@@ -29,7 +29,7 @@ public class TaskController {
     public ResponseEntity<Void> createTask(@RequestBody CreateTaskRequest request) {
         try {
             taskService.saveTask(
-                    CreateTaskRequest.DtoToEntityMapper().apply(request)
+                    CreateTaskRequest.dtoToEntityMapper().apply(request)
             );
             return ResponseEntity.ok().build();
         } catch (Exception e) {

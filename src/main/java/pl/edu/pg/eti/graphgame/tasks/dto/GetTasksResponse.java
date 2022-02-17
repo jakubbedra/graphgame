@@ -23,6 +23,7 @@ public class GetTasksResponse {
     @EqualsAndHashCode
     public static class TaskDto {
 
+        private Long id;
         private String name;
 
     }
@@ -35,6 +36,7 @@ public class GetTasksResponse {
             GetTasksResponseBuilder response = GetTasksResponse.builder();
             tasks.stream()
                     .map(task -> TaskDto.builder()
+                            .id(task.getId())
                             .name(task.getName())
                             .build())
                     .forEach(response::task);

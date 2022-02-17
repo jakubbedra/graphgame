@@ -1,8 +1,8 @@
 package pl.edu.pg.eti.graphgame.exceptions;
 
-public class UserDoesNotExist extends Exception {
+public class UserDoesNotExistException extends Exception {
 
-    public UserDoesNotExist(Long id) {
+    public UserDoesNotExistException(Long id) {
         super("User with the id: " + id + " does not exist.");
     }
 

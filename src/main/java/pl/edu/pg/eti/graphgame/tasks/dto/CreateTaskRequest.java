@@ -15,7 +15,7 @@ public class CreateTaskRequest {
 
     private String name;
 
-    public static Function<CreateTaskRequest, Task> DtoToEntityMapper() {
+    public static Function<CreateTaskRequest, Task> dtoToEntityMapper() {
         return request -> Task.builder()
                 .name(request.getName())
                 .build();

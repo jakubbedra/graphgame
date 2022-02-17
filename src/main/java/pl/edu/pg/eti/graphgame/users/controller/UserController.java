@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import pl.edu.pg.eti.graphgame.exceptions.UserAlreadyExistsException;
-import pl.edu.pg.eti.graphgame.users.UserRole;
 import pl.edu.pg.eti.graphgame.users.dto.CreateUserRequest;
 import pl.edu.pg.eti.graphgame.users.dto.GetUserResponse;
 import pl.edu.pg.eti.graphgame.users.dto.GetUsersResponse;
@@ -21,7 +20,7 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    private final UserRole DEFAULT_USER_ROLE;
+    private final String DEFAULT_USER_ROLE;
 
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender mailSender;
@@ -33,7 +32,7 @@ public class UserController {
             JavaMailSender mailSender,
             UserService userService
     ) {
-        this.DEFAULT_USER_ROLE = UserRole.STUDENT;
+        this.DEFAULT_USER_ROLE = "ROLE_USER";
         this.mailSender = mailSender;
         this.userService = userService;
         this.passwordEncoder = new BCryptPasswordEncoder(11);
@@ -45,7 +44,7 @@ public class UserController {
                 .login(request.getLogin())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(DEFAULT_USER_ROLE)
+                .roles(DEFAULT_USER_ROLE)
                 .build();
         try {
             userService.registerNewUserAccount(user);

@@ -1,7 +1,6 @@
 package pl.edu.pg.eti.graphgame.users.entity;
 
 import lombok.*;
-import pl.edu.pg.eti.graphgame.users.UserRole;
 
 import javax.persistence.*;
 
@@ -21,6 +20,6 @@ public class User {
     private String login;
     private String email;
     private String password;
-    private UserRole role;
+    private String roles;
 
 }
