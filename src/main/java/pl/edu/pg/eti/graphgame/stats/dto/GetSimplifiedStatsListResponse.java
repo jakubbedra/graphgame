@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
-public class GetStatsListResponse {
+public class GetSimplifiedStatsListResponse {
 
     @Getter
     @Setter
@@ -24,11 +24,6 @@ public class GetStatsListResponse {
     @Builder
     @EqualsAndHashCode
     public static class StatsDto {
-
-        private UUID uuid;
-
-        private Long userId;
-        private Long taskId;
 
         private int correct;
         private int wrong;
@@ -39,14 +34,11 @@ public class GetStatsListResponse {
 
     private List<StatsDto> statsList;
 
-    public static Function<List<Stats>, GetStatsListResponse> entityToDtoMapper() {
+    public static Function<List<Stats>, GetSimplifiedStatsListResponse> entityToDtoMapper() {
         return statsList ->
-                GetStatsListResponse.builder()
+                GetSimplifiedStatsListResponse.builder()
                         .statsList(statsList.stream()
                                 .map(stats -> StatsDto.builder()
-                                        .uuid(stats.getUuid())
-                                        .taskId(stats.getTask().getId())
-                                        .userId(stats.getUser().getId())
                                         .correct(stats.getCorrect())
                                         .wrong(stats.getWrong())
                                         .date(stats.getDate())

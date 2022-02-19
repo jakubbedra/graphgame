@@ -25,6 +25,10 @@ public class TaskService {
         return taskRepository.findById(id);
     }
 
+    public Optional<Task> findTaskByName(String name) {
+        return taskRepository.findAllByName(name).stream().findAny();
+    }
+
     public List<Task> findAllTasks() {
         return (List<Task>) taskRepository.findAll();
     }

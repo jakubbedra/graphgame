@@ -30,6 +30,10 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
+    public Optional<User> findUserByName(String name) {
+        return userRepository.findByLogin(name);
+    }
+
     @Transactional
     public void registerNewUserAccount(User user) throws UserAlreadyExistsException {
         if (emailExists(user.getEmail())) {

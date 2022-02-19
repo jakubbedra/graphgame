@@ -20,19 +20,10 @@ public class GetSummedStatsResponse {
     private int correct;
     private int wrong;
 
-    public GetSummedStatsResponse(List<Stats> stats) {
-        this.correct = 0;
-        this.wrong = 0;
-        stats.forEach(s -> {
-            correct += s.getCorrect();
-            wrong += s.getWrong();
-        });
-    }
-
-    public static Function<Stats, GetSummedStatsResponse> entityToDtoMapper() {
+    public static Function<List<Stats>, GetSummedStatsResponse> entityToDtoMapper() {
         return stats -> GetSummedStatsResponse.builder()
-                .correct(stats.getCorrect())
-                .wrong(stats.getWrong())
+                .correct(stats.stream().map(Stats::getCorrect).reduce(0, Integer::sum))
+                .wrong(stats.stream().map(Stats::getWrong).reduce(0, Integer::sum))
                 .build();
     }
 
