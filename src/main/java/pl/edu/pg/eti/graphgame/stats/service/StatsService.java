@@ -57,6 +57,18 @@ public class StatsService {
         ).collect(Collectors.toList());
     }
 
+    public List<Stats> findAllStatsByUserAndDate(User user, Date date) {
+        return statsRepository.findAllByUser(user).stream()
+                .filter(s -> StatsUtils.equalDates(s.getDate(), date))
+                .collect(Collectors.toList());
+    }
+
+    public List<Stats> findAllStatsByUserAndTaskAndDate(User user, Task task, Date date) {
+        return statsRepository.findAllByUserAndTask(user, task).stream()
+                .filter(s -> StatsUtils.equalDates(s.getDate(), date))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public void saveStats(Stats stats) {
         statsRepository.save(stats);
@@ -73,7 +85,6 @@ public class StatsService {
     /**
      * Method used for updating (or creating) today's stats
      * of a given task type for a specific player.
-     * The
      */
     @Transactional
     public void updateCurrentStats(Stats stats) {

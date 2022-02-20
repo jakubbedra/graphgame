@@ -7,18 +7,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import pl.edu.pg.eti.graphgame.exceptions.UserAlreadyExistsException;
-import pl.edu.pg.eti.graphgame.users.dto.CreateUserRequest;
-import pl.edu.pg.eti.graphgame.users.dto.GetUserResponse;
-import pl.edu.pg.eti.graphgame.users.dto.GetUsersResponse;
-import pl.edu.pg.eti.graphgame.users.dto.UpdateUserRequest;
+import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
+import pl.edu.pg.eti.graphgame.stats.service.StatsService;
+import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
+import pl.edu.pg.eti.graphgame.users.dto.*;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
 
-import java.util.Optional;
+import java.sql.Date;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
+
+    private final static int MAX_USERS_PER_PAGE = 50;
 
     private final String DEFAULT_USER_ROLE;
 
@@ -26,15 +32,21 @@ public class UserController {
     private final JavaMailSender mailSender;
 
     private final UserService userService;
+    private final StatsService statsService;
+    private final TaskService taskService;
 
     @Autowired
     public UserController(
             JavaMailSender mailSender,
-            UserService userService
+            UserService userService,
+            StatsService statsService,
+            TaskService taskService
     ) {
         this.DEFAULT_USER_ROLE = "ROLE_USER";
         this.mailSender = mailSender;
         this.userService = userService;
+        this.statsService = statsService;
+        this.taskService = taskService;
         this.passwordEncoder = new BCryptPasswordEncoder(11);
     }
 
@@ -70,6 +82,75 @@ public class UserController {
         );
     }
 
+    @GetMapping("/topChart/overall/{page}")
+    public ResponseEntity<GetTopUsersResponse> getTopUsersAlltime(@PathVariable("page") Integer page) {
+        List<Stats> selectedStats = getTopUserStatsPage(page, Optional.empty(), false);
+        if (selectedStats.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(
+                GetTopUsersResponse
+                        .statsListToTopUsersMapper((page - 1) * MAX_USERS_PER_PAGE + 1, page)
+                        .apply(selectedStats)
+        );
+    }
+
+    @GetMapping("/topChart/{taskId}/{page}")
+    public ResponseEntity<GetTopUsersResponse> getTopUsersAlltime(
+            @PathVariable("page") Integer page,
+            @PathVariable("taskId") Long taskId
+    ) {
+        Optional<Task> task = taskService.findTaskById(taskId);
+        if (task.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Stats> selectedStats = getTopUserStatsPage(page, task, false);
+        if (selectedStats.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(
+                GetTopUsersResponse
+                        .statsListToTopUsersMapper((page - 1) * MAX_USERS_PER_PAGE + 1, page)
+                        .apply(selectedStats)
+        );
+    }
+
+    @GetMapping("/topChart/overall/{page}/today")
+    public ResponseEntity<GetTopUsersResponse> getTopUsersToday(
+            @PathVariable("page") Integer page
+    ) {
+        List<Stats> selectedStats = getTopUserStatsPage(page, Optional.empty(), true);
+        if (selectedStats.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(
+                GetTopUsersResponse
+                        .statsListToTopUsersMapper((page - 1) * MAX_USERS_PER_PAGE + 1, page)
+                        .apply(selectedStats)
+        );
+    }
+
+
+    @GetMapping("/topChart/{taskId}/{page}/today")
+    public ResponseEntity<GetTopUsersResponse> getTopUsersToday(
+            @PathVariable("page") Integer page,
+            @PathVariable("taskId") Long taskId
+    ) {
+        Optional<Task> task = taskService.findTaskById(taskId);
+        if (task.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Stats> selectedStats = getTopUserStatsPage(page, task, true);
+        if (selectedStats.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(
+                GetTopUsersResponse
+                        .statsListToTopUsersMapper((page - 1) * MAX_USERS_PER_PAGE + 1, page)
+                        .apply(selectedStats)
+        );
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("id") Long id) {
         Optional<User> user = userService.findUser(id);
@@ -96,5 +177,58 @@ public class UserController {
     private void sendAccountActivationEmail(User user) {
 
     }
+
+    private Stats getUserScoreSummed(User user, Optional<Task> task, boolean today) {
+        List<Stats> stats;
+        if (!today) {
+            if (task.isEmpty()) {
+                stats = statsService.findAllStatsByUser(user);
+            } else {
+                stats = statsService.findAllStatsByUserAndTask(user, task.get());
+            }
+        }else {
+            Date todayDate = new Date(System.currentTimeMillis());
+            if (task.isEmpty()) {
+                stats = statsService.findAllStatsByUserAndDate(user, todayDate);
+            } else {
+                stats = statsService.findAllStatsByUserAndTaskAndDate(user, task.get(), todayDate);
+            }
+        }
+        AtomicInteger correct = new AtomicInteger();
+        AtomicInteger wrong = new AtomicInteger();
+        stats.forEach(s -> {
+            correct.addAndGet(s.getCorrect());
+            wrong.addAndGet(s.getWrong());
+        });
+        return Stats.builder()
+                .correct(correct.get())
+                .wrong(wrong.get())
+                .user(user)
+                .build();
+    }
+
+    private List<Stats> getTopUserStatsPage(int page, Optional<Task> task, boolean today) {
+        List<User> users = new ArrayList<>(userService.findAllUsers());
+
+        if (users.size() - (page - 1) * MAX_USERS_PER_PAGE < 0) {
+            return Collections.emptyList();
+        }
+
+        List<Stats> userStatsSummed = users.stream()
+                .map(u -> getUserScoreSummed(u, task, today))
+                .sorted(Comparator.comparingInt(u -> u.getCorrect() - u.getWrong()))
+                .collect(Collectors.toList());
+
+        List<Stats> selectedStats = new LinkedList<>();
+        for (
+                int i = (page - 1) * MAX_USERS_PER_PAGE;
+                i < page * MAX_USERS_PER_PAGE && i < userStatsSummed.size();
+                i++
+        ) {
+            selectedStats.add(userStatsSummed.get(i));
+        }
+        return selectedStats;
+    }
+
 
 }

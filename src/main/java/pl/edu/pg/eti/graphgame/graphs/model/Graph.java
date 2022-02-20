@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.graphgame.graphs;
+package pl.edu.pg.eti.graphgame.graphs.model;
 
 import java.util.List;
 
