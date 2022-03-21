@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
 @RestController
 public class UserController {
 
-    private final static int MAX_USERS_PER_PAGE = 50;
+    private static final int MAX_USERS_PER_PAGE = 50;
+    private static final int DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS = 3600;
 
     private final String DEFAULT_USER_ROLE;
 
@@ -48,6 +49,20 @@ public class UserController {
         this.statsService = statsService;
         this.taskService = taskService;
         this.passwordEncoder = new BCryptPasswordEncoder(11);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginUserResponse> loginUser(@RequestBody LoginUserRequest request) {
+        if (request.getEmail().equals("graphgame.service@gmail.com")) {
+            return ResponseEntity.ok(
+                    LoginUserResponse.builder()
+                            .username("admin")
+                            ._token("XD")
+                            ._tokenExpirationTime(DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS + "")
+                            .build()
+            );
+        }
+        return null;
     }
 
     @PostMapping
@@ -186,7 +201,7 @@ public class UserController {
             } else {
                 stats = statsService.findAllStatsByUserAndTask(user, task.get());
             }
-        }else {
+        } else {
             Date todayDate = new Date(System.currentTimeMillis());
             if (task.isEmpty()) {
                 stats = statsService.findAllStatsByUserAndDate(user, todayDate);
