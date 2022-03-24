@@ -23,6 +23,14 @@ public class TestDataHardcoder {
 
     private User user1;
     private User user2;
+    private User user3;
+    private User user4;
+    private User user5;
+    private User user6;
+    private User user7;
+    private User user8;
+    private User user9;
+    private User user10;
 
     private Task task1;
     private Task task2;
@@ -52,6 +60,14 @@ public class TestDataHardcoder {
     private void hardcodeUsers() throws UserAlreadyExistsException {
         userService.registerNewUserAccount(user1);
         userService.registerNewUserAccount(user2);
+        userService.registerNewUserAccount(user3);
+        userService.registerNewUserAccount(user4);
+        userService.registerNewUserAccount(user5);
+        userService.registerNewUserAccount(user6);
+        userService.registerNewUserAccount(user7);
+        userService.registerNewUserAccount(user8);
+        userService.registerNewUserAccount(user9);
+        userService.registerNewUserAccount(user10);
     }
 
     private void hardcodeTasks() {
@@ -144,6 +160,54 @@ public class TestDataHardcoder {
                 .id(37L)
                 .login("sample user 2")
                 .email("user2@example.com")
+                .password("xd")
+                .build();
+        user3 = User.builder()
+                .id(21L)
+                .login("sample user 3")
+                .email("user3@example.com")
+                .password("xd")
+                .build();
+        user4 = User.builder()
+                .id(37L)
+                .login("sample user 4")
+                .email("user4@example.com")
+                .password("xd")
+                .build();
+        user5 = User.builder()
+                .id(21L)
+                .login("sample user 5")
+                .email("user5@example.com")
+                .password("xd")
+                .build();
+        user6 = User.builder()
+                .id(37L)
+                .login("sample user 6")
+                .email("user6@example.com")
+                .password("xd")
+                .build();
+        user7 = User.builder()
+                .id(21L)
+                .login("sample user 7")
+                .email("user7@example.com")
+                .password("xd")
+                .build();
+        user8 = User.builder()
+                .id(37L)
+                .login("sample user 8")
+                .email("user8@example.com")
+                .password("xd")
+                .build();
+        user9 = User.builder()
+                .id(21L)
+                .login("sample user 9")
+                .email("user9@example.com")
+                .password("xd")
+                .build();
+        user10 = User.builder()
+                .id(37L)
+                .login("sample user 10")
+                .email("user10@example.com")
                 .password("xd")
                 .build();
         task1 = Task.builder()

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 public class UserController {
 
-    private static final int MAX_USERS_PER_PAGE = 50;
+    private static final int MAX_USERS_PER_PAGE = 10;
     private static final int DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS = 3600;
 
     private final String DEFAULT_USER_ROLE;
@@ -145,7 +145,6 @@ public class UserController {
         );
     }
 
-
     @GetMapping("/topChart/{taskId}/{page}/today")
     public ResponseEntity<GetTopUsersResponse> getTopUsersToday(
             @PathVariable("page") Integer page,
@@ -228,10 +227,10 @@ public class UserController {
         if (users.size() - (page - 1) * MAX_USERS_PER_PAGE < 0) {
             return Collections.emptyList();
         }
-
+//todo: uwzglednic jak ktos ma 0 blednych i 0 poprawnych (mozna wsm wyjebac go z rankingu w takiej sytuacji)
         List<Stats> userStatsSummed = users.stream()
                 .map(u -> getUserScoreSummed(u, task, today))
-                .sorted(Comparator.comparingInt(u -> u.getCorrect() - u.getWrong()))
+                .sorted(Comparator.comparingInt(u -> calculateScore(u.getCorrect(), u.getWrong())))
                 .collect(Collectors.toList());
 
         List<Stats> selectedStats = new LinkedList<>();
@@ -245,5 +244,11 @@ public class UserController {
         return selectedStats;
     }
 
+    private int calculateScore(int correctAnswers, int wrongAnswers) {
+        if (correctAnswers == 0 && wrongAnswers == 0) {
+            return Integer.MAX_VALUE;
+        }
+        return wrongAnswers - correctAnswers;
+    }
 
 }
