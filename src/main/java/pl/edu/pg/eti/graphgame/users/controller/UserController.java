@@ -227,7 +227,6 @@ public class UserController {
         if (users.size() - (page - 1) * MAX_USERS_PER_PAGE < 0) {
             return Collections.emptyList();
         }
-//todo: uwzglednic jak ktos ma 0 blednych i 0 poprawnych (mozna wsm wyjebac go z rankingu w takiej sytuacji)
         List<Stats> userStatsSummed = users.stream()
                 .map(u -> getUserScoreSummed(u, task, today))
                 .sorted(Comparator.comparingInt(u -> calculateScore(u.getCorrect(), u.getWrong())))
