@@ -45,7 +45,7 @@ public class GetStatsListResponse {
                         .statsList(statsList.stream()
                                 .map(stats -> StatsDto.builder()
                                         .uuid(stats.getUuid())
-                                        .taskId(stats.getTask().getId())
+                                        .taskId(stats.getTaskSubject().getId())
                                         .userId(stats.getUser().getId())
                                         .correct(stats.getCorrect())
                                         .wrong(stats.getWrong())

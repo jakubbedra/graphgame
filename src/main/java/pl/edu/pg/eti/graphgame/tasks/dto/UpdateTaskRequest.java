@@ -1,7 +1,7 @@
 package pl.edu.pg.eti.graphgame.tasks.dto;
 
 import lombok.*;
-import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
 
 import java.util.function.BiFunction;
 
@@ -15,7 +15,7 @@ public class UpdateTaskRequest {
 
     private String name;
 
-    public static BiFunction<Task, UpdateTaskRequest, Task> dtoToEntityUpdater() {
+    public static BiFunction<TaskSubject, UpdateTaskRequest, TaskSubject> dtoToEntityUpdater() {
         return (task, request) -> {
             task.setName(request.getName());
             return task;

@@ -24,7 +24,7 @@ public class GetStatsResponse {
 
     public static Function<Stats, GetStatsResponse> entityToDtoMapper() {
         return stats -> GetStatsResponse.builder()
-                .taskId(stats.getTask().getId())
+                .taskId(stats.getTaskSubject().getId())
                 .userId(stats.getUser().getId())
                 .correct(stats.getCorrect())
                 .wrong(stats.getWrong())

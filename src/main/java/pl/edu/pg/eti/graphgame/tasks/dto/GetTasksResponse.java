@@ -1,7 +1,7 @@
 package pl.edu.pg.eti.graphgame.tasks.dto;
 
 import lombok.*;
-import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,7 +31,7 @@ public class GetTasksResponse {
     @Singular
     private List<TaskDto> tasks;
 
-    public static Function<Collection<Task>, GetTasksResponse> entityToDtoMapper() {
+    public static Function<Collection<TaskSubject>, GetTasksResponse> entityToDtoMapper() {
         return tasks -> {
             GetTasksResponseBuilder response = GetTasksResponse.builder();
             tasks.stream()
