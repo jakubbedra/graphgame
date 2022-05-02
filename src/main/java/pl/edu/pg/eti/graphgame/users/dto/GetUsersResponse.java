@@ -41,7 +41,7 @@ public class GetUsersResponse {
                             .id(user.getId())
                             .login(user.getLogin())
                             .email(user.getEmail())
-                            .password(user.getPassword())
+                            .password(user.getPasswordEncoded())
                             .build())
                     .forEach(response::user);
             return response.build();

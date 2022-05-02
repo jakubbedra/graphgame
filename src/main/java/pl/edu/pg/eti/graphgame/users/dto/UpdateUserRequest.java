@@ -14,13 +14,5 @@ public class UpdateUserRequest {
 
     private String login;
     private String password;
-
-    public static BiFunction<User, UpdateUserRequest, User> dtoToEntityUpdater() {
-        return (user, request) -> {
-            user.setLogin(request.getLogin());
-            user.setPassword(request.getPassword());
-            return user;
-        };
-    }
-
+    private String email;
 }

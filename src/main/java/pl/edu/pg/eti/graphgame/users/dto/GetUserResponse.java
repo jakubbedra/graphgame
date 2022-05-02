@@ -21,7 +21,7 @@ public class GetUserResponse {
         return user -> GetUserResponse.builder()
                 .login(user.getLogin())
                 .email(user.getEmail())
-                .password(user.getPassword())
+                .password(user.getPasswordEncoded())
                 .build();
     }
 

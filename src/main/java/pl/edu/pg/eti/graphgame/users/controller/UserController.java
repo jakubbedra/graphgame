@@ -2,67 +2,85 @@ package pl.edu.pg.eti.graphgame.users.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.mail.javamail.JavaMailSender;
+import pl.edu.pg.eti.graphgame.exceptions.EmailAlreadyInUseException;
 import pl.edu.pg.eti.graphgame.exceptions.UserAlreadyExistsException;
-import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
-import pl.edu.pg.eti.graphgame.stats.service.StatsService;
-import pl.edu.pg.eti.graphgame.tasks.entity.Task;
-import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
+import pl.edu.pg.eti.graphgame.exceptions.UserSessionTokenAlreadyExistsException;
 import pl.edu.pg.eti.graphgame.users.dto.*;
 import pl.edu.pg.eti.graphgame.users.entity.User;
+import pl.edu.pg.eti.graphgame.users.entity.UserSession;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
+import pl.edu.pg.eti.graphgame.users.service.UserSessionService;
 
-import java.sql.Date;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
 
-    private static final int MAX_USERS_PER_PAGE = 10;
-    private static final int DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS = 3600;
 
     private final String DEFAULT_USER_ROLE;
 
-    private final PasswordEncoder passwordEncoder;
     private final JavaMailSender mailSender;
 
     private final UserService userService;
-    private final StatsService statsService;
-    private final TaskService taskService;
+    private final UserSessionService userSessionService;
 
     @Autowired
     public UserController(
             JavaMailSender mailSender,
             UserService userService,
-            StatsService statsService,
-            TaskService taskService
+            UserSessionService userSessionService
     ) {
         this.DEFAULT_USER_ROLE = "ROLE_USER";
         this.mailSender = mailSender;
         this.userService = userService;
-        this.statsService = statsService;
-        this.taskService = taskService;
-        this.passwordEncoder = new BCryptPasswordEncoder(11);
+        this.userSessionService = userSessionService;
+    }
+
+
+
+    @GetMapping("/session")
+    public ResponseEntity<String> testQueryParam123fds(@RequestParam("token") String token) {
+        Optional<UserSession> session = userSessionService.findSessionByToken(token);
+        if(session.isEmpty())
+            return ResponseEntity.notFound().build();
+        String resp = token + " : " + session.get().getUser().getEmail() + " ; " + session.get().getExpirationDatetime();
+        return ResponseEntity.ok(resp);
+    }
+
+    @PutMapping("/prolong_session")
+    public ResponseEntity<Void> prolongToken(@RequestParam("token") String token) {
+        Optional<UserSession> session = userSessionService.findSessionByToken(token);
+        if(session.isEmpty())
+            return ResponseEntity.notFound().build();
+        userSessionService.prolongUserSession(session.get());
+        return ResponseEntity.accepted().build();
+    }
+
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logoutUser(@RequestParam("token") String token) {
+        Optional<UserSession> session = userSessionService.findSessionByToken(token);
+        if(session.isEmpty())
+            return ResponseEntity.notFound().build();
+        userSessionService.logoutUserFromSession(session.get());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginUserResponse> loginUser(@RequestBody LoginUserRequest request) {
-        if (request.getEmail().equals("graphgame.service@gmail.com")) {
-            return ResponseEntity.ok(
-                    LoginUserResponse.builder()
-                            .username("admin")
-                            ._token("XD")
-                            ._tokenExpirationTime(DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS + "")
-                            .build()
-            );
-        }
-        return null;
+    public ResponseEntity<LoginUserResponse> loginUser(@RequestBody LoginUserRequest request)
+        throws UserSessionTokenAlreadyExistsException {
+		Optional<UserSession> userSession = userService.loginUserWithPassword(request.getEmail(), request.getPassword());
+        return userSession.map(session -> ResponseEntity
+                .ok(LoginUserResponse.builder()
+                    .username(session.getUser().getLogin())
+                    ._token(session.getToken())
+                    ._tokenExpirationTime(UserSessionService.DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS+"")
+                    .user_id(session.getUser().getId())
+                    .build()))
+                .orElse(null);
     }
 
     @PostMapping
@@ -70,11 +88,10 @@ public class UserController {
         User user = User.builder()
                 .login(request.getLogin())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
                 .roles(DEFAULT_USER_ROLE)
                 .build();
         try {
-            userService.registerNewUserAccount(user);
+            userService.registerNewUserAccountWithPassword(user, request.getPassword());
             sendAccountActivationEmail(user);
         } catch (UserAlreadyExistsException e) {
             e.printStackTrace();
@@ -97,80 +114,25 @@ public class UserController {
         );
     }
 
-    @GetMapping("/topChart/overall/{page}")
-    public ResponseEntity<GetTopUsersResponse> getTopUsersAlltime(@PathVariable("page") Integer page) {
-        List<Stats> selectedStats = getTopUserStatsPage(page, Optional.empty(), false);
-        if (selectedStats.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(
-                GetTopUsersResponse
-                        .statsListToTopUsersMapper((page - 1) * MAX_USERS_PER_PAGE + 1, page)
-                        .apply(selectedStats)
-        );
-    }
-
-    @GetMapping("/topChart/{taskId}/{page}")
-    public ResponseEntity<GetTopUsersResponse> getTopUsersAlltime(
-            @PathVariable("page") Integer page,
-            @PathVariable("taskId") Long taskId
-    ) {
-        Optional<Task> task = taskService.findTaskById(taskId);
-        if (task.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        List<Stats> selectedStats = getTopUserStatsPage(page, task, false);
-        if (selectedStats.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(
-                GetTopUsersResponse
-                        .statsListToTopUsersMapper((page - 1) * MAX_USERS_PER_PAGE + 1, page)
-                        .apply(selectedStats)
-        );
-    }
-
-    @GetMapping("/topChart/overall/{page}/today")
-    public ResponseEntity<GetTopUsersResponse> getTopUsersToday(
-            @PathVariable("page") Integer page
-    ) {
-        List<Stats> selectedStats = getTopUserStatsPage(page, Optional.empty(), true);
-        if (selectedStats.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(
-                GetTopUsersResponse
-                        .statsListToTopUsersMapper((page - 1) * MAX_USERS_PER_PAGE + 1, page)
-                        .apply(selectedStats)
-        );
-    }
-
-    @GetMapping("/topChart/{taskId}/{page}/today")
-    public ResponseEntity<GetTopUsersResponse> getTopUsersToday(
-            @PathVariable("page") Integer page,
-            @PathVariable("taskId") Long taskId
-    ) {
-        Optional<Task> task = taskService.findTaskById(taskId);
-        if (task.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        List<Stats> selectedStats = getTopUserStatsPage(page, task, true);
-        if (selectedStats.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(
-                GetTopUsersResponse
-                        .statsListToTopUsersMapper((page - 1) * MAX_USERS_PER_PAGE + 1, page)
-                        .apply(selectedStats)
-        );
-    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("id") Long id) {
+    public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("id") Long id)
+        throws EmailAlreadyInUseException {
         Optional<User> user = userService.findUser(id);
+        // TODO: check for session token and current user permissions
         if (user.isPresent()) {
-            UpdateUserRequest.dtoToEntityUpdater().apply(user.get(), request);
-            userService.updateUser(user.get());
+            if(request.getPassword() != null) {
+                if(!request.getPassword().equals(""))
+                    userService.updatePassword(user.get(), request.getPassword());
+            }
+            if(request.getLogin() != null) {
+                if(!request.getLogin().equals(""))
+                    userService.updateLogin(user.get(), request.getLogin());
+            }
+            if(request.getEmail() != null) {
+                if(!request.getEmail().equals(""))
+                    userService.updateEmail(user.get(), request.getEmail());
+            }
             return ResponseEntity.accepted().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -192,62 +154,5 @@ public class UserController {
 
     }
 
-    private Stats getUserScoreSummed(User user, Optional<Task> task, boolean today) {
-        List<Stats> stats;
-        if (!today) {
-            if (task.isEmpty()) {
-                stats = statsService.findAllStatsByUser(user);
-            } else {
-                stats = statsService.findAllStatsByUserAndTask(user, task.get());
-            }
-        } else {
-            Date todayDate = new Date(System.currentTimeMillis());
-            if (task.isEmpty()) {
-                stats = statsService.findAllStatsByUserAndDate(user, todayDate);
-            } else {
-                stats = statsService.findAllStatsByUserAndTaskAndDate(user, task.get(), todayDate);
-            }
-        }
-        AtomicInteger correct = new AtomicInteger();
-        AtomicInteger wrong = new AtomicInteger();
-        stats.forEach(s -> {
-            correct.addAndGet(s.getCorrect());
-            wrong.addAndGet(s.getWrong());
-        });
-        return Stats.builder()
-                .correct(correct.get())
-                .wrong(wrong.get())
-                .user(user)
-                .build();
-    }
-
-    private List<Stats> getTopUserStatsPage(int page, Optional<Task> task, boolean today) {
-        List<User> users = new ArrayList<>(userService.findAllUsers());
-
-        if (users.size() - (page - 1) * MAX_USERS_PER_PAGE < 0) {
-            return Collections.emptyList();
-        }
-        List<Stats> userStatsSummed = users.stream()
-                .map(u -> getUserScoreSummed(u, task, today))
-                .sorted(Comparator.comparingInt(u -> calculateScore(u.getCorrect(), u.getWrong())))
-                .collect(Collectors.toList());
-
-        List<Stats> selectedStats = new LinkedList<>();
-        for (
-                int i = (page - 1) * MAX_USERS_PER_PAGE;
-                i < page * MAX_USERS_PER_PAGE && i < userStatsSummed.size();
-                i++
-        ) {
-            selectedStats.add(userStatsSummed.get(i));
-        }
-        return selectedStats;
-    }
-
-    private int calculateScore(int correctAnswers, int wrongAnswers) {
-        if (correctAnswers == 0 && wrongAnswers == 0) {
-            return Integer.MAX_VALUE;
-        }
-        return wrongAnswers - correctAnswers;
-    }
 
 }

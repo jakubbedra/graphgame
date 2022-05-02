@@ -19,7 +19,8 @@ public class User {
     private Long id;
     private String login;
     private String email;
-    private String password;
+    private String passwordEncoded;
     private String roles;
+
 
 }
