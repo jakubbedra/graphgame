@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 import pl.edu.pg.eti.graphgame.exceptions.UserAlreadyExistsException;
 import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
 import pl.edu.pg.eti.graphgame.stats.service.StatsService;
-import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
@@ -32,9 +33,9 @@ public class TestDataHardcoder {
     private User user9;
     private User user10;
 
-    private Task task1;
-    private Task task2;
-    private Task task3;
+    private TaskSubject taskSubject1;
+    private TaskSubject taskSubject2;
+    private TaskSubject taskSubject3;
 
     private final int DAY_MILLIS = 24 * 60 * 60 * 1000;
 
@@ -71,9 +72,9 @@ public class TestDataHardcoder {
     }
 
     private void hardcodeTasks() {
-        taskService.saveTask(task1);
-        taskService.saveTask(task2);
-        taskService.saveTask(task3);
+        taskService.saveTask(taskSubject1);
+        taskService.saveTask(taskSubject2);
+        taskService.saveTask(taskSubject3);
     }
 
     private void hardcodeStats() {
@@ -81,7 +82,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .task(taskService.findTaskByName("sample task 3").get())
+                        .taskSubject(taskService.findTaskByName("sample task 3").get())
                         .correct(2)
                         .wrong(14)
                         .date(new Date(System.currentTimeMillis()))
@@ -91,7 +92,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .task(taskService.findTaskByName("sample task 1").get())
+                        .taskSubject(taskService.findTaskByName("sample task 1").get())
                         .correct(4)
                         .wrong(3)
                         .date(new Date(System.currentTimeMillis() - DAY_MILLIS))
@@ -101,7 +102,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .task(taskService.findTaskByName("sample task 1").get())
+                        .taskSubject(taskService.findTaskByName("sample task 1").get())
                         .correct(2)
                         .wrong(1)
                         .date(new Date(System.currentTimeMillis()))
@@ -111,7 +112,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .task(taskService.findTaskByName("sample task 2").get())
+                        .taskSubject(taskService.findTaskByName("sample task 2").get())
                         .correct(0)
                         .wrong(2)
                         .date(new Date(System.currentTimeMillis()))
@@ -121,7 +122,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .task(taskService.findTaskByName("sample task 3").get())
+                        .taskSubject(taskService.findTaskByName("sample task 3").get())
                         .correct(6)
                         .wrong(8)
                         .date(new Date(System.currentTimeMillis() - DAY_MILLIS))
@@ -131,7 +132,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .task(taskService.findTaskByName("sample task 2").get())
+                        .taskSubject(taskService.findTaskByName("sample task 2").get())
                         .correct(2)
                         .wrong(10)
                         .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
@@ -141,7 +142,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .task(taskService.findTaskByName("sample task 1").get())
+                        .taskSubject(taskService.findTaskByName("sample task 1").get())
                         .correct(6)
                         .wrong(17)
                         .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
@@ -200,16 +201,13 @@ public class TestDataHardcoder {
                 .login("sample user 10")
                 .email("user10@example.com")
                 .build();
-        task1 = Task.builder()
-                .id(1L)
+        taskSubject1 = TaskSubject.builder()
                 .name("sample task 1")
                 .build();
-        task2 = Task.builder()
-                .id(1L)
+        taskSubject2 = TaskSubject.builder()
                 .name("sample task 2")
                 .build();
-        task3 = Task.builder()
-                .id(2L)
+        taskSubject3 = TaskSubject.builder()
                 .name("sample task 3")
                 .build();
     }

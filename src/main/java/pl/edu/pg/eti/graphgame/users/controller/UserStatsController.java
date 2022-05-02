@@ -10,7 +10,7 @@ import pl.edu.pg.eti.graphgame.stats.dto.GetSummedStatsResponse;
 import pl.edu.pg.eti.graphgame.stats.dto.UpdateStatsRequest;
 import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
 import pl.edu.pg.eti.graphgame.stats.service.StatsService;
-import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
@@ -97,7 +97,7 @@ public class UserStatsController {
             @RequestParam(name = "endDate", required = false) Optional<Date> endDate
     ) {
         Optional<User> user = userService.findUser(userId);
-        Optional<Task> task = taskService.findTaskById(taskId);
+        Optional<TaskSubject> task = taskService.findTaskById(taskId);
         if (user.isEmpty() || task.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -126,7 +126,7 @@ public class UserStatsController {
             @RequestParam(name = "endDate", required = false) Optional<Date> endDate
     ) {
         Optional<User> user = userService.findUser(userId);
-        Optional<Task> task = taskService.findTaskById(taskId);
+        Optional<TaskSubject> task = taskService.findTaskById(taskId);
         if (user.isEmpty() || task.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -151,7 +151,7 @@ public class UserStatsController {
             @RequestBody UpdateStatsRequest request
     ) {
         Optional<User> user = userService.findUser(userId);
-        Optional<Task> task = taskService.findTaskById(taskId);
+        Optional<TaskSubject> task = taskService.findTaskById(taskId);
         if (user.isEmpty() || task.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -159,7 +159,7 @@ public class UserStatsController {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(user.get())
-                        .task(task.get())
+                        .taskSubject(task.get())
                         .date(new Date(System.currentTimeMillis()))
                         .correct(request.getCorrect())
                         .wrong(request.getWrong())
@@ -169,7 +169,7 @@ public class UserStatsController {
     }
 
     private List<Stats> findUserStats(
-            User user, Optional<Date> startDate, Optional<Date> endDate, Optional<Task> task
+            User user, Optional<Date> startDate, Optional<Date> endDate, Optional<TaskSubject> task
     ) {
         if (task.isPresent()) {
             if (startDate.isPresent() && endDate.isPresent()) {

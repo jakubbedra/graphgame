@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
 import pl.edu.pg.eti.graphgame.stats.service.StatsService;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.dto.*;
 import pl.edu.pg.eti.graphgame.users.entity.User;
@@ -57,7 +58,7 @@ public class UserTopChartsController {
 		@PathVariable("page") Integer page,
 		@PathVariable("taskId") Long taskId
 	) {
-		Optional<Task> task = taskService.findTaskById(taskId);
+		Optional<TaskSubject> task = taskService.findTaskById(taskId);
 		if (task.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -92,7 +93,7 @@ public class UserTopChartsController {
 		@PathVariable("page") Integer page,
 		@PathVariable("taskId") Long taskId
 	) {
-		Optional<Task> task = taskService.findTaskById(taskId);
+		Optional<TaskSubject> task = taskService.findTaskById(taskId);
 		if (task.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -109,7 +110,7 @@ public class UserTopChartsController {
 
 
 
-	private List<Stats> getTopUserStatsPage(int page, Optional<Task> task, boolean today) {
+	private List<Stats> getTopUserStatsPage(int page, Optional<TaskSubject> task, boolean today) {
 		List<User> users = new ArrayList<>(userService.findAllUsers());
 
 		if (users.size() - (page - 1) * MAX_USERS_PER_PAGE < 0) {
@@ -131,7 +132,7 @@ public class UserTopChartsController {
 		return selectedStats;
 	}
 
-	private Stats getUserScoreSummed(User user, Optional<Task> task, boolean today) {
+	private Stats getUserScoreSummed(User user, Optional<TaskSubject> task, boolean today) {
 		List<Stats> stats;
 		if (!today) {
 			if (task.isEmpty()) {

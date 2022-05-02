@@ -3,7 +3,7 @@ package pl.edu.pg.eti.graphgame.tasks.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.repository.TaskRepository;
 
 import java.util.List;
@@ -21,31 +21,31 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Optional<Task> findTaskById(Long id) {
+    public Optional<TaskSubject> findTaskById(Long id) {
         return taskRepository.findById(id);
     }
 
-    public Optional<Task> findTaskByName(String name) {
+    public Optional<TaskSubject> findTaskByName(String name) {
         return taskRepository.findAllByName(name).stream().findAny();
     }
 
-    public List<Task> findAllTasks() {
-        return (List<Task>) taskRepository.findAll();
+    public List<TaskSubject> findAllTasks() {
+        return (List<TaskSubject>) taskRepository.findAll();
     }
 
     @Transactional
-    public void saveTask(Task task) {
-        taskRepository.save(task);
+    public void saveTask(TaskSubject taskSubject) {
+        taskRepository.save(taskSubject);
     }
 
     @Transactional
-    public void updateTask(Task task) {
-        taskRepository.save(task);
+    public void updateTask(TaskSubject taskSubject) {
+        taskRepository.save(taskSubject);
     }
 
     @Transactional
-    public void deleteTask(Task task) {
-        taskRepository.delete(task);
+    public void deleteTask(TaskSubject taskSubject) {
+        taskRepository.delete(taskSubject);
     }
 
 }
