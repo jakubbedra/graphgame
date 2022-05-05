@@ -9,6 +9,7 @@ import pl.edu.pg.eti.graphgame.stats.dto.GetStatsResponse;
 import pl.edu.pg.eti.graphgame.stats.dto.UpdateStatsRequest;
 import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
 import pl.edu.pg.eti.graphgame.stats.service.StatsService;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
 
@@ -40,7 +41,7 @@ public class StatsController {
         statsService.saveStats(
                 CreateStatsRequest.dtoToEntityMapper(
                         (id) -> userService.findUser(id).orElseThrow(),
-                        (id) -> taskService.findTaskById(id).orElseThrow(),
+                        GraphTaskSubject::valueOf,
                         () -> new Date(System.currentTimeMillis())
                 ).apply(request)
         );

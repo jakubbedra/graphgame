@@ -42,7 +42,7 @@ public class UserController {
 
 
     @GetMapping("/session")
-    public ResponseEntity<String> testQueryParam123fds(@RequestParam("token") String token) {
+    public ResponseEntity<String> getSession(@RequestParam("token") String token) {
         Optional<UserSession> session = userSessionService.findSessionByToken(token);
         if(session.isEmpty())
             return ResponseEntity.notFound().build();

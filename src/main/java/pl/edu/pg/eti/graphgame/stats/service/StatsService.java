@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pg.eti.graphgame.stats.StatsUtils;
 import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
 import pl.edu.pg.eti.graphgame.stats.repository.StatsRepository;
-import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 
 import java.sql.Date;
@@ -47,11 +47,12 @@ public class StatsService {
     }
 
     //todo
-    public List<Stats> findAllStatsByUserAndTask(User user, TaskSubject taskSubject) {
-        return statsRepository.findAllByUserAndTaskSubject(user, taskSubject);
+    public List<Stats> findAllStatsByUserAndTask(User user, GraphTaskSubject taskSubject) {
+        return statsRepository.findAllByUserAndGraphTaskSubject(user, taskSubject);
+        //return statsRepository.findAllByUserAndTaskSubject(user, taskSubject);
     }
 
-    public List<Stats> findAllStatsByUserAndTaskInTimePeriod(User user, TaskSubject taskSubject, Date startDate, Date endDate) {
+    public List<Stats> findAllStatsByUserAndTaskInTimePeriod(User user, GraphTaskSubject taskSubject, Date startDate, Date endDate) {
         return findAllStatsByUserAndTask(user, taskSubject).stream().filter(s ->
                 !s.getDate().after(endDate) && !s.getDate().before(startDate)
         ).collect(Collectors.toList());
@@ -63,8 +64,8 @@ public class StatsService {
                 .collect(Collectors.toList());
     }
 
-    public List<Stats> findAllStatsByUserAndTaskAndDate(User user, TaskSubject taskSubject, Date date) {
-        return statsRepository.findAllByUserAndTaskSubject(user, taskSubject).stream()
+    public List<Stats> findAllStatsByUserAndTaskAndDate(User user, GraphTaskSubject taskSubject, Date date) {
+        return statsRepository.findAllByUserAndGraphTaskSubject(user, taskSubject).stream()
                 .filter(s -> StatsUtils.equalDates(s.getDate(), date))
                 .collect(Collectors.toList());
     }
@@ -88,7 +89,7 @@ public class StatsService {
      */
     @Transactional
     public void updateCurrentStats(Stats stats) {
-        Optional<Stats> mostCurrent = statsRepository.findAllByUserAndTaskSubject(stats.getUser(), stats.getTaskSubject()).stream()
+        Optional<Stats> mostCurrent = statsRepository.findAllByUserAndGraphTaskSubject(stats.getUser(), stats.getGraphTaskSubject()).stream()
                 .max(Comparator.comparing(Stats::getDate));
         if (mostCurrent.isPresent() && StatsUtils.equalDates(mostCurrent.get().getDate(), stats.getDate())) {
             mostCurrent.get().setCorrect(mostCurrent.get().getCorrect() + stats.getCorrect());

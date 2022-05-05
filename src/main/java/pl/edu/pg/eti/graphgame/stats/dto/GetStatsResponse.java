@@ -15,7 +15,7 @@ import java.util.function.Function;
 public class GetStatsResponse {
 
     private Long userId;
-    private Long taskId;
+    private String taskName;
 
     private int correct;
     private int wrong;
@@ -24,7 +24,7 @@ public class GetStatsResponse {
 
     public static Function<Stats, GetStatsResponse> entityToDtoMapper() {
         return stats -> GetStatsResponse.builder()
-                .taskId(stats.getTaskSubject().getId())
+                .taskName(stats.getGraphTaskSubject().name())
                 .userId(stats.getUser().getId())
                 .correct(stats.getCorrect())
                 .wrong(stats.getWrong())

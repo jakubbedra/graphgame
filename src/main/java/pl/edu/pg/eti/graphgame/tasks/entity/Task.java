@@ -1,6 +1,8 @@
 package pl.edu.pg.eti.graphgame.tasks.entity;
 
 import lombok.*;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskType;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 
 import javax.persistence.*;
@@ -23,5 +25,11 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "user")
     private User user;
+
+    private GraphTaskSubject subject;
+
+    private GraphTaskType type;
+
+    private String content;
 
 }

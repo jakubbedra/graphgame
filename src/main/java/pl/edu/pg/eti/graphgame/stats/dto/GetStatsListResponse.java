@@ -28,7 +28,7 @@ public class GetStatsListResponse {
         private UUID uuid;
 
         private Long userId;
-        private Long taskId;
+        private String taskName;
 
         private int correct;
         private int wrong;
@@ -45,7 +45,7 @@ public class GetStatsListResponse {
                         .statsList(statsList.stream()
                                 .map(stats -> StatsDto.builder()
                                         .uuid(stats.getUuid())
-                                        .taskId(stats.getTaskSubject().getId())
+                                        .taskName(stats.getGraphTaskSubject().name())
                                         .userId(stats.getUser().getId())
                                         .correct(stats.getCorrect())
                                         .wrong(stats.getWrong())

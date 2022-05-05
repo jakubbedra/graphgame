@@ -3,14 +3,11 @@ package pl.edu.pg.eti.graphgame.tasks.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pg.eti.graphgame.tasks.dto.CreateTaskRequest;
-import pl.edu.pg.eti.graphgame.tasks.dto.GetTaskResponse;
-import pl.edu.pg.eti.graphgame.tasks.dto.GetTasksResponse;
-import pl.edu.pg.eti.graphgame.tasks.dto.UpdateTaskRequest;
-import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.dto.*;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 
-import java.util.Optional;
+import java.util.List;
 
 @RequestMapping("/api/tasks")
 @RestController
@@ -24,7 +21,7 @@ public class TaskController {
     ) {
         this.taskService = taskService;
     }
-
+/*
     @PostMapping
     public ResponseEntity<Void> createTask(@RequestBody CreateTaskRequest request) {
         try {
@@ -44,7 +41,15 @@ public class TaskController {
                 GetTasksResponse.entityToDtoMapper().apply(taskService.findAllTasks())
         );
     }
+*/
+    @GetMapping("/subjects")
+    public ResponseEntity<GetTaskSubjectsResponse> getTaskSubjects() {
+        return ResponseEntity.ok(
+                GetTaskSubjectsResponse.entityToDtoMapper().apply(List.of(GraphTaskSubject.values()))
+        );
+    }
 
+    /*
     @GetMapping("/{id}")
     public ResponseEntity<GetTaskResponse> getTask(@PathVariable("id") Long id) {
         return taskService.findTaskById(id)
@@ -74,5 +79,5 @@ public class TaskController {
             return ResponseEntity.notFound().build();
         }
     }
-
+*/
 }

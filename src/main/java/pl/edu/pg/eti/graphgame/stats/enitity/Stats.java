@@ -1,7 +1,7 @@
 package pl.edu.pg.eti.graphgame.stats.enitity;
 
 import lombok.*;
-import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 
 import javax.persistence.*;
@@ -28,9 +28,7 @@ public class Stats {
     @JoinColumn(name = "user")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "task_subject")
-    private TaskSubject taskSubject;
+    private GraphTaskSubject graphTaskSubject;
 
     private Date date;
 

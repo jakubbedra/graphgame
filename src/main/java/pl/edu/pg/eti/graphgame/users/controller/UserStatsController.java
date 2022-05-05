@@ -10,7 +10,7 @@ import pl.edu.pg.eti.graphgame.stats.dto.GetSummedStatsResponse;
 import pl.edu.pg.eti.graphgame.stats.dto.UpdateStatsRequest;
 import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
 import pl.edu.pg.eti.graphgame.stats.service.StatsService;
-import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
@@ -89,20 +89,22 @@ public class UserStatsController {
         );
     }
 
-    @GetMapping("/{taskId}")
+    @GetMapping("/{taskName}")
     public ResponseEntity<GetSummedStatsResponse> getUserStatsTask(
             @PathVariable("userId") Long userId,
-            @PathVariable("taskId") Long taskId,
+            @PathVariable("taskName") String taskName,
+//            @PathVariable("taskId") Long taskId,
             @RequestParam(name = "startDate", required = false) Optional<Date> startDate,
             @RequestParam(name = "endDate", required = false) Optional<Date> endDate
     ) {
         Optional<User> user = userService.findUser(userId);
-        Optional<TaskSubject> task = taskService.findTaskById(taskId);
-        if (user.isEmpty() || task.isEmpty()) {
+//        Optional<TaskSubject> task = taskService.findTaskById(taskId);
+        GraphTaskSubject taskSubject = GraphTaskSubject.valueOf(taskName);
+        if (user.isEmpty() || taskSubject == null) {
             return ResponseEntity.notFound().build();
         }
 
-        List<Stats> statsList = findUserStats(user.get(), startDate, endDate, task);
+        List<Stats> statsList = findUserStats(user.get(), startDate, endDate, Optional.of(taskSubject));
 
         if (statsList.isEmpty()) {
             return ResponseEntity.ok(
@@ -118,20 +120,20 @@ public class UserStatsController {
         }
     }
 
-    @GetMapping("/{taskId}/list")
+    @GetMapping("/{taskName}/list")
     public ResponseEntity<GetStatsListResponse> getUserStatsListTask(
             @PathVariable("userId") Long userId,
-            @PathVariable("taskId") Long taskId,
+            @PathVariable("taskName") String taskName,
             @RequestParam(name = "startDate", required = false) Optional<Date> startDate,
             @RequestParam(name = "endDate", required = false) Optional<Date> endDate
     ) {
         Optional<User> user = userService.findUser(userId);
-        Optional<TaskSubject> task = taskService.findTaskById(taskId);
-        if (user.isEmpty() || task.isEmpty()) {
+        GraphTaskSubject taskSubject = GraphTaskSubject.valueOf(taskName);
+        if (user.isEmpty() || taskSubject == null) {
             return ResponseEntity.notFound().build();
         }
         List<Stats> statsList = findUserStats(
-                user.get(), startDate, endDate, task
+                user.get(), startDate, endDate, Optional.of(taskSubject)
         );
         return ResponseEntity.ok(
                 GetStatsListResponse.entityToDtoMapper().apply(statsList)
@@ -144,22 +146,24 @@ public class UserStatsController {
      * The stats are updated by <strong>adding</s> the stats given in the DTO to those
      * stored in the data layer.
      */
-    @PutMapping("/{taskId}")
+    @PutMapping("/{taskName}")
     public ResponseEntity<Void> updateDailyUserStats(
             @PathVariable("userId") Long userId,
-            @PathVariable("taskId") Long taskId,
+            @PathVariable("taskName") String taskName,
+            //@PathVariable("taskId") Long taskId,
             @RequestBody UpdateStatsRequest request
     ) {
         Optional<User> user = userService.findUser(userId);
-        Optional<TaskSubject> task = taskService.findTaskById(taskId);
-        if (user.isEmpty() || task.isEmpty()) {
+        //Optional<TaskSubject> task = taskService.findTaskById(taskId);
+        GraphTaskSubject taskSubject = GraphTaskSubject.valueOf(taskName);
+        if (user.isEmpty() || taskSubject == null) {
             return ResponseEntity.notFound().build();
         }
         statsService.updateCurrentStats(
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(user.get())
-                        .taskSubject(task.get())
+                        .graphTaskSubject(taskSubject)
                         .date(new Date(System.currentTimeMillis()))
                         .correct(request.getCorrect())
                         .wrong(request.getWrong())
@@ -169,7 +173,7 @@ public class UserStatsController {
     }
 
     private List<Stats> findUserStats(
-            User user, Optional<Date> startDate, Optional<Date> endDate, Optional<TaskSubject> task
+            User user, Optional<Date> startDate, Optional<Date> endDate, Optional<GraphTaskSubject> task
     ) {
         if (task.isPresent()) {
             if (startDate.isPresent() && endDate.isPresent()) {

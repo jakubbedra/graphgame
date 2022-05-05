@@ -6,7 +6,6 @@ import pl.edu.pg.eti.graphgame.exceptions.UserAlreadyExistsException;
 import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
 import pl.edu.pg.eti.graphgame.stats.service.StatsService;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
-import pl.edu.pg.eti.graphgame.tasks.entity.TaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
@@ -33,10 +32,6 @@ public class TestDataHardcoder {
     private User user9;
     private User user10;
 
-    private TaskSubject taskSubject1;
-    private TaskSubject taskSubject2;
-    private TaskSubject taskSubject3;
-
     private final int DAY_MILLIS = 24 * 60 * 60 * 1000;
 
     @Autowired
@@ -54,7 +49,6 @@ public class TestDataHardcoder {
     @PostConstruct
     public void hardcodeData() throws UserAlreadyExistsException {
         hardcodeUsers();
-        hardcodeTasks();
         hardcodeStats();
     }
 
@@ -71,18 +65,12 @@ public class TestDataHardcoder {
         userService.registerNewUserAccountWithPassword(user10, "xD");
     }
 
-    private void hardcodeTasks() {
-        taskService.saveTask(taskSubject1);
-        taskService.saveTask(taskSubject2);
-        taskService.saveTask(taskSubject3);
-    }
-
     private void hardcodeStats() {
         statsService.saveStats(
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .taskSubject(taskService.findTaskByName("sample task 3").get())
+                        .graphTaskSubject(GraphTaskSubject.BFS)
                         .correct(2)
                         .wrong(14)
                         .date(new Date(System.currentTimeMillis()))
@@ -92,17 +80,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .taskSubject(taskService.findTaskByName("sample task 1").get())
-                        .correct(4)
-                        .wrong(3)
-                        .date(new Date(System.currentTimeMillis() - DAY_MILLIS))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 1").get())
-                        .taskSubject(taskService.findTaskByName("sample task 1").get())
+                        .graphTaskSubject(GraphTaskSubject.COMPLETE_GRAPHS)
                         .correct(2)
                         .wrong(1)
                         .date(new Date(System.currentTimeMillis()))
@@ -112,19 +90,9 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .taskSubject(taskService.findTaskByName("sample task 2").get())
-                        .correct(0)
-                        .wrong(2)
-                        .date(new Date(System.currentTimeMillis()))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 1").get())
-                        .taskSubject(taskService.findTaskByName("sample task 3").get())
-                        .correct(6)
-                        .wrong(8)
+                        .graphTaskSubject(GraphTaskSubject.BFS)
+                        .correct(4)
+                        .wrong(3)
                         .date(new Date(System.currentTimeMillis() - DAY_MILLIS))
                         .build()
         );
@@ -132,7 +100,17 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .taskSubject(taskService.findTaskByName("sample task 2").get())
+                        .graphTaskSubject(GraphTaskSubject.COMPLETE_GRAPHS)
+                        .correct(0)
+                        .wrong(2)
+                        .date(new Date(System.currentTimeMillis() - DAY_MILLIS))
+                        .build()
+        );
+        statsService.saveStats(
+                Stats.builder()
+                        .uuid(UUID.randomUUID())
+                        .user(userService.findUserByName("sample user 1").get())
+                        .graphTaskSubject(GraphTaskSubject.BFS)
                         .correct(2)
                         .wrong(10)
                         .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
@@ -142,7 +120,7 @@ public class TestDataHardcoder {
                 Stats.builder()
                         .uuid(UUID.randomUUID())
                         .user(userService.findUserByName("sample user 1").get())
-                        .taskSubject(taskService.findTaskByName("sample task 1").get())
+                        .graphTaskSubject(GraphTaskSubject.COMPLETE_GRAPHS)
                         .correct(6)
                         .wrong(17)
                         .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
@@ -200,15 +178,6 @@ public class TestDataHardcoder {
                 .id(37L)
                 .login("sample user 10")
                 .email("user10@example.com")
-                .build();
-        taskSubject1 = TaskSubject.builder()
-                .name("sample task 1")
-                .build();
-        taskSubject2 = TaskSubject.builder()
-                .name("sample task 2")
-                .build();
-        taskSubject3 = TaskSubject.builder()
-                .name("sample task 3")
                 .build();
     }
 
