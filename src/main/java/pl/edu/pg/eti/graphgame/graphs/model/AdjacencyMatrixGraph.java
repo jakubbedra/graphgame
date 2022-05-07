@@ -148,4 +148,16 @@ public class AdjacencyMatrixGraph implements Graph {
         }
     }
 
+    //For testing purposes
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                sb.append(matrix[i][j]).append(j != n - 1 ? ", " : "\n");
+            }
+        }
+        return sb.toString();
+    }
+
 }

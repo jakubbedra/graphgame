@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskType;
+import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
 import java.util.UUID;
 
@@ -14,33 +15,38 @@ import java.util.UUID;
 public class TaskQuestion {
 
     /**
-     * The UUID of the task
+     * The UUID of the task.
      */
     private UUID taskUuid;
 
     /**
-     * The uuid of the user who has this task assigned
+     * The uuid of the user who has this task assigned.
      */
     private Long userId;
 
     /**
-     * The subject of the task
+     * The subject of the task.
      */
-    private GraphTaskSubject graphTaskSubject;
+    private GraphTaskSubject subject;
 
     /**
-     * The game mode of the task
+     * The game mode of the task.
      */
-    private GraphTaskType graphTaskType;
+    private GraphTaskType type;
 
     /**
-     * Te content of the task (only the string explaining what to do)
+     * Number of vertices of the graph related to the task.
      */
-    private String content;
+    private int graphVertices;
 
-    /**
-     * For now placeholder, will contain the generated graph, if the task needs it
-     */
-    private String graph;
+    public static TaskQuestion map(Task taskEntity) {
+        return TaskQuestion.builder()
+                .taskUuid(taskEntity.getUuid())
+                .userId(taskEntity.getUser().getId())
+                .subject(taskEntity.getSubject())
+                .type(taskEntity.getType())
+                .graphVertices(taskEntity.getGraphVertices())
+                .build();
+    }
 
 }

@@ -19,4 +19,22 @@ public interface Graph {
     List<Integer> neighbours(int v);
     //List<Integer> commonNeighbours(int v1, int v2);
 
+    default boolean isSame(Graph g) {
+        if (g.getN() != getN() || g.getM() != getM()) {
+            return false;
+        }
+
+        for (int i = 0; i < g.getN(); i++) {
+            for (int j = 0; j < g.getN(); j++) {
+                boolean e1 = g.edgeExists(i, j);
+                boolean e2 = edgeExists(i, j);
+                if (e1 != e2) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
 }

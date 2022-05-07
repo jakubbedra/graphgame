@@ -5,48 +5,100 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.dto.*;
+import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
+import pl.edu.pg.eti.graphgame.users.entity.User;
+import pl.edu.pg.eti.graphgame.users.service.UserService;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequestMapping("/api/tasks")
 @RestController
 public class TaskController {
 
     private final TaskService taskService;
+    private final UserService userService;
 
     @Autowired
     public TaskController(
-            TaskService taskService
+            TaskService taskService,
+            UserService userService
     ) {
         this.taskService = taskService;
-    }
-/*
-    @PostMapping
-    public ResponseEntity<Void> createTask(@RequestBody CreateTaskRequest request) {
-        try {
-            taskService.saveTask(
-                    CreateTaskRequest.dtoToEntityMapper().apply(request)
-            );
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
+        this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<GetTasksResponse> getTasks() {
-        return ResponseEntity.ok(
-                GetTasksResponse.entityToDtoMapper().apply(taskService.findAllTasks())
-        );
-    }
-*/
+    /*
+        @PostMapping
+        public ResponseEntity<Void> createTask(@RequestBody CreateTaskRequest request) {
+            try {
+                taskService.saveTask(
+                        CreateTaskRequest.dtoToEntityMapper().apply(request)
+                );
+                return ResponseEntity.ok().build();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
+        @GetMapping
+        public ResponseEntity<GetTasksResponse> getTasks() {
+            return ResponseEntity.ok(
+                    GetTasksResponse.entityToDtoMapper().apply(taskService.findAllTasks())
+            );
+        }
+    */
+
     @GetMapping("/subjects")
     public ResponseEntity<GetTaskSubjectsResponse> getTaskSubjects() {
         return ResponseEntity.ok(
                 GetTaskSubjectsResponse.entityToDtoMapper().apply(List.of(GraphTaskSubject.values()))
         );
+    }
+
+    @GetMapping("/{uuid}")
+    public ResponseEntity<TaskQuestion> getTask(
+            @PathParam("uuid") UUID uuid
+    ) {
+        Optional<Task> task = taskService.findTask(uuid);
+        return task.map(value -> ResponseEntity.ok(
+                TaskQuestion.map(value)
+        )).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<TaskQuestion> getTask(
+            @PathParam("id") Long id
+    ) {
+        Optional<User> user = userService.findUser(id);
+        if (user.isPresent()) {
+            Optional<Task> task = taskService.findTaskOfUser(user.get());
+            return task.map(value -> ResponseEntity.ok(
+                    TaskQuestion.map(value)
+            )).orElseGet(() -> ResponseEntity.notFound().build());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/user/{id}")
+    public ResponseEntity<Void> createTask(@PathVariable("id") Long id) {
+        //todo: checking if player already has a task
+
+        //TODO: graphService.createGraphForTask(task)
+
+        Optional<User> user = userService.findUser(id);
+        if (user.isPresent()) {
+            taskService.createAndSaveTaskForUser(user.get());
+            //graphService.createAndSaveGraphForTask(task);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /*

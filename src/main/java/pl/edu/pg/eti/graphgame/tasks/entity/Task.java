@@ -30,6 +30,6 @@ public class Task {
 
     private GraphTaskType type;
 
-    private String content;
+    private int graphVertices;
 
 }
