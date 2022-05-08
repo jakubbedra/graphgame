@@ -3,7 +3,9 @@ package pl.edu.pg.eti.graphgame.tasks.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pg.eti.graphgame.graphs.service.GraphService;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskType;
 import pl.edu.pg.eti.graphgame.tasks.dto.*;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
@@ -21,14 +23,17 @@ public class TaskController {
 
     private final TaskService taskService;
     private final UserService userService;
+    private final GraphService graphService;
 
     @Autowired
     public TaskController(
             TaskService taskService,
-            UserService userService
+            UserService userService,
+            GraphService graphService
     ) {
         this.taskService = taskService;
         this.userService = userService;
+        this.graphService = graphService;
     }
 
     /*
@@ -89,16 +94,20 @@ public class TaskController {
     public ResponseEntity<Void> createTask(@PathVariable("id") Long id) {
         //todo: checking if player already has a task
 
-        //TODO: graphService.createGraphForTask(task)
-
         Optional<User> user = userService.findUser(id);
         if (user.isPresent()) {
-            taskService.createAndSaveTaskForUser(user.get());
-            //graphService.createAndSaveGraphForTask(task);
+            Task task = taskService.createAndSaveTaskForUser(user.get());
+            if (taskRequiresGraph(task)) {
+                graphService.createAndSaveGraphForTask(task);
+            }
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    private boolean taskRequiresGraph(Task task) {
+        return task.getType() != GraphTaskType.DRAW;
     }
 
     /*

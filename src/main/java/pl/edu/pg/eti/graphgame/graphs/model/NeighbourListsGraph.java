@@ -1,9 +1,14 @@
 package pl.edu.pg.eti.graphgame.graphs.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+@Getter
+@Setter
 public class NeighbourListsGraph implements Graph {
 
     /**
@@ -11,19 +16,26 @@ public class NeighbourListsGraph implements Graph {
      */
     private final List<List<Integer>> neighbourLists;
 
+    private int n;
     private int m;
 
     public NeighbourListsGraph() {
         neighbourLists = new ArrayList<>();
         m = 0;
+        n = 0;
     }
 
     public NeighbourListsGraph(int n) {
+        this.n = n;
         neighbourLists = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            neighbourLists.add(new LinkedList<>());
+        }
         m = 0;
     }
 
     public NeighbourListsGraph(Graph g) {
+        this.n = g.getN();
         this.m = g.getM();
         neighbourLists = new ArrayList<>(g.getN());
         for (int i = 0; i < g.getN(); i++) {
@@ -43,6 +55,7 @@ public class NeighbourListsGraph implements Graph {
 
     @Override
     public void addVertex() {
+        n++;
         neighbourLists.add(new LinkedList<>());
     }
 
@@ -63,6 +76,7 @@ public class NeighbourListsGraph implements Graph {
             }
         }
         m -= neighbours.size();
+        n--;
     }
 
     @Override
