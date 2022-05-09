@@ -43,7 +43,7 @@ public class GraphService {
 
             graphRepository.save(GraphEntity.builder()
                     .uuid(UUID.randomUUID())
-                    .task(task)
+                    .task(task.getUuid())
                     .json(json)
                     .build()
             );
@@ -53,7 +53,7 @@ public class GraphService {
     }
 
     public Optional<Graph> findGraphByTask(Task task) {
-        GraphEntity entity = graphRepository.findFirstByTask(task).get();
+        GraphEntity entity = graphRepository.findFirstByTask(task.getUuid()).get();
         try {
             return Optional.of(graphFromJson(entity.getJson()));
         } catch (JsonProcessingException e) {

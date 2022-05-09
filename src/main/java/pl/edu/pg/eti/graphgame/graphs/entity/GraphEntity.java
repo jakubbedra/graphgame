@@ -20,9 +20,7 @@ public class GraphEntity {
     @Id
     private UUID uuid;
 
-    @OneToOne
-    @JoinColumn(name = "task")
-    private Task task;
+    private UUID task;
 
     private String json;
 

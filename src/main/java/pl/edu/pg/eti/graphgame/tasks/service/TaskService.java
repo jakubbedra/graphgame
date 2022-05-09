@@ -2,6 +2,7 @@ package pl.edu.pg.eti.graphgame.tasks.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 import pl.edu.pg.eti.graphgame.tasks.factory.TaskFactory;
 import pl.edu.pg.eti.graphgame.tasks.repository.TaskRepository;
@@ -40,8 +41,9 @@ public class TaskService {
         return task;
     }
 
+    @Transactional
     public void deleteAllUserTasks(User user) {
-        taskRepository.deleteAll(taskRepository.getAllByUser(user));
+        taskRepository.deleteAllByUser(user);
     }
 
 }

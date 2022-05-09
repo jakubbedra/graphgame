@@ -3,11 +3,13 @@ package pl.edu.pg.eti.graphgame.tasks.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.graphs.service.GraphService;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskType;
 import pl.edu.pg.eti.graphgame.tasks.dto.*;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.service.TaskAnswerService;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
@@ -22,41 +24,22 @@ import java.util.UUID;
 public class TaskController {
 
     private final TaskService taskService;
+    private final TaskAnswerService taskAnswerService;
     private final UserService userService;
     private final GraphService graphService;
 
     @Autowired
     public TaskController(
             TaskService taskService,
+            TaskAnswerService taskAnswerService,
             UserService userService,
             GraphService graphService
     ) {
         this.taskService = taskService;
+        this.taskAnswerService = taskAnswerService;
         this.userService = userService;
         this.graphService = graphService;
     }
-
-    /*
-        @PostMapping
-        public ResponseEntity<Void> createTask(@RequestBody CreateTaskRequest request) {
-            try {
-                taskService.saveTask(
-                        CreateTaskRequest.dtoToEntityMapper().apply(request)
-                );
-                return ResponseEntity.ok().build();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return ResponseEntity.badRequest().build();
-            }
-        }
-
-        @GetMapping
-        public ResponseEntity<GetTasksResponse> getTasks() {
-            return ResponseEntity.ok(
-                    GetTasksResponse.entityToDtoMapper().apply(taskService.findAllTasks())
-            );
-        }
-    */
 
     @GetMapping("/subjects")
     public ResponseEntity<GetTaskSubjectsResponse> getTaskSubjects() {
@@ -91,11 +74,12 @@ public class TaskController {
     }
 
     @PostMapping("/user/{id}")
-    public ResponseEntity<Void> createTask(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> createTask(@PathParam("id") Long id) {
         //todo: checking if player already has a task
 
         Optional<User> user = userService.findUser(id);
         if (user.isPresent()) {
+            taskService.deleteAllUserTasks(user.get());
             Task task = taskService.createAndSaveTaskForUser(user.get());
             if (taskRequiresGraph(task)) {
                 graphService.createAndSaveGraphForTask(task);
@@ -106,39 +90,37 @@ public class TaskController {
         }
     }
 
+    /**
+     * Method for checking the answers to the task
+     *
+     * @param uuid UUID of the Task
+     * @return true if the given answer was correct, false otherwise
+     */
+    @PostMapping("/vertexSelection/{uuid}/answer")
+    public ResponseEntity<Boolean> checkTaskAnswer(
+            @PathParam("uuid") UUID uuid,
+            @RequestBody VertexSelectionTaskAnswer answer
+    ) {
+        Optional<Task> task = taskService.findTask(uuid);
+        if (task.isPresent()) {
+            Optional<Graph> graph = graphService.findGraphByTask(task.get());
+            if (graph.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            boolean check = taskAnswerService.checkVertexSelectionAnswer(
+                    answer.getSelectedVertices(), task.get(), graph.get()
+            );
+
+            //todo: REMOVE THE TASK FROM DB AFTER CHECKING ANSWER!!!!
+
+            return ResponseEntity.ok(check);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     private boolean taskRequiresGraph(Task task) {
         return task.getType() != GraphTaskType.DRAW;
     }
 
-    /*
-    @GetMapping("/{id}")
-    public ResponseEntity<GetTaskResponse> getTask(@PathVariable("id") Long id) {
-        return taskService.findTaskById(id)
-                .map(value -> ResponseEntity.ok(GetTaskResponse.entityToDtoMapper().apply(value)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateTask(@PathVariable("id") Long id, @RequestBody UpdateTaskRequest request) {
-        Optional<TaskSubject> task = taskService.findTaskById(id);
-        if (task.isPresent()) {
-            UpdateTaskRequest.dtoToEntityUpdater().apply(task.get(), request);
-            taskService.updateTask(task.get());
-            return ResponseEntity.accepted().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable("id") Long id) {
-        Optional<TaskSubject> task = taskService.findTaskById(id);
-        if (task.isPresent()) {
-            taskService.deleteTask(task.get());
-            return ResponseEntity.accepted().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-*/
 }

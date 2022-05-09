@@ -14,4 +14,6 @@ public interface TaskRepository extends CrudRepository<Task, UUID> {
 
     Optional<Task> findFirstByUser(User user);
 
+    void deleteAllByUser(User user);
+
 }

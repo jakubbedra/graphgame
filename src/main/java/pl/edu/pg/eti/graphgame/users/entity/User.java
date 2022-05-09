@@ -1,8 +1,10 @@
 package pl.edu.pg.eti.graphgame.users.entity;
 
 import lombok.*;
+import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,5 +24,7 @@ public class User {
     private String passwordEncoded;
     private String roles;
 
+    @OneToMany
+    private List<Task> tasks;
 
 }
