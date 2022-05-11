@@ -86,6 +86,8 @@ public class StatsService {
     /**
      * Method used for updating (or creating) today's stats
      * of a given task type for a specific player.
+     *
+     * The stats param already needs to have today's date.
      */
     @Transactional
     public void updateCurrentStats(Stats stats) {

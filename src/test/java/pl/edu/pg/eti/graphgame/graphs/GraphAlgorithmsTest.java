@@ -35,8 +35,6 @@ public class GraphAlgorithmsTest {
     public void breadthFirstSearchTest() {
         final List<Integer> expected = List.of(0, 1, 2, 5, 4, 3);
         List<Integer> breadthFirstSearch = GraphAlgorithms.breadthFirstSearch(graph);
-//todo: check if its ok xdddd
-        //breadthFirstSearch.forEach(System.out::println);
         Assertions.assertThat(expected).isEqualTo(breadthFirstSearch);
     }
 

@@ -39,8 +39,6 @@ public class GraphService {
         try {
             String json = graphToJson(graph);
 
-            System.out.println("json:\n" + json);/////////////////////////////////////////////
-
             graphRepository.save(GraphEntity.builder()
                     .uuid(UUID.randomUUID())
                     .task(task.getUuid())
@@ -63,8 +61,6 @@ public class GraphService {
     }
 
     private String graphToJson(Graph graph) throws JsonProcessingException {
-        System.out.println(graph);
-
         return objectMapper.writeValueAsString(graph);
     }
 

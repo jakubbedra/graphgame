@@ -23,17 +23,14 @@ public class StatsController {
 
     private final StatsService statsService;
     private final UserService userService;
-    private final TaskService taskService;
 
     @Autowired
     public StatsController(
             StatsService statsService,
-            UserService userService,
-            TaskService taskService
+            UserService userService
     ) {
         this.statsService = statsService;
         this.userService = userService;
-        this.taskService = taskService;
     }
 
     @PostMapping

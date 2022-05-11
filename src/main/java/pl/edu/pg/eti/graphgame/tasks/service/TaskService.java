@@ -41,6 +41,10 @@ public class TaskService {
         return task;
     }
 
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
+    }
+
     @Transactional
     public void deleteAllUserTasks(User user) {
         taskRepository.deleteAllByUser(user);

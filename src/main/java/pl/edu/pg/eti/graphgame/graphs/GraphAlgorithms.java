@@ -22,7 +22,6 @@ public class GraphAlgorithms {
 
         while (!queue.isEmpty()) {
             v = queue.poll();
-//            System.out.println(v);
             visitedVertices.add(v);
 
             List<Integer> neighbours = graph.neighbours(v);
@@ -41,8 +40,15 @@ public class GraphAlgorithms {
         return null;
     }
 
-    public static boolean checkCompleteness() {
-        return false;
+    public static boolean isComplete(Graph graph) {
+        for (int i = 0; i < graph.getN(); i++) {
+            for (int j = 0; j < graph.getN(); j++) {
+                if (i != j && !graph.edgeExists(i, j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static boolean checkConnectivity() {
