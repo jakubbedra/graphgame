@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class CreateUserRequest {
 
-    private String login;
+    private String username;
     private String email;
     private String password;
 

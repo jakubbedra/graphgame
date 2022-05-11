@@ -126,6 +126,26 @@ public class TestDataHardcoder {
                         .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
                         .build()
         );
+        statsService.saveStats(
+                Stats.builder()
+                        .uuid(UUID.randomUUID())
+                        .user(userService.findUserByName("sample user 2").get())
+                        .graphTaskSubject(GraphTaskSubject.COMPLETE_GRAPHS)
+                        .correct(2)
+                        .wrong(1)
+                        .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
+                        .build()
+        );
+        statsService.saveStats(
+                Stats.builder()
+                        .uuid(UUID.randomUUID())
+                        .user(userService.findUserByName("sample user 2").get())
+                        .graphTaskSubject(GraphTaskSubject.BFS)
+                        .correct(3)
+                        .wrong(7)
+                        .date(new Date(System.currentTimeMillis()-1*DAY_MILLIS))
+                        .build()
+        );
     }
 
     private void initUsersAndTasks() {

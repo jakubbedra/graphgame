@@ -24,7 +24,7 @@ public class GetUsersResponse {
     public static class UserDto {
 
         private Long id;
-        private String login;
+        private String username;
         private String email;
         private String password;
 
@@ -39,7 +39,7 @@ public class GetUsersResponse {
             users.stream()
                     .map(user -> UserDto.builder()
                             .id(user.getId())
-                            .login(user.getLogin())
+                            .username(user.getLogin())
                             .email(user.getEmail())
                             .password(user.getPasswordEncoded())
                             .build())

@@ -86,7 +86,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Void> registerUser(@RequestBody CreateUserRequest request) {
         User user = User.builder()
-                .login(request.getLogin())
+                .login(request.getUsername())
                 .email(request.getEmail())
                 .roles(DEFAULT_USER_ROLE)
                 .build();
@@ -125,9 +125,9 @@ public class UserController {
                 if(!request.getPassword().equals(""))
                     userService.updatePassword(user.get(), request.getPassword());
             }
-            if(request.getLogin() != null) {
-                if(!request.getLogin().equals(""))
-                    userService.updateLogin(user.get(), request.getLogin());
+            if(request.getUsername() != null) {
+                if(!request.getUsername().equals(""))
+                    userService.updateLogin(user.get(), request.getUsername());
             }
             if(request.getEmail() != null) {
                 if(!request.getEmail().equals(""))

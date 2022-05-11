@@ -13,13 +13,13 @@ import java.util.function.Function;
 @EqualsAndHashCode
 public class GetUserResponse {
 
-    private String login;
+    private String username;
     private String email;
     private String password;
 
     public static Function<User, GetUserResponse> entityToDtoMapper() {
         return user -> GetUserResponse.builder()
-                .login(user.getLogin())
+                .username(user.getLogin())
                 .email(user.getEmail())
                 .password(user.getPasswordEncoded())
                 .build();

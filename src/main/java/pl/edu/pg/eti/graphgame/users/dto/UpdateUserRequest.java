@@ -1,9 +1,6 @@
 package pl.edu.pg.eti.graphgame.users.dto;
 
 import lombok.*;
-import pl.edu.pg.eti.graphgame.users.entity.User;
-
-import java.util.function.BiFunction;
 
 @Getter
 @Setter
@@ -12,7 +9,7 @@ import java.util.function.BiFunction;
 @EqualsAndHashCode
 public class UpdateUserRequest {
 
-    private String login;
+    private String username;
     private String password;
     private String email;
 }
