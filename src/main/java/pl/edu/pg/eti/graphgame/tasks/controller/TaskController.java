@@ -56,7 +56,7 @@ public class TaskController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<TaskQuestion> getTask(
-            @PathParam("uuid") UUID uuid
+            @PathVariable("uuid") UUID uuid
     ) {
         Optional<Task> task = taskService.findTask(uuid);
         return task.map(value -> ResponseEntity.ok(
@@ -66,14 +66,18 @@ public class TaskController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<TaskQuestion> getTask(
-            @PathParam("id") Long id
+            @PathVariable("id") Long id
     ) {
         Optional<User> user = userService.findUser(id);
         if (user.isPresent()) {
             Optional<Task> task = taskService.findTaskOfUser(user.get());
             return task.map(value -> ResponseEntity.ok(
                     TaskQuestion.map(value)
-            )).orElseGet(() -> ResponseEntity.notFound().build());
+            )).orElseGet(() -> ResponseEntity.ok(
+                    TaskQuestion.builder()
+                            .type(GraphTaskType.UNDEFINED)
+                            .build()
+            ));
         } else {
             return ResponseEntity.notFound().build();
         }

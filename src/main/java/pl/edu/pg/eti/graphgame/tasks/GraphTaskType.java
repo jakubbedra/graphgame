@@ -6,7 +6,8 @@ package pl.edu.pg.eti.graphgame.tasks;
 public enum GraphTaskType {
 
     DRAW,
-    VERTEX_SELECTION
+    VERTEX_SELECTION,
+    UNDEFINED
     //EDGE_SELECTION
 
 }
