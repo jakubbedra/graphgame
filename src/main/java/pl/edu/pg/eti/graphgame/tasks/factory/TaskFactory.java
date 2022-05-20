@@ -37,6 +37,8 @@ public class TaskFactory {
                 return createCompleteGraphTask(user);
             case BFS:
                 return createBFSTask(user);
+            case DFS:
+                return createDFSTask(user);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
@@ -64,6 +66,19 @@ public class TaskFactory {
                 .user(user)
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.BFS)
+                .type(GraphTaskType.VERTEX_SELECTION)
+                .build();
+    }
+
+    private Task createDFSTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.DFS)
                 .type(GraphTaskType.VERTEX_SELECTION)
                 .build();
     }

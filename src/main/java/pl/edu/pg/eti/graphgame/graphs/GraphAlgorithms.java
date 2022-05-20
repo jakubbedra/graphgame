@@ -36,8 +36,28 @@ public class GraphAlgorithms {
         return visitedVertices;
     }
 
-    public static List<Integer> depthFirstSearch() {
-        return null;
+    public static List<Integer> depthFirstSearch(Graph graph) {
+        List<Integer> visitOrder = new LinkedList<>();
+        boolean[] visited = new boolean[graph.getN()];
+
+        for (int i = 0; i < visited.length; i++) {
+            visited[i] = false;
+        }
+
+        dfsVisit(graph, 0, visited, visitOrder);
+
+        return visitOrder;
+    }
+
+    private static void dfsVisit(Graph g, int v, boolean[] visited, List<Integer> visitOrder) {
+        visited[v] = true;
+        visitOrder.add(v);
+        List<Integer> neighbours = g.neighbours(v);
+        for (int i : neighbours) {
+            if (!visited[i]) {
+                dfsVisit(g, i, visited, visitOrder);
+            }
+        }
     }
 
     public static boolean isComplete(Graph graph) {

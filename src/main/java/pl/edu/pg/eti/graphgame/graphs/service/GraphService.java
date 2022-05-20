@@ -72,6 +72,7 @@ public class GraphService {
         GraphTaskSubject subject = task.getSubject();
         switch (subject) {
             case BFS:
+            case DFS:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices());
             default:
                 throw new UnsupportedTaskSubjectException("");

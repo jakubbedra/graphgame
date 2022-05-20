@@ -38,4 +38,11 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(expected).isEqualTo(breadthFirstSearch);
     }
 
+    @Test
+    public void depthFirstSearchTest() {
+        final List<Integer> expected = List.of(0, 1, 4, 5, 2, 3);
+        List<Integer> depthFirstSearch = GraphAlgorithms.depthFirstSearch(graph);
+        Assertions.assertThat(expected).isEqualTo(depthFirstSearch);
+    }
+
 }

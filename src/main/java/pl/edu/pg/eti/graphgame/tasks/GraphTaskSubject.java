@@ -11,6 +11,7 @@ import java.util.Random;
 public enum GraphTaskSubject {
 
     BFS("Breadth-First Search"),
+    DFS("Depth-First Search"),
     COMPLETE_GRAPHS("Complete Graphs");
 
     public final String label;

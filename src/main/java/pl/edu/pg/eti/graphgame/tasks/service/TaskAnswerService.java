@@ -20,6 +20,8 @@ public class TaskAnswerService {
         switch (task.getSubject()) {
             case BFS:
                 return vertices.equals(GraphAlgorithms.breadthFirstSearch(graph));
+            case DFS:
+                return vertices.equals(GraphAlgorithms.depthFirstSearch(graph));
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
