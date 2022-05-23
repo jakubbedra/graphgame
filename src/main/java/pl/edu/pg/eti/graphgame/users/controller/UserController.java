@@ -40,11 +40,10 @@ public class UserController {
     }
 
 
-
     @GetMapping("/session")
     public ResponseEntity<String> getSession(@RequestParam("token") String token) {
         Optional<UserSession> session = userSessionService.findSessionByToken(token);
-        if(session.isEmpty())
+        if (session.isEmpty())
             return ResponseEntity.notFound().build();
         String resp = token + " : " + session.get().getUser().getEmail() + " ; " + session.get().getExpirationDatetime();
         return ResponseEntity.ok(resp);
@@ -53,17 +52,16 @@ public class UserController {
     @PutMapping("/prolong_session")
     public ResponseEntity<Void> prolongToken(@RequestParam("token") String token) {
         Optional<UserSession> session = userSessionService.findSessionByToken(token);
-        if(session.isEmpty())
+        if (session.isEmpty())
             return ResponseEntity.notFound().build();
         userSessionService.prolongUserSession(session.get());
         return ResponseEntity.accepted().build();
     }
 
-
     @DeleteMapping("/logout")
     public ResponseEntity<Void> logoutUser(@RequestParam("token") String token) {
         Optional<UserSession> session = userSessionService.findSessionByToken(token);
-        if(session.isEmpty())
+        if (session.isEmpty())
             return ResponseEntity.notFound().build();
         userSessionService.logoutUserFromSession(session.get());
         return ResponseEntity.ok().build();
@@ -71,15 +69,15 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginUserResponse> loginUser(@RequestBody LoginUserRequest request)
-        throws UserSessionTokenAlreadyExistsException {
-		Optional<UserSession> userSession = userService.loginUserWithPassword(request.getEmail(), request.getPassword());
+            throws UserSessionTokenAlreadyExistsException {
+        Optional<UserSession> userSession = userService.loginUserWithPassword(request.getEmail(), request.getPassword());
         return userSession.map(session -> ResponseEntity
-                .ok(LoginUserResponse.builder()
-                    .username(session.getUser().getLogin())
-                    ._token(session.getToken())
-                    ._tokenExpirationTime(UserSessionService.DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS+"")
-                    .user_id(session.getUser().getId())
-                    .build()))
+                        .ok(LoginUserResponse.builder()
+                                .username(session.getUser().getLogin())
+                                ._token(session.getToken())
+                                ._tokenExpirationTime(UserSessionService.DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS + "")
+                                .user_id(session.getUser().getId())
+                                .build()))
                 .orElse(null);
     }
 
@@ -117,20 +115,20 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("id") Long id)
-        throws EmailAlreadyInUseException {
+            throws EmailAlreadyInUseException {
         Optional<User> user = userService.findUser(id);
         // TODO: check for session token and current user permissions
         if (user.isPresent()) {
-            if(request.getPassword() != null) {
-                if(!request.getPassword().equals(""))
+            if (request.getPassword() != null) {
+                if (!request.getPassword().equals(""))
                     userService.updatePassword(user.get(), request.getPassword());
             }
-            if(request.getUsername() != null) {
-                if(!request.getUsername().equals(""))
+            if (request.getUsername() != null) {
+                if (!request.getUsername().equals(""))
                     userService.updateLogin(user.get(), request.getUsername());
             }
-            if(request.getEmail() != null) {
-                if(!request.getEmail().equals(""))
+            if (request.getEmail() != null) {
+                if (!request.getEmail().equals(""))
                     userService.updateEmail(user.get(), request.getEmail());
             }
             return ResponseEntity.accepted().build();
