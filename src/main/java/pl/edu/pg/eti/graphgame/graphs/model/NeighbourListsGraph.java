@@ -45,7 +45,7 @@ public class NeighbourListsGraph implements Graph {
 
     @Override
     public int getN() {
-        return neighbourLists.size();
+        return n;
     }
 
     @Override

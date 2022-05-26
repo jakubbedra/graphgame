@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Random;
 
 public class NeighbourListsGraphTest {
 
@@ -13,7 +12,7 @@ public class NeighbourListsGraphTest {
 
     @BeforeEach
     public void setup() {
-        graph = new NeighbourListsGraph(6);
+        graph = new NeighbourListsGraph();
         graph.addVertex();
         graph.addVertex();
         graph.addVertex();
