@@ -15,6 +15,7 @@ import pl.edu.pg.eti.graphgame.tasks.service.TaskAnswerService;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
+import pl.edu.pg.eti.graphgame.users.service.UserSessionService;
 
 import javax.websocket.server.PathParam;
 import java.sql.Date;
@@ -31,6 +32,7 @@ public class TaskController {
     private final UserService userService;
     private final StatsService statsService;
     private final GraphService graphService;
+    private final UserSessionService userSessionService;
 
     @Autowired
     public TaskController(
@@ -38,13 +40,15 @@ public class TaskController {
             TaskAnswerService taskAnswerService,
             UserService userService,
             StatsService statsService,
-            GraphService graphService
+            GraphService graphService,
+            UserSessionService userSessionService
     ) {
         this.taskService = taskService;
         this.taskAnswerService = taskAnswerService;
         this.userService = userService;
         this.statsService = statsService;
         this.graphService = graphService;
+        this.userSessionService = userSessionService;
     }
 
     @GetMapping("/subjects")
@@ -56,8 +60,14 @@ public class TaskController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<TaskQuestion> getTask(
-            @PathVariable("uuid") UUID uuid
+            @PathVariable("uuid") UUID uuid,
+            @RequestParam("token") String token
     ) {
+        if(!userSessionService.hasTaskAccess(token, uuid)) {
+            return userSessionService.getResponseTokenAccessTask(token,
+                uuid);
+        }
+
         Optional<Task> task = taskService.findTask(uuid);
         return task.map(value -> ResponseEntity.ok(
                 TaskQuestion.map(value)
@@ -66,8 +76,14 @@ public class TaskController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<TaskQuestion> getTask(
-            @PathVariable("id") Long id
+            @PathVariable("id") Long id,
+            @RequestParam("token") String token
     ) {
+        if(!userSessionService.hasAccess(token, id)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                id);
+        }
+
         Optional<User> user = userService.findUser(id);
         if (user.isPresent()) {
             Optional<Task> task = taskService.findTaskOfUser(user.get());
@@ -85,8 +101,14 @@ public class TaskController {
 
     @PostMapping("/user/{id}")
     public ResponseEntity<Void> createTask(
-            @PathVariable("id") Long id
+            @PathVariable("id") Long id,
+            @RequestParam("token") String token
     ) {
+        if(!userSessionService.hasAccess(token, id)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                id);
+        }
+
         Optional<User> user = userService.findUser(id);
         if (user.isPresent()) {
             Task task = taskService.createAndSaveTaskForUser(user.get());
@@ -102,8 +124,14 @@ public class TaskController {
     @PostMapping("/answer/vertexSelection/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
             @PathVariable("uuid") UUID uuid,
-            @RequestBody VertexSelectionTaskAnswer answer
+            @RequestBody VertexSelectionTaskAnswer answer,
+            @RequestParam("token") String token
     ) {
+        if(!userSessionService.hasTaskAccess(token, uuid)) {
+            return userSessionService.getResponseTokenAccessTask(token,
+                uuid);
+        }
+
         Optional<Task> task = taskService.findTask(uuid);
         if (task.isPresent()) {
             if (!task.get().getType().equals(GraphTaskType.VERTEX_SELECTION)) {
@@ -130,8 +158,14 @@ public class TaskController {
     @PostMapping("/answer/draw/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
             @PathVariable("uuid") UUID uuid,
-            @RequestBody DrawGraphTaskAnswer answer
+            @RequestBody DrawGraphTaskAnswer answer,
+            @RequestParam("token") String token
     ) {
+        if(!userSessionService.hasTaskAccess(token, uuid)) {
+            return userSessionService.getResponseTokenAccessTask(token,
+                uuid);
+        }
+
         Optional<Task> task = taskService.findTask(uuid);
         if (task.isPresent()) {
             if (!task.get().getType().equals(GraphTaskType.DRAW)) {
