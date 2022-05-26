@@ -14,6 +14,7 @@ import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
+import pl.edu.pg.eti.graphgame.users.service.UserSessionService;
 
 import java.sql.Date;
 import java.util.*;
@@ -26,16 +27,19 @@ public class UserStatsController {
     private final StatsService statsService;
     private final UserService userService;
     private final TaskService taskService;
+    private final UserSessionService userSessionService;
 
     @Autowired
     public UserStatsController(
             StatsService statsService,
             UserService userService,
-            TaskService taskService
+            TaskService taskService,
+            UserSessionService userSessionService
     ) {
         this.statsService = statsService;
         this.userService = userService;
         this.taskService = taskService;
+        this.userSessionService = userSessionService;
     }
 
     /**
@@ -48,8 +52,15 @@ public class UserStatsController {
     public ResponseEntity<GetSummedStatsResponse> getUserStatsOverall(
             @PathVariable("userId") Long userId,
             @RequestParam(name = "startDate", required = false) Optional<Date> startDate,
-            @RequestParam(name = "endDate", required = false) Optional<Date> endDate
+            @RequestParam(name = "endDate", required = false) Optional<Date> endDate,
+            @RequestParam("token") String token
     ) {
+
+        if(userSessionService.hasAccess(token, userId)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                userId);
+        }
+
         Optional<User> user = userService.findUser(userId);
         if (user.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -75,12 +86,19 @@ public class UserStatsController {
     public ResponseEntity<GetSimplifiedStatsListResponse> getUserStatsListOverall(
             @PathVariable("userId") Long userId,
             @RequestParam(name = "startDate", required = false) Optional<Date> startDate,
-            @RequestParam(name = "endDate", required = false) Optional<Date> endDate
+            @RequestParam(name = "endDate", required = false) Optional<Date> endDate,
+            @RequestParam("token") String token
     ) {
         Optional<User> user = userService.findUser(userId);
         if (user.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
+        if(!userSessionService.hasAccess(token, userId)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                userId);
+        }
+
         List<Stats> statsList = findUserStats(
                 user.get(), startDate, endDate, Optional.empty()
         );
@@ -95,10 +113,17 @@ public class UserStatsController {
             @PathVariable("taskName") String taskName,
 //            @PathVariable("taskId") Long taskId,
             @RequestParam(name = "startDate", required = false) Optional<Date> startDate,
-            @RequestParam(name = "endDate", required = false) Optional<Date> endDate
+            @RequestParam(name = "endDate", required = false) Optional<Date> endDate,
+            @RequestParam("token") String token
     ) {
         Optional<User> user = userService.findUser(userId);
-//        Optional<TaskSubject> task = taskService.findTaskById(taskId);
+
+        if(!userSessionService.hasAccess(token, userId)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                userId);
+        }
+
+        //        Optional<TaskSubject> task = taskService.findTaskById(taskId);
         GraphTaskSubject taskSubject = GraphTaskSubject.valueOf(taskName);
         if (user.isEmpty() || taskSubject == null) {
             return ResponseEntity.notFound().build();
@@ -125,9 +150,16 @@ public class UserStatsController {
             @PathVariable("userId") Long userId,
             @PathVariable("taskName") String taskName,
             @RequestParam(name = "startDate", required = false) Optional<Date> startDate,
-            @RequestParam(name = "endDate", required = false) Optional<Date> endDate
+            @RequestParam(name = "endDate", required = false) Optional<Date> endDate,
+            @RequestParam("token") String token
     ) {
         Optional<User> user = userService.findUser(userId);
+
+        if(!userSessionService.hasAccess(token, userId)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                userId);
+        }
+
         GraphTaskSubject taskSubject = GraphTaskSubject.valueOf(taskName);
         if (user.isEmpty() || taskSubject == null) {
             return ResponseEntity.notFound().build();
@@ -151,9 +183,16 @@ public class UserStatsController {
             @PathVariable("userId") Long userId,
             @PathVariable("taskName") String taskName,
             //@PathVariable("taskId") Long taskId,
-            @RequestBody UpdateStatsRequest request
+            @RequestBody UpdateStatsRequest request,
+            @RequestParam("token") String token
     ) {
         Optional<User> user = userService.findUser(userId);
+
+        if(!userSessionService.hasAccess(token, userId)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                userId);
+        }
+
         //Optional<TaskSubject> task = taskService.findTaskById(taskId);
         GraphTaskSubject taskSubject = GraphTaskSubject.valueOf(taskName);
         if (user.isEmpty() || taskSubject == null) {

@@ -1,9 +1,12 @@
 package pl.edu.pg.eti.graphgame.users.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pg.eti.graphgame.exceptions.*;
+import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.entity.UserSession;
 import pl.edu.pg.eti.graphgame.users.repository.UserSessionRepository;
@@ -18,12 +21,15 @@ public class UserSessionService {
 	
     public static final int DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS = 3600;
 	private final UserSessionRepository userSessionRepository;
+	private final TaskService taskService;
 
     @Autowired
     public UserSessionService(
-			UserSessionRepository userSessionRepository
+			UserSessionRepository userSessionRepository,
+			TaskService taskService
     ) {
 		this.userSessionRepository = userSessionRepository;
+		this.taskService = taskService;
     }
 	
 	public String getCurrentSessionExpirationDatetime() {
@@ -74,6 +80,49 @@ public class UserSessionService {
 	@Transactional
 	public void logoutUserFromSession(UserSession session) {
 		userSessionRepository.delete(session);
+	}
+
+
+
+	public boolean hasAccess(String token, Long userId) {
+		if(getResponseTokenAccessUser(token, userId) == null)
+			return true;
+		return false;
+	}
+	public ResponseEntity getResponseTokenAccessUser(String token, Long userId) {
+		if(token == null)
+			return ResponseEntity.status(401).body(new String("Access denied: token is needed"));
+		if(userId == null)
+			return ResponseEntity.status(401).body(new String("Access denied: access only for specific user is allowed"));
+		Optional<UserSession> session = findSessionByToken(token);
+		if(session.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		if(session.get().getUser() == null) {
+			return ResponseEntity.status(401).body(new String("Access denied: User not logged in"));
+		}
+		if(!session.get().getUser().getId().equals(userId)) {
+			return ResponseEntity.status(401).body(new String("Access denied: userId=" + userId));
+		}
+		return null;
+	}
+
+	public boolean hasTaskAccess(String token, UUID taskUuid) {
+		if(getResponseTokenAccessTask(token, taskUuid) == null)
+			return true;
+		return false;
+	}
+	public ResponseEntity getResponseTokenAccessTask(String token, UUID taskUuid) {
+		if(taskUuid == null)
+			return ResponseEntity.status(404).build();
+		Optional<Task> task = taskService.findTask(taskUuid);
+		if(task.isEmpty())
+			return ResponseEntity.status(404).build();
+		if(task.get().getUser() == null) {
+			// TODO: does it mean that not logged in user is doing a task?
+			return null;
+		}
+		return getResponseTokenAccessUser(token, task.get().getUser().getId());
 	}
 }
 

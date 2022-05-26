@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.graphgame.users.controller;
 
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -99,14 +100,23 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetUserResponse> getUser(@PathVariable("id") Long id) {
+    public ResponseEntity<GetUserResponse> getUser(@PathVariable("id") Long id, @RequestParam("token") String token) {
+        if(!userSessionService.hasAccess(token, id)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                id);
+        }
+
         return userService.findUser(id)
                 .map(value -> ResponseEntity.ok(GetUserResponse.entityToDtoMapper().apply(value)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    public ResponseEntity<GetUsersResponse> getUsers() {
+    public ResponseEntity<GetUsersResponse> getUsers(@RequestParam("token") String token) {
+        if(!userSessionService.hasAccess(token, null)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                null);
+        }
         return ResponseEntity.ok(
                 GetUsersResponse.entityToDtoMapper().apply(userService.findAllUsers())
         );
@@ -114,10 +124,15 @@ public class UserController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("id") Long id)
+    public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("id") Long id, @RequestParam("token") String token)
             throws EmailAlreadyInUseException {
+        if(!userSessionService.hasAccess(token, id)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                id);
+        }
+
         Optional<User> user = userService.findUser(id);
-        // TODO: check for session token and current user permissions
+
         if (user.isPresent()) {
             if (request.getPassword() != null) {
                 if (!request.getPassword().equals(""))
@@ -138,7 +153,11 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id, @RequestParam("token") String token) {
+        if(!userSessionService.hasAccess(token, id)) {
+            return userSessionService.getResponseTokenAccessUser(token,
+                id);
+        }
         Optional<User> user = userService.findUser(id);
         if (user.isPresent()) {
             userService.deleteUser(user.get());
