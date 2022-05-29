@@ -51,6 +51,14 @@ public class TaskController {
         this.userSessionService = userSessionService;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<GetTaskSubjectsResponse> getAll() {
+
+        return ResponseEntity.ok(
+            GetTaskSubjectsResponse.entityToDtoMapper().apply(List.of(GraphTaskSubject.values()))
+        );
+    }
+
     @GetMapping("/subjects")
     public ResponseEntity<GetTaskSubjectsResponse> getTaskSubjects() {
         return ResponseEntity.ok(

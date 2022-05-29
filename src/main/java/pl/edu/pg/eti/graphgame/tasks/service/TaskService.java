@@ -8,6 +8,7 @@ import pl.edu.pg.eti.graphgame.tasks.factory.TaskFactory;
 import pl.edu.pg.eti.graphgame.tasks.repository.TaskRepository;
 import pl.edu.pg.eti.graphgame.users.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,6 +18,10 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
     private final TaskFactory taskFactory;
+
+     public Iterable<Task> findAll() {
+         return taskRepository.findAll();
+     }
 
     @Autowired
     public TaskService(

@@ -31,7 +31,7 @@ public class UserSessionService {
 		this.userSessionRepository = userSessionRepository;
 		this.taskService = taskService;
     }
-	
+
 	public String getCurrentSessionExpirationDatetime() {
 		return (LocalDateTime.now().plusHours(1)).toString();
 	}
@@ -85,39 +85,35 @@ public class UserSessionService {
 
 
 	public boolean hasAccess(String token, Long userId) {
-		if(getResponseTokenAccessUser(token, userId) == null)
-			return true;
-		return false;
+		return getResponseTokenAccessUser(token, userId)==null;
 	}
 	public ResponseEntity getResponseTokenAccessUser(String token, Long userId) {
 		if(token == null)
-			return ResponseEntity.status(401).body(new String("Access denied: token is needed"));
+			return ResponseEntity.status(401).body("Access denied: token is needed");
 		if(userId == null)
-			return ResponseEntity.status(401).body(new String("Access denied: access only for specific user is allowed"));
+			return ResponseEntity.status(401).body("Access denied: access only for specific user is allowed");
 		Optional<UserSession> session = findSessionByToken(token);
 		if(session.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		if(session.get().getUser() == null) {
-			return ResponseEntity.status(401).body(new String("Access denied: User not logged in"));
+			return ResponseEntity.status(401).body("Access denied: User not logged in");
 		}
 		if(!session.get().getUser().getId().equals(userId)) {
-			return ResponseEntity.status(401).body(new String("Access denied: userId=" + userId));
+			return ResponseEntity.status(401).body("Access denied: userId=" + userId);
 		}
 		return null;
 	}
 
 	public boolean hasTaskAccess(String token, UUID taskUuid) {
-		if(getResponseTokenAccessTask(token, taskUuid) == null)
-			return true;
-		return false;
+		return getResponseTokenAccessTask(token, taskUuid)==null;
 	}
 	public ResponseEntity getResponseTokenAccessTask(String token, UUID taskUuid) {
 		if(taskUuid == null)
-			return ResponseEntity.status(404).build();
+			return ResponseEntity.status(404).body("task uuid = null");
 		Optional<Task> task = taskService.findTask(taskUuid);
 		if(task.isEmpty())
-			return ResponseEntity.status(404).build();
+			return ResponseEntity.status(404).body("no task with given uuid: " + taskUuid);
 		if(task.get().getUser() == null) {
 			// TODO: does it mean that not logged in user is doing a task?
 			return null;
