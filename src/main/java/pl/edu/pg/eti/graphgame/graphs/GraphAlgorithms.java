@@ -5,6 +5,7 @@ import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 public class GraphAlgorithms {
 
@@ -24,7 +25,7 @@ public class GraphAlgorithms {
             v = queue.poll();
             visitedVertices.add(v);
 
-            List<Integer> neighbours = graph.neighbours(v);
+            List<Integer> neighbours = graph.neighbours(v).stream().sorted().collect(Collectors.toList());
             for (int neighbour : neighbours) {
                 if (!visited[neighbour]) {
                     visited[neighbour] = true;
@@ -52,7 +53,7 @@ public class GraphAlgorithms {
     private static void dfsVisit(Graph g, int v, boolean[] visited, List<Integer> visitOrder) {
         visited[v] = true;
         visitOrder.add(v);
-        List<Integer> neighbours = g.neighbours(v);
+        List<Integer> neighbours = g.neighbours(v).stream().sorted().collect(Collectors.toList());
         for (int i : neighbours) {
             if (!visited[i]) {
                 dfsVisit(g, i, visited, visitOrder);

@@ -46,7 +46,7 @@ public class TaskFactory {
 
     private Task createCompleteGraphTask(User user) {
         int graphVertices = RANDOM.nextInt(
-                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+                Constants.MAX_COMPLETE_GRAPH_VERTICES - Constants.MIN_COMPLETE_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
         return Task.builder()
                 .uuid(UUID.randomUUID())
