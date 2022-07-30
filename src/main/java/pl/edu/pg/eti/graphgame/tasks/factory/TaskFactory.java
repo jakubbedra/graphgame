@@ -35,12 +35,20 @@ public class TaskFactory {
         switch (subject) {
             case COMPLETE_GRAPHS:
                 return createCompleteGraphTask(user);
+            case PATH_GRAPHS:
+                return createPathGraphTask(user);
+            case CYCLE_GRAPHS:
+                return createCycleGraphTask(user);
+            case STAR_GRAPHS:
+                return createStarGraphTask(user);
+            case WHEEL_GRAPHS:
+                return createWheelGraphTask(user);
+            default:
+                throw new UnsupportedTaskSubjectException("");
             case BFS:
                 return createBFSTask(user);
             case DFS:
                 return createDFSTask(user);
-            default:
-                throw new UnsupportedTaskSubjectException("");
         }
     }
 
@@ -53,6 +61,58 @@ public class TaskFactory {
                 .user(user)
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.COMPLETE_GRAPHS)
+                .type(GraphTaskType.DRAW)
+                .build();
+    }
+
+    private Task createPathGraphTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.PATH_GRAPHS)
+                .type(GraphTaskType.DRAW)
+                .build();
+    }
+
+    private Task createCycleGraphTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.CYCLE_GRAPHS)
+                .type(GraphTaskType.DRAW)
+                .build();
+    }
+
+    private Task createStarGraphTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.STAR_GRAPHS)
+                .type(GraphTaskType.DRAW)
+                .build();
+    }
+
+    private Task createWheelGraphTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.WHEEL_GRAPHS)
                 .type(GraphTaskType.DRAW)
                 .build();
     }

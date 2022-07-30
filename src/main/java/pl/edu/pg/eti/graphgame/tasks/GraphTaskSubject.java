@@ -12,7 +12,23 @@ public enum GraphTaskSubject {
 
     BFS("Breadth-First Search"),
     DFS("Depth-First Search"),
-    COMPLETE_GRAPHS("Complete Graphs");
+    COMPLETE_GRAPHS("Complete Graphs"),
+    PATH_GRAPHS("Path Graphs"),
+    CYCLE_GRAPHS("Cycle Graphs"),
+    STAR_GRAPHS("Star Graphs"),
+    WHEEL_GRAPHS("Wheel Graphs"),
+    HYPERCUBES("Hypercubes"),
+    REGULAR_GRAPHS("Regular Graphs");
+    //SPECIAL_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
+    //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
+    //BIPARTITE_GRAPHS("Bipartite Graphs"),
+    //HYPERCUBES("Hypercubes"),
+    //EULERIAN_GRAPHS("Eulerian Graphs"),//also do some cycle finding algorithms
+    //HAMILTONIAN_GRAPHS("Hamiltonian Graphs"),//for this one aswell
+    //VERTEX_COLORING("Vertex Coloring"),
+    //EDGE_COLORING("Edge Coloring"),
+    //MAX_CLIQUE("Max Clique Problem");
+    //VERTEX_COVER("Vertex Cover"),
 
     public final String label;
 

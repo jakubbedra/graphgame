@@ -61,19 +61,4 @@ public class GraphAlgorithms {
         }
     }
 
-    public static boolean isComplete(Graph graph) {
-        for (int i = 0; i < graph.getN(); i++) {
-            for (int j = 0; j < graph.getN(); j++) {
-                if (i != j && !graph.edgeExists(i, j)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public static boolean checkConnectivity() {
-        return false;
-    }
-
 }

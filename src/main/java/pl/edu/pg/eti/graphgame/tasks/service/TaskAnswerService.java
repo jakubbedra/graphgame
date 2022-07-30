@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.GraphAlgorithms;
+import pl.edu.pg.eti.graphgame.graphs.GraphClassChecker;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
@@ -30,7 +31,15 @@ public class TaskAnswerService {
     public boolean checkDrawGraphAnswer(Graph graph, Task task) {
         switch (task.getSubject()) {
             case COMPLETE_GRAPHS:
-                return GraphAlgorithms.isComplete(graph) && graph.getN() == task.getGraphVertices();
+                return GraphClassChecker.isComplete(graph) && graph.getN() == task.getGraphVertices();
+            case PATH_GRAPHS:
+                return GraphClassChecker.isPath(graph) && graph.getN() == task.getGraphVertices();
+            case CYCLE_GRAPHS:
+                return GraphClassChecker.isCycle(graph) && graph.getN() == task.getGraphVertices();
+            case STAR_GRAPHS:
+                return GraphClassChecker.isStar(graph) && graph.getN() == task.getGraphVertices();
+            case WHEEL_GRAPHS:
+                return GraphClassChecker.isWheel(graph) && graph.getN() == task.getGraphVertices();
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
