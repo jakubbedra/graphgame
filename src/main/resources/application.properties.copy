@@ -1,0 +1,20 @@
+spring.datasource.url=jdbc:mariadb://localhost:3306/graphsdb
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.datasource.username=root
+spring.datasource.password=root
+
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto=create-drop
+
+spring.h2.console.enabled=true
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=<login user to smtp server>
+spring.mail.password=<login password to smtp server>
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+server.port=8080
+
+spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER

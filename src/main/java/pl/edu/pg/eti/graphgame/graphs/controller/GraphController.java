@@ -10,6 +10,7 @@ import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 import pl.edu.pg.eti.graphgame.tasks.service.TaskService;
 import pl.edu.pg.eti.graphgame.users.service.UserSessionService;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,15 +38,14 @@ public class GraphController {
             @PathVariable("uuid") UUID uuid,
             @RequestParam("token") String token
     ) {
-        if(!userSessionService.hasTaskAccess(token, uuid)) {
-            return userSessionService.getResponseTokenAccessTask(token,
-                uuid);
-        }
-
         Optional<Task> task = taskService.findTask(uuid);
         if (task.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
+            if(!userSessionService.hasTaskAccess(token, uuid)) {
+                return userSessionService.getResponseTokenAccessTask(token,
+                    uuid);
+            }
             Optional<Graph> graph = graphService.findGraphByTask(task.get());
             if (graph.isEmpty()) {
                 return ResponseEntity.notFound().build();
