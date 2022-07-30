@@ -122,8 +122,10 @@ public class GraphClassChecker {
      * Checks if graph is a Hypercube
      */
     public static boolean isHypercube(Graph graph) {
-        //todo: test all the cases for this one because we will stop at n=4
-        int n = (int) Math.floor(Math.log(graph.getN()));
+        if (!isConnected(graph) || !(graph.getN() > 0 && isKRegular(graph, graph.degree(0)))) {
+            return false;
+        }
+        int n = (int) Math.ceil(Math.log(graph.getN()));
         return graph.getM() == ((int) Math.pow(2, n - 1) * n);
     }
 
