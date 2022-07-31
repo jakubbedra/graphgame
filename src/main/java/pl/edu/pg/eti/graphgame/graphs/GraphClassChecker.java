@@ -125,8 +125,12 @@ public class GraphClassChecker {
         if (!isConnected(graph) || !(graph.getN() > 0 && isKRegular(graph, graph.degree(0)))) {
             return false;
         }
-        int n = (int) Math.ceil(Math.log(graph.getN()));
+        int n = (int) Math.ceil(log2(graph.getN()));
         return graph.getM() == ((int) Math.pow(2, n - 1) * n);
+    }
+
+    private static int log2(int n) {
+        return (int) (Math.log(n) / Math.log(2));
     }
 
     /**
@@ -142,5 +146,6 @@ public class GraphClassChecker {
     public static boolean isKRegular(Graph graph, int k) {
         return 2 * graph.getM() == graph.getN() * k;
     }
+
 
 }

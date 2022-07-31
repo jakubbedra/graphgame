@@ -43,6 +43,10 @@ public class TaskFactory {
                 return createStarGraphTask(user);
             case WHEEL_GRAPHS:
                 return createWheelGraphTask(user);
+            case HYPERCUBES:
+                return createHypercubesTask(user);
+            case REGULAR_GRAPHS:
+                return createRegularGraphTask(user);
             default:
                 throw new UnsupportedTaskSubjectException("");
             case BFS:
@@ -62,6 +66,7 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.COMPLETE_GRAPHS)
                 .type(GraphTaskType.DRAW)
+                .specialValues("")
                 .build();
     }
 
@@ -75,6 +80,7 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.PATH_GRAPHS)
                 .type(GraphTaskType.DRAW)
+                .specialValues("")
                 .build();
     }
 
@@ -88,6 +94,7 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.CYCLE_GRAPHS)
                 .type(GraphTaskType.DRAW)
+                .specialValues("")
                 .build();
     }
 
@@ -101,6 +108,7 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.STAR_GRAPHS)
                 .type(GraphTaskType.DRAW)
+                .specialValues("")
                 .build();
     }
 
@@ -114,6 +122,42 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.WHEEL_GRAPHS)
                 .type(GraphTaskType.DRAW)
+                .specialValues("")
+                .build();
+    }
+
+    private Task createHypercubesTask(User user) {
+        int graphVertices = Constants.HYPERCUBE_VERTICES[RANDOM.nextInt(Constants.HYPERCUBE_VERTICES.length)];
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.HYPERCUBES)
+                .type(GraphTaskType.DRAW)
+                .specialValues("")
+                .build();
+    }
+
+    private Task createRegularGraphTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        int k = RANDOM.nextInt(
+                Constants.MAX_REGULAR_GRAPH_K - Constants.MIN_REGULAR_GRAPH_K
+        ) + Constants.MIN_REGULAR_GRAPH_K;
+        if (k >= graphVertices) {
+            graphVertices += 2;
+        }
+        if (k * graphVertices % 2 != 0) {
+            graphVertices++;
+        }
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.REGULAR_GRAPHS)
+                .type(GraphTaskType.DRAW)
+                .specialValues(k + ";")
                 .build();
     }
 
@@ -127,6 +171,7 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.BFS)
                 .type(GraphTaskType.VERTEX_SELECTION)
+                .specialValues("")
                 .build();
     }
 
@@ -140,6 +185,7 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.DFS)
                 .type(GraphTaskType.VERTEX_SELECTION)
+                .specialValues("")
                 .build();
     }
 
