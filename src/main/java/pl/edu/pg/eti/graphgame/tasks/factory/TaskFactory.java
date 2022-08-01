@@ -60,10 +60,14 @@ public class TaskFactory {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_COMPLETE_GRAPH_VERTICES - Constants.MIN_COMPLETE_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)
                 .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
                 .subject(GraphTaskSubject.COMPLETE_GRAPHS)
                 .type(GraphTaskType.DRAW)
                 .specialValues("")
@@ -74,6 +78,9 @@ public class TaskFactory {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)
@@ -88,6 +95,9 @@ public class TaskFactory {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)
@@ -102,6 +112,9 @@ public class TaskFactory {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)
@@ -116,6 +129,9 @@ public class TaskFactory {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)
@@ -165,10 +181,14 @@ public class TaskFactory {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)
                 .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
                 .subject(GraphTaskSubject.BFS)
                 .type(GraphTaskType.VERTEX_SELECTION)
                 .specialValues("")
@@ -179,10 +199,14 @@ public class TaskFactory {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)
                 .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
                 .subject(GraphTaskSubject.DFS)
                 .type(GraphTaskType.VERTEX_SELECTION)
                 .specialValues("")

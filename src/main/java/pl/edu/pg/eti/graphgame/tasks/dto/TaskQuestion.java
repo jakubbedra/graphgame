@@ -43,6 +43,11 @@ public class TaskQuestion {
     private int graphVertices;
 
     /**
+     * Number of edges of the graph related to the task.
+     */
+    private int graphEdges;
+
+    /**
      * Integer value(s) that can be specific to a given task subject. Might be empty.
      */
     private List<Integer> specialValues;
@@ -59,6 +64,7 @@ public class TaskQuestion {
                 .subject(taskEntity.getSubject())
                 .type(taskEntity.getType())
                 .graphVertices(taskEntity.getGraphVertices())
+                .graphEdges(taskEntity.getGraphEdges())
                 .specialValues(specialValues)
                 .build();
     }

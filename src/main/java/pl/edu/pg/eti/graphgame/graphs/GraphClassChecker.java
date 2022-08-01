@@ -1,6 +1,5 @@
 package pl.edu.pg.eti.graphgame.graphs;
 
-import org.springframework.security.core.parameters.P;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 
 import java.util.List;

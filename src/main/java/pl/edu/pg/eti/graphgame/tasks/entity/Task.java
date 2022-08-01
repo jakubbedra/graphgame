@@ -32,6 +32,8 @@ public class Task {
 
     private int graphVertices;
 
+    private int graphEdges;
+
     private String specialValues;
 
 }

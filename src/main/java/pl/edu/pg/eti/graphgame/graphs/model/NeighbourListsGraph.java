@@ -43,6 +43,12 @@ public class NeighbourListsGraph implements Graph {
         }
     }
 
+    public NeighbourListsGraph(List<List<Integer>> neighbourLists, int n, int m) {
+        this.n = n;
+        this.m = m;
+        this.neighbourLists = neighbourLists;
+    }
+
     @Override
     public int getN() {
         return n;
