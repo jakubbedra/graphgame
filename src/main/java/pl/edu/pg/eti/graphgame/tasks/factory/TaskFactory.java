@@ -53,6 +53,8 @@ public class TaskFactory {
                 return createBFSTask(user);
             case DFS:
                 return createDFSTask(user);
+            case MAX_CLIQUE:
+                return createMaxCliqueTask(user);
         }
     }
 
@@ -208,6 +210,25 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .graphEdges(graphEdges)
                 .subject(GraphTaskSubject.DFS)
+                .type(GraphTaskType.VERTEX_SELECTION)
+                .specialValues("")
+                .build();
+    }
+
+    private Task createMaxCliqueTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_MAX_CLIQUE_VERTICES - Constants.MIN_MAX_CLIQUE_VERTICES
+        ) + Constants.MIN_MAX_CLIQUE_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        graphEdges -= Math.max(RANDOM.nextInt(Constants.MIN_MAX_CLIQUE_VERTICES), graphVertices - 1);
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.MAX_CLIQUE)
                 .type(GraphTaskType.VERTEX_SELECTION)
                 .specialValues("")
                 .build();

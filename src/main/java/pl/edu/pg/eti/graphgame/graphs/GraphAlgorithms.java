@@ -61,4 +61,50 @@ public class GraphAlgorithms {
         }
     }
 
+    public static boolean checkClique(Graph g, List<Integer> vertices) {
+        int[] array = new int[vertices.size()];
+        int i = 0;
+        for (Integer vertex : vertices) {
+            array[i] = vertex;
+            i++;
+        }
+        return isClique(g, array, vertices.size());
+    }
+
+    private static boolean isClique(Graph g, int[] selectedVertices, int b) {
+        for (int i = 0; i < b; i++) {
+            for (int j = i + 1; j < b; j++) {
+                if (!g.edgeExists(selectedVertices[i], selectedVertices[j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static int maxClique(Graph g, int[] selectedVertices, int i, int l) {
+        int max = 0;
+
+        for (int j = i; j < g.getN(); j++) {
+            selectedVertices[l] = j;
+
+            //for (int chuj = 0; chuj < l+1; chuj++) {
+            //    System.out.print(selectedVertices[chuj] + ", ");
+            //}
+            //System.out.println();
+
+            if (isClique(g, selectedVertices, l + 1)) {
+                max = Math.max(max, l + 1);
+                max = Math.max(max, maxClique(g, selectedVertices, j + 1, l + 1));
+            }
+        }
+
+        return max;
+    }
+
+    public static int maxCliqueSize(Graph g) {
+        int[] selectedVertices = new int[g.getN()];
+        return maxClique(g, selectedVertices, 0, 0);
+    }
+
 }

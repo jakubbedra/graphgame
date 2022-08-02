@@ -18,7 +18,8 @@ public enum GraphTaskSubject {
     STAR_GRAPHS("Star Graphs"),
     WHEEL_GRAPHS("Wheel Graphs"),
     HYPERCUBES("Hypercubes"),
-    REGULAR_GRAPHS("Regular Graphs");
+    REGULAR_GRAPHS("Regular Graphs"),
+    MAX_CLIQUE("Max Clique Problem");
     //SPECIAL_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
     //BIPARTITE_GRAPHS("Bipartite Graphs"),
@@ -27,7 +28,6 @@ public enum GraphTaskSubject {
     //HAMILTONIAN_GRAPHS("Hamiltonian Graphs"),//for this one aswell
     //VERTEX_COLORING("Vertex Coloring"),
     //EDGE_COLORING("Edge Coloring"),
-    //MAX_CLIQUE("Max Clique Problem");
     //VERTEX_COVER("Vertex Cover"),
 
     public final String label;

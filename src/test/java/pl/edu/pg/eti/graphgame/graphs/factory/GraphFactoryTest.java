@@ -33,14 +33,14 @@ public class GraphFactoryTest {
     }
 
     @Test
-    public void createRandomConnectedGraphV2TestAShitTonOfRandomGraphs() {
+    public void createRandomConnectedGraphV2TestALotOfRandomGraphs() {
         for (int i = 0; i < 1000000; i++) {
             int graphVertices = RANDOM.nextInt(
                     Constants.MAX_COMPLETE_GRAPH_VERTICES - Constants.MIN_COMPLETE_GRAPH_VERTICES
             ) + Constants.MIN_GRAPH_VERTICES;
             int graphEdges = RANDOM.nextInt(
                     (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
-            ) + (graphVertices - 1);//todo DIVIDE BY 2!!!!!!!!!!
+            ) + (graphVertices - 1);
             try {
                 Graph graph = graphFactory.createRandomConnectedGraph(graphVertices, graphEdges);
                 //if (!isConnected(graph)) System.out.println(graph);

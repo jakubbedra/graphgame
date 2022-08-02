@@ -73,6 +73,7 @@ public class GraphService {
         switch (subject) {
             case BFS:
             case DFS:
+            case MAX_CLIQUE:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
             //return graphFactory.createRandomConnectedGraph(task.getGraphVertices());
             default:

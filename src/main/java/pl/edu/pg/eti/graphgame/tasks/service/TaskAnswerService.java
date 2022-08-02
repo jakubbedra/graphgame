@@ -26,6 +26,8 @@ public class TaskAnswerService {
                 return vertices.equals(GraphAlgorithms.breadthFirstSearch(graph));
             case DFS:
                 return vertices.equals(GraphAlgorithms.depthFirstSearch(graph));
+            case MAX_CLIQUE:
+                return vertices.size() == GraphAlgorithms.maxCliqueSize(graph) && GraphAlgorithms.checkClique(graph, vertices);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
