@@ -97,4 +97,22 @@ public class GraphAlgorithmsTest {
         System.out.println("Average number of edges: " + edgesAvg);
     }
 
+    @Test
+    public void maxIndependentSetTest() {
+        final int[][] TEST = {
+                {0, 0, 1, 1, 0},
+                {0, 0, 1, 0, 1},
+                {1, 1, 0, 0, 0},
+                {1, 0, 0, 0, 0},
+                {0, 1, 0, 0, 0},
+        };
+        final int N = 5;
+        final int M = 4;
+        Graph g = new AdjacencyMatrixGraph(TEST, N, M);
+
+        int expectedMaxIndependentSet = 3;
+
+        Assertions.assertThat(GraphAlgorithms.maxIndependentSetSize(g)).isEqualTo(expectedMaxIndependentSet);
+    }
+
 }

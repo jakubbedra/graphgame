@@ -19,7 +19,8 @@ public enum GraphTaskSubject {
     WHEEL_GRAPHS("Wheel Graphs"),
     HYPERCUBES("Hypercubes"),
     REGULAR_GRAPHS("Regular Graphs"),
-    MAX_CLIQUE("Max Clique Problem");
+    MAX_CLIQUE("Max Clique Problem"),
+    MAX_INDEPENDENT_SET("Max Independent Set Problem");
     //SPECIAL_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
     //BIPARTITE_GRAPHS("Bipartite Graphs"),

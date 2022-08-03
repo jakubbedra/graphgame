@@ -74,6 +74,7 @@ public class GraphService {
             case BFS:
             case DFS:
             case MAX_CLIQUE:
+            case MAX_INDEPENDENT_SET:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
             //return graphFactory.createRandomConnectedGraph(task.getGraphVertices());
             default:

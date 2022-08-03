@@ -55,6 +55,8 @@ public class TaskFactory {
                 return createDFSTask(user);
             case MAX_CLIQUE:
                 return createMaxCliqueTask(user);
+            case MAX_INDEPENDENT_SET:
+                return createMaxIndependentSetTask(user);
         }
     }
 
@@ -215,7 +217,7 @@ public class TaskFactory {
                 .build();
     }
 
-    private Task createMaxCliqueTask(User user) {
+    private Task createMaxVertexSetSelectionTask(User user, GraphTaskSubject subject) {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_MAX_CLIQUE_VERTICES - Constants.MIN_MAX_CLIQUE_VERTICES
         ) + Constants.MIN_MAX_CLIQUE_VERTICES;
@@ -228,10 +230,18 @@ public class TaskFactory {
                 .user(user)
                 .graphVertices(graphVertices)
                 .graphEdges(graphEdges)
-                .subject(GraphTaskSubject.MAX_CLIQUE)
+                .subject(subject)
                 .type(GraphTaskType.VERTEX_SELECTION)
                 .specialValues("")
                 .build();
+    }
+
+    private Task createMaxCliqueTask(User user) {
+        return createMaxVertexSetSelectionTask(user, GraphTaskSubject.MAX_CLIQUE);
+    }
+
+    private Task createMaxIndependentSetTask(User user) {
+        return createMaxVertexSetSelectionTask(user, GraphTaskSubject.MAX_INDEPENDENT_SET);
     }
 
 }

@@ -28,6 +28,8 @@ public class TaskAnswerService {
                 return vertices.equals(GraphAlgorithms.depthFirstSearch(graph));
             case MAX_CLIQUE:
                 return vertices.size() == GraphAlgorithms.maxCliqueSize(graph) && GraphAlgorithms.checkClique(graph, vertices);
+            case MAX_INDEPENDENT_SET:
+                return vertices.size() == GraphAlgorithms.maxIndependentSetSize(graph) && GraphAlgorithms.checkIndependentSet(graph, vertices);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
