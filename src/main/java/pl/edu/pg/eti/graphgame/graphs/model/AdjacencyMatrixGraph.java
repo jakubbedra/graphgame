@@ -35,7 +35,21 @@ public class AdjacencyMatrixGraph implements Graph {
     }
 
     public AdjacencyMatrixGraph(Graph g) {
-
+        this.n = g.getN();
+        this.m = g.getM();
+        this.matrix = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            List<Integer> neighbours = g.neighbours(i);
+            for (Integer v : neighbours) {
+                this.matrix[i][v] = 1;
+                this.matrix[v][i] = 1;
+            }
+        }
     }
 
     @Override
@@ -58,6 +72,7 @@ public class AdjacencyMatrixGraph implements Graph {
 
     @Override
     public void removeVertex(int v) {
+        m -= degree(v);
         if (n > 0) {
             for (int i = 0; i < n; i++) {
                 matrix[i][v] = 0;

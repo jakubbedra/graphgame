@@ -30,6 +30,8 @@ public class TaskAnswerService {
                 return vertices.size() == GraphAlgorithms.maxCliqueSize(graph) && GraphAlgorithms.checkClique(graph, vertices);
             case MAX_INDEPENDENT_SET:
                 return vertices.size() == GraphAlgorithms.maxIndependentSetSize(graph) && GraphAlgorithms.checkIndependentSet(graph, vertices);
+            case MIN_VERTEX_COVER:
+                return vertices.size() == GraphAlgorithms.minVertexCoverSize(graph) && GraphAlgorithms.checkVertexCover(graph, vertices);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

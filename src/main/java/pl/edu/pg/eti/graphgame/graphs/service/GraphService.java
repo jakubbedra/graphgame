@@ -75,6 +75,7 @@ public class GraphService {
             case DFS:
             case MAX_CLIQUE:
             case MAX_INDEPENDENT_SET:
+            case MIN_VERTEX_COVER:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
             //return graphFactory.createRandomConnectedGraph(task.getGraphVertices());
             default:

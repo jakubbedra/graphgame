@@ -57,6 +57,8 @@ public class TaskFactory {
                 return createMaxCliqueTask(user);
             case MAX_INDEPENDENT_SET:
                 return createMaxIndependentSetTask(user);
+            case MIN_VERTEX_COVER:
+                return createMinVertexCoverTask(user);
         }
     }
 
@@ -217,7 +219,7 @@ public class TaskFactory {
                 .build();
     }
 
-    private Task createMaxVertexSetSelectionTask(User user, GraphTaskSubject subject) {
+    private Task createVertexSetSelectionTask(User user, GraphTaskSubject subject) {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_MAX_CLIQUE_VERTICES - Constants.MIN_MAX_CLIQUE_VERTICES
         ) + Constants.MIN_MAX_CLIQUE_VERTICES;
@@ -237,11 +239,15 @@ public class TaskFactory {
     }
 
     private Task createMaxCliqueTask(User user) {
-        return createMaxVertexSetSelectionTask(user, GraphTaskSubject.MAX_CLIQUE);
+        return createVertexSetSelectionTask(user, GraphTaskSubject.MAX_CLIQUE);
     }
 
     private Task createMaxIndependentSetTask(User user) {
-        return createMaxVertexSetSelectionTask(user, GraphTaskSubject.MAX_INDEPENDENT_SET);
+        return createVertexSetSelectionTask(user, GraphTaskSubject.MAX_INDEPENDENT_SET);
+    }
+
+    private Task createMinVertexCoverTask(User user) {
+        return createVertexSetSelectionTask(user, GraphTaskSubject.MIN_VERTEX_COVER);
     }
 
 }

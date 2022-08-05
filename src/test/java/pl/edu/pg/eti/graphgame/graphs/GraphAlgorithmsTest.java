@@ -115,4 +115,70 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(GraphAlgorithms.maxIndependentSetSize(g)).isEqualTo(expectedMaxIndependentSet);
     }
 
+    @Test
+    public void minVertexCoverTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 1, 0, 1},
+                {0, 0, 0, 1, 0, 0, 0, 1, 0},
+                {1, 0, 1, 0, 1, 1, 1, 0, 0},
+                {0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 1, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0, 0, 0},
+                {0, 1, 0, 0, 0, 0, 0, 0, 0}
+        };
+        final int TEST_N = 9;
+        final int TEST_M = 8;
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST_MATRIX, TEST_N, TEST_M
+        );
+
+        int expectedMinVertexCoverSize = 3;
+
+        Assertions.assertThat(GraphAlgorithms.minVertexCoverSize(testGraph)).isEqualTo(expectedMinVertexCoverSize);
+    }
+
+    @Test
+    public void minVertexCoverStarTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 1, 0, 0},
+                {1, 0, 1, 1},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0}
+        };
+        final int TEST_N = 4;
+        final int TEST_M = 3;
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST_MATRIX, TEST_N, TEST_M
+        );
+
+        int expectedMinVertexCoverSize = 1;
+
+        Assertions.assertThat(GraphAlgorithms.minVertexCoverSize(testGraph)).isEqualTo(expectedMinVertexCoverSize);
+    }
+
+    @Test
+    public void minVertexCoverCompleteGraphTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 1, 1, 1, 1, 1, 1, 1},
+                {1, 0, 1, 1, 1, 1, 1, 1},
+                {1, 1, 0, 1, 1, 1, 1, 1},
+                {1, 1, 1, 0, 1, 1, 1, 1},
+                {1, 1, 1, 1, 0, 1, 1, 1},
+                {1, 1, 1, 1, 1, 0, 1, 1},
+                {1, 1, 1, 1, 1, 1, 0, 1},
+                {1, 1, 1, 1, 1, 1, 1, 0}
+        };
+        final int TEST_N = 8;
+        final int TEST_M = 28;
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST_MATRIX, TEST_N, TEST_M
+        );
+
+        int expectedMinVertexCoverSize = 7;
+
+        Assertions.assertThat(GraphAlgorithms.minVertexCoverSize(testGraph)).isEqualTo(expectedMinVertexCoverSize);
+    }
+
 }

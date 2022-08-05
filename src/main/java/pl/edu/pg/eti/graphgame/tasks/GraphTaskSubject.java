@@ -20,11 +20,11 @@ public enum GraphTaskSubject {
     HYPERCUBES("Hypercubes"),
     REGULAR_GRAPHS("Regular Graphs"),
     MAX_CLIQUE("Max Clique Problem"),
-    MAX_INDEPENDENT_SET("Max Independent Set Problem");
+    MAX_INDEPENDENT_SET("Max Independent Set Problem"),
+    MIN_VERTEX_COVER("Min Vertex Cover");
     //SPECIAL_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
     //BIPARTITE_GRAPHS("Bipartite Graphs"),
-    //HYPERCUBES("Hypercubes"),
     //EULERIAN_GRAPHS("Eulerian Graphs"),//also do some cycle finding algorithms
     //HAMILTONIAN_GRAPHS("Hamiltonian Graphs"),//for this one aswell
     //VERTEX_COLORING("Vertex Coloring"),
@@ -58,3 +58,4 @@ public enum GraphTaskSubject {
     }
 
 }
+
