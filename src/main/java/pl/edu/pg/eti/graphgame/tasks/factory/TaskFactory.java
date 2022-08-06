@@ -59,6 +59,8 @@ public class TaskFactory {
                 return createMaxIndependentSetTask(user);
             case MIN_VERTEX_COVER:
                 return createMinVertexCoverTask(user);
+            case EULER_CYCLE:
+                return createEulerCycleTask(user);
         }
     }
 
@@ -248,6 +250,16 @@ public class TaskFactory {
 
     private Task createMinVertexCoverTask(User user) {
         return createVertexSetSelectionTask(user, GraphTaskSubject.MIN_VERTEX_COVER);
+    }
+
+    private Task createEulerCycleTask(User user) {
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .subject(GraphTaskSubject.EULER_CYCLE)
+                .type(GraphTaskType.VERTEX_SELECTION)
+                .specialValues("")
+                .build();
     }
 
 }

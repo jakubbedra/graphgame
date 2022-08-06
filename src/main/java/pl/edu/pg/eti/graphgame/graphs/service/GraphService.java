@@ -77,7 +77,8 @@ public class GraphService {
             case MAX_INDEPENDENT_SET:
             case MIN_VERTEX_COVER:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
-            //return graphFactory.createRandomConnectedGraph(task.getGraphVertices());
+            case EULER_CYCLE:
+                return graphFactory.createRandomEulerianGraph();
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

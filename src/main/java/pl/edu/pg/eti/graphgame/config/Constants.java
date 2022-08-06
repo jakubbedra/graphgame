@@ -20,4 +20,7 @@ public class Constants {
     public static final int MIN_REGULAR_GRAPH_K = 2;
     public static final int MAX_REGULAR_GRAPH_K = 5;
 
+    public static final int MIN_EULERIAN_VERTICES = 4;
+    public static final int MAX_EULERIAN_VERTICES = 10;
+
 }

@@ -24,8 +24,8 @@ public class GraphFactory {
 
     public Graph createRandomEulerianGraph() {
         int n = RANDOM.nextInt(
-                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
-        ) + Constants.MIN_GRAPH_VERTICES;
+                Constants.MAX_EULERIAN_VERTICES - Constants.MIN_EULERIAN_VERTICES
+        ) + Constants.MIN_EULERIAN_VERTICES;
         int m = RANDOM.nextInt(
                 (n * n - n) / 2 - (n - 1)
         ) + (n - 1);
