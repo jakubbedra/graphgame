@@ -6,6 +6,7 @@ import pl.edu.pg.eti.graphgame.exceptions.IncompleteTaskEntityException;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.GraphAlgorithms;
 import pl.edu.pg.eti.graphgame.graphs.GraphClassChecker;
+import pl.edu.pg.eti.graphgame.graphs.model.Edge;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
@@ -39,6 +40,47 @@ public class TaskAnswerService {
         }
     }
 
+    public boolean checkEdgeSelectionAnswer(List<Edge> edges, Task task, Graph graph) {
+        switch (task.getSubject()) {
+            case EULER_CYCLE:
+                if (edges.size() <= 1) {
+                    return false;
+                }
+                // checking if it even is a cycle
+                List<Integer> vertices = new LinkedList<>();
+                if (getCommonVertex(edges.get(0), edges.get(1)) == edges.get(0).getV1()) {
+                    vertices.add(edges.get(0).getV2());
+                } else {
+                    vertices.add(edges.get(0).getV1());
+                }
+                for (int i = 0; i < edges.size() - 1; i++) {
+                    int commonVertex = getCommonVertex(edges.get(i), edges.get(i + 1));
+                    if (commonVertex == -1) {
+                        return false;
+                    }
+                    vertices.add(commonVertex);
+                }
+                int commonVertex = getCommonVertex(edges.get(0), edges.get(edges.size() - 1));
+                if (commonVertex == -1) {
+                    return false;
+                }
+                vertices.add(commonVertex);
+                return GraphAlgorithms.checkEulerCycle(graph, vertices);
+            default:
+                throw new UnsupportedTaskSubjectException("");
+        }
+    }
+
+    private int getCommonVertex(Edge e1, Edge e2) {
+        if (e1.getV1() == e2.getV1() || e1.getV1() == e2.getV2()) {
+            return e1.getV1();
+        } else if (e1.getV2() == e2.getV2() || e1.getV2() == e2.getV1()) {
+            return e1.getV2();
+        } else {
+            return -1;
+        }
+    }
+
     public boolean checkDrawGraphAnswer(Graph graph, Task task) {
         if (graph.getN() != task.getGraphVertices()) {
             return false;
@@ -63,7 +105,7 @@ public class TaskAnswerService {
                     Arrays.stream(split).forEach(s -> specialValues.add(Integer.parseInt(s)));
                     return GraphClassChecker.isKRegular(graph, specialValues.get(0));
                 } else {
-                 throw new IncompleteTaskEntityException("");
+                    throw new IncompleteTaskEntityException("");
                 }
             default:
                 throw new UnsupportedTaskSubjectException("");

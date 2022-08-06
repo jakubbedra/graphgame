@@ -163,6 +163,40 @@ public class TaskController {
         }
     }
 
+    @PostMapping("/answer/edgeSelection/{uuid}")
+    public ResponseEntity<Boolean> checkTaskAnswer(
+            @PathVariable("uuid") UUID uuid,
+            @RequestBody EdgeSelectionTaskAnswer answer,
+            @RequestParam("token") String token
+    ) {
+        if(!userSessionService.hasTaskAccess(token, uuid)) {
+            return userSessionService.getResponseTokenAccessTask(token,
+                    uuid);
+        }
+
+        Optional<Task> task = taskService.findTask(uuid);
+        if (task.isPresent()) {
+            if (!task.get().getType().equals(GraphTaskType.EDGE_SELECTION)) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            Optional<Graph> graph = graphService.findGraphByTask(task.get());
+            if (graph.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            boolean check = taskAnswerService.checkEdgeSelectionAnswer(
+                    answer.getSelectedEdges(), task.get(), graph.get()
+            );
+
+            updateStats(task.get(), check);
+            taskService.deleteTask(task.get());
+
+            return ResponseEntity.ok(check);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/answer/draw/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
             @PathVariable("uuid") UUID uuid,

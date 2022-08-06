@@ -253,13 +253,24 @@ public class TaskFactory {
     }
 
     private Task createEulerCycleTask(User user) {
-        return Task.builder()
-                .uuid(UUID.randomUUID())
-                .user(user)
-                .subject(GraphTaskSubject.EULER_CYCLE)
-                .type(GraphTaskType.VERTEX_SELECTION)
-                .specialValues("")
-                .build();
+        int r = RANDOM.nextInt(2);
+        if (r == 0) {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .subject(GraphTaskSubject.EULER_CYCLE)
+                    .type(GraphTaskType.EDGE_SELECTION)
+                    .specialValues("")
+                    .build();
+        } else {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .subject(GraphTaskSubject.EULER_CYCLE)
+                    .type(GraphTaskType.VERTEX_SELECTION)
+                    .specialValues("")
+                    .build();
+        }
     }
 
 }
