@@ -3,6 +3,7 @@ package pl.edu.pg.eti.graphgame.graphs.factory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.edu.pg.eti.graphgame.config.Constants;
+import pl.edu.pg.eti.graphgame.graphs.GraphClassChecker;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 
 import java.util.ArrayList;
@@ -21,6 +22,24 @@ public class GraphFactoryTest {
     }
 
     @Test
+    public void createRandomEulerianGraphTest() {
+        Graph graph = graphFactory.createRandomEulerianGraph();
+
+        Assertions.assertTrue(isConnected(graph));
+        Assertions.assertTrue(GraphClassChecker.isEulerian(graph));
+    }
+
+    @Test
+    public void createRandomEulerianGraphTestALotOfRandomGraphs() {
+        for (int i = 0; i < 10000; i++) {
+            Graph graph = graphFactory.createRandomEulerianGraph();
+
+            Assertions.assertTrue(isConnected(graph));
+            Assertions.assertTrue(GraphClassChecker.isEulerian(graph));
+        }
+    }
+
+    @Test
     public void createRandomConnectedGraphV2Test() {
         final int TEST_N = 9;
         final int TEST_M = 10;
@@ -34,7 +53,7 @@ public class GraphFactoryTest {
 
     @Test
     public void createRandomConnectedGraphV2TestALotOfRandomGraphs() {
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10000; i++) {
             int graphVertices = RANDOM.nextInt(
                     Constants.MAX_COMPLETE_GRAPH_VERTICES - Constants.MIN_COMPLETE_GRAPH_VERTICES
             ) + Constants.MIN_GRAPH_VERTICES;

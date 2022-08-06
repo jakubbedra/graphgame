@@ -146,5 +146,13 @@ public class GraphClassChecker {
         return 2 * graph.getM() == graph.getN() * k;
     }
 
+    public static boolean isEulerian(Graph graph) {
+        for (int i = 0; i < graph.getN(); i++) {
+            if (graph.degree(i) % 2 != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

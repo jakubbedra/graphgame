@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,7 +47,11 @@ public class NeighbourListsGraph implements Graph {
     public NeighbourListsGraph(List<List<Integer>> neighbourLists, int n, int m) {
         this.n = n;
         this.m = m;
-        this.neighbourLists = neighbourLists;
+        this.neighbourLists = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            List<Integer> nList = new LinkedList(neighbourLists.get(i));
+            this.neighbourLists.add(nList);
+        }
     }
 
     @Override
@@ -62,7 +67,8 @@ public class NeighbourListsGraph implements Graph {
     @Override
     public void addVertex() {
         n++;
-        neighbourLists.add(new LinkedList<>());
+        List<Integer> neighbours = new LinkedList<>();
+        neighbourLists.add(neighbours);
     }
 
     @Override

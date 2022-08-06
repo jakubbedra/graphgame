@@ -7,7 +7,9 @@ public enum GraphTaskType {
 
     DRAW,
     VERTEX_SELECTION,
+    EDGE_SELECTION,
+    VERTEX_COLORING,
+    BOOLEAN,
     UNDEFINED
-    //EDGE_SELECTION
 
 }

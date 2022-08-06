@@ -181,4 +181,24 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(GraphAlgorithms.minVertexCoverSize(testGraph)).isEqualTo(expectedMinVertexCoverSize);
     }
 
+    @Test
+    public void checkEulerCycleTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 1, 1, 1, 1, 0},
+                {1, 0, 1, 0, 0, 0},
+                {1, 1, 0, 1, 1, 0},
+                {1, 0, 1, 0, 1, 1},
+                {1, 0, 1, 1, 0, 1},
+                {0, 0, 0, 1, 1, 0}
+        };
+        final int TEST_N = 6;
+        final int TEST_M = 10;
+
+        Graph graph = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        List<Integer> cycle = List.of(0, 1, 2, 0, 3, 2, 4, 5, 3, 4, 0);
+
+        Assertions.assertThat(GraphAlgorithms.checkEulerCycle(graph, cycle)).isTrue();
+    }
+
 }

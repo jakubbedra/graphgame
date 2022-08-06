@@ -188,4 +188,15 @@ public class GraphAlgorithms {
         return minVertexCover(g, selectedVertices, 0, 0);
     }
 
+    public static boolean checkEulerCycle(Graph g, List<Integer> vertices) {
+        Graph g2 = new AdjacencyMatrixGraph(g);
+        for (int i = 0; i < vertices.size() - 1; i++) {
+            if (!g2.edgeExists(vertices.get(i), vertices.get(i + 1))) {
+                return false;
+            }
+            g2.removeEdge(vertices.get(i), vertices.get(i + 1));
+        }
+        return g2.getM() == 0;
+    }
+
 }

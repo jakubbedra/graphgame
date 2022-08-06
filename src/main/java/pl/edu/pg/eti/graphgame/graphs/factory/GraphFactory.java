@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.edu.pg.eti.graphgame.config.Constants;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.graphs.model.NeighbourListsGraph;
 
 import java.util.*;
+import java.util.ArrayList;
 
 @Component
 public class GraphFactory {
@@ -18,6 +20,37 @@ public class GraphFactory {
     @Autowired
     public GraphFactory() {
         this.RANDOM = new Random();
+    }
+
+    public Graph createRandomEulerianGraph() {
+        int n = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        int m = RANDOM.nextInt(
+                (n * n - n) / 2 - (n - 1)
+        ) + (n - 1);
+        Graph graph = createRandomConnectedGraph(n, m);
+
+        int[] unevenDegVertices = new int[n];
+        int unevenDegVerticesCount = 0;
+        for (int i = 0; i < n; i++) {
+            if (graph.degree(i) % 2 != 0) {
+                unevenDegVertices[unevenDegVerticesCount] = i;
+                unevenDegVerticesCount++;
+            }
+        }
+
+        for (int i = 1; i < unevenDegVerticesCount; i += 2) {
+            if (!graph.edgeExists(unevenDegVertices[i], unevenDegVertices[i - 1])) {
+                graph.addEdge(unevenDegVertices[i], unevenDegVertices[i - 1]);
+            } else {
+                graph.addVertex();
+                graph.addEdge(unevenDegVertices[i], graph.getN() - 1);
+                graph.addEdge(unevenDegVertices[i - 1], graph.getN() - 1);
+            }
+        }
+
+        return graph;
     }
 
     public Graph createRandomConnectedGraph(int n, int m) {
@@ -85,7 +118,7 @@ public class GraphFactory {
     }
 
     private List<List<Integer>> createRandomSpanningTree(int n) {
-        List<List<Integer>> neighbourLists = new ArrayList<>(n);
+        List<List<Integer>> neighbourLists = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             neighbourLists.add(new LinkedList<>());
         }
