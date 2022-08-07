@@ -37,6 +37,8 @@ public class TaskAnswerService {
                 return vertices.size() == GraphAlgorithms.minVertexCoverSize(graph) && GraphAlgorithms.checkVertexCover(graph, vertices);
             case EULER_CYCLE:
                 return GraphAlgorithms.checkEulerCycle(graph, vertices);
+            case HAMILTON_CYCLE:
+                return GraphClassChecker.isHamiltonCycle(graph, vertices);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

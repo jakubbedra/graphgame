@@ -66,6 +66,33 @@ public class GraphFactory {
         return graph;
     }
 
+    public Graph createRandomHamiltonianGraph(int n, int m) {
+        List<List<Integer>> cycle = createCycle(n);
+        cycle = randomizeVertices(cycle, n);
+        Graph graph = new NeighbourListsGraph(cycle, n, n);
+        Edge[] possibleEdges = createRandomPossibleEdges(graph, n);
+
+        for (int i = 0; i < m - n; i++) {
+            graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
+        }
+
+        return graph;
+    }
+
+    private List<List<Integer>> createCycle(int n) {
+        List<List<Integer>> cycle = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            cycle.add(new LinkedList<>());
+        }
+        for (int i = 0; i < n - 1; i++) {
+            cycle.get(i).add(i + 1);
+            cycle.get(i + 1).add(i);
+        }
+        cycle.get(0).add(n - 1);
+        cycle.get(n - 1).add(0);
+        return cycle;
+    }
+
     public Graph createRandomConnectedGraph(int n, int m) {
         return createRandomConnectedGraph(n, m, false);
     }
@@ -95,6 +122,40 @@ public class GraphFactory {
 
         // O(n^2)
         // calculating possible edges
+        Edge[] possibleEdges = createRandomPossibleEdges(graph, n);
+
+        // adding the edges
+        for (int i = 0; i < m - (n - 1); i++) {
+            graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
+        }
+
+        if (randomWeights) {
+            return convertToRandomWeightedGraph(graph);
+        }
+        // another possible method, that in certain cases should be more optimal, but is much worse overall:
+        // O (n^3) n vertices, maximum of O(n^2) times
+        // 1. make an array of all vertices that are not complete
+        // 2. choose one at random
+        // 3. make an array of all the vertices which are not his neighbours
+        // 4. pick one at random
+        // 5. place an edge
+        // 6. repeat 1 - 5 till m count is satisfied
+
+        return graph;
+    }
+
+    private Graph convertToRandomWeightedGraph(Graph graph) {
+        WeightedGraph graph2 = new WeightedAdjacencyMatrixGraph(graph);
+        for (int i = 0; i < graph.getN(); i++) {
+            for (int j = i + 1; j < graph.getN(); j++) {
+                graph2.setEdgeWeight(i, j, RANDOM.nextInt(Constants.MAX_EDGE_WEIGHT - 1) + 1);
+            }
+        }
+        return graph2;
+    }
+
+    private Edge[] createRandomPossibleEdges(Graph graph, int n){
+        // calculating possible edges
         Edge[] possibleEdges = new Edge[n * n - n];
         int possibleEdgesCount = 0;
         for (int i = 0; i < n; i++) {
@@ -114,34 +175,7 @@ public class GraphFactory {
             possibleEdges[r] = tmp;
         }
 
-        // adding the edges
-        for (int i = 0; i < m - (n - 1); i++) {
-            graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
-        }
-
-        if (randomWeights) {
-            return addWeights(graph);
-        }
-        // another possible method, that in certain cases should be more optimal, but is much worse overall:
-        // O (n^3) n vertices, maximum of O(n^2) times
-        // 1. make an array of all vertices that are not complete
-        // 2. choose one at random
-        // 3. make an array of all the vertices which are not his neighbours
-        // 4. pick one at random
-        // 5. place an edge
-        // 6. repeat 1 - 5 till m count is satisfied
-
-        return graph;
-    }
-
-    private Graph addWeights(Graph graph) {
-        WeightedGraph graph2 = new WeightedAdjacencyMatrixGraph(graph);
-        for (int i = 0; i < graph.getN(); i++) {
-            for (int j = i + 1; j < graph.getN(); j++) {
-                graph2.setEdgeWeight(i, j, RANDOM.nextInt(Constants.MAX_EDGE_WEIGHT - 1) + 1);
-            }
-        }
-        return graph2;
+        return possibleEdges;
     }
 
     private List<List<Integer>> createRandomSpanningTree(int n) {

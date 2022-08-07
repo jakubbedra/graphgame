@@ -23,7 +23,8 @@ public enum GraphTaskSubject {
     MAX_INDEPENDENT_SET("Max Independent Set Problem"),
     MIN_VERTEX_COVER("Min Vertex Cover"),
     EULER_CYCLE("Eulerian Graphs"),
-    MIN_SPANNING_TREE("Min Spanning Tree");
+    MIN_SPANNING_TREE("Min Spanning Tree"),
+    HAMILTON_CYCLE("Hamiltonian Graphs");
     //SPECIAL_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
     //BIPARTITE_GRAPHS("Bipartite Graphs"),
@@ -55,7 +56,8 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        return VALUES.get(RANDOM.nextInt(SIZE));
+        return GraphTaskSubject.HAMILTON_CYCLE;
+        //return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }

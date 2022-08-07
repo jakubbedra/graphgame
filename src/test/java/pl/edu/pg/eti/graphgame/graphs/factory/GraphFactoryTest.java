@@ -40,6 +40,38 @@ public class GraphFactoryTest {
     }
 
     @Test
+    public void createRandomHamiltonianGraphTest() {
+        final int TEST_N = 9;
+        final int TEST_M = 16;
+
+        Graph graph = graphFactory.createRandomHamiltonianGraph(TEST_N, TEST_M);
+
+        Assertions.assertTrue(isConnected(graph));
+        Assertions.assertTrue(GraphClassChecker.isHamiltonian(graph));
+        Assertions.assertEquals(graph.getN(), TEST_N);
+        Assertions.assertEquals(graph.getM(), TEST_M);
+    }
+
+    @Test
+    public void createRandomHamiltonianGraphTestALotOfRandomGraphs() {
+        for (int i = 0; i < 10000; i++) {
+            int graphVertices = RANDOM.nextInt(
+                    Constants.MAX_COMPLETE_GRAPH_VERTICES - Constants.MIN_COMPLETE_GRAPH_VERTICES + 1
+            ) + Constants.MIN_GRAPH_VERTICES + 1;
+            int graphEdges = RANDOM.nextInt(
+                    (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices)
+            ) + (graphVertices);
+
+            Graph graph = graphFactory.createRandomHamiltonianGraph(graphVertices, graphEdges);
+
+            Assertions.assertTrue(isConnected(graph));
+            Assertions.assertTrue(GraphClassChecker.isHamiltonian(graph));
+            Assertions.assertEquals(graph.getN(), graphVertices);
+            Assertions.assertEquals(graph.getM(), graphEdges);
+        }
+    }
+
+    @Test
     public void createRandomConnectedGraphV2Test() {
         final int TEST_N = 9;
         final int TEST_M = 10;

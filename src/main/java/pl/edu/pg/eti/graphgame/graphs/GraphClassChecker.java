@@ -2,6 +2,7 @@ package pl.edu.pg.eti.graphgame.graphs;
 
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class GraphClassChecker {
@@ -153,6 +154,41 @@ public class GraphClassChecker {
             }
         }
         return true;
+    }
+
+    public static boolean isHamiltonCycle(Graph graph, List<Integer> vertices) {
+        if (vertices.size() != graph.getN() && vertices.size() != graph.getN() + 1) {
+            return false;
+        }
+        for (int i = 0; i < vertices.size() - 1; i++) {
+            if (!graph.edgeExists(vertices.get(i), vertices.get(i + 1))) {
+                return false;
+            }
+        }
+        return graph.edgeExists(vertices.get(0), vertices.get(vertices.size() - 1))
+                || vertices.get(0).intValue() == vertices.get(vertices.size() - 1).intValue();
+    }
+
+    private static boolean checkHamiltonCycle(Graph graph, List<Integer> vertices) {
+        if (vertices.size() == graph.getN()) {
+            return isHamiltonCycle(graph, vertices);
+        } else {
+            for (int i = 0; i < graph.getN(); i++) {
+                if (!vertices.contains(i)) {
+                    vertices.add(i);
+                    boolean hamiltonCycle = checkHamiltonCycle(graph, vertices);
+                    vertices.remove((Integer) i);
+                    if (hamiltonCycle) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isHamiltonian(Graph graph) {
+        return checkHamiltonCycle(graph, new LinkedList<>());
     }
 
 }

@@ -345,5 +345,36 @@ public class GraphClassCheckerTest {
         Assertions.assertThat(GraphClassChecker.isKRegular(testGraph, 4)).isFalse();
     }
 
+    @Test
+    public void isHamiltonianTestHamiltonianGraph() {
+        final int[][] TEST = {
+                {0, 1, 1, 1, 1},
+                {1, 0, 1, 1, 1},
+                {1, 1, 0, 1, 1},
+                {1, 1, 1, 0, 1},
+                {1, 1, 1, 1, 0}
+        };
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST, 5, 10
+        );
+        Assertions.assertThat(GraphClassChecker.isHamiltonian(testGraph)).isTrue();
+    }
+
+    @Test
+    public void isHamiltonianTestNoHamiltonianGraph() {
+        final int[][] TEST_MATRIX = {
+                {0, 1, 0, 0},
+                {1, 0, 1, 1},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0}
+        };
+        final int TEST_N = 4;
+        final int TEST_M = 3;
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST_MATRIX, TEST_N, TEST_M
+        );
+        Assertions.assertThat(GraphClassChecker.isHamiltonian(testGraph)).isFalse();
+    }
+
 }
 

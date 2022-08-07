@@ -61,6 +61,8 @@ public class TaskFactory {
                 return createMinVertexCoverTask(user);
             case EULER_CYCLE:
                 return createEulerCycleTask(user);
+            case HAMILTON_CYCLE:
+                return createHamiltonCycleTask(user);
             case MIN_SPANNING_TREE:
                 return createMinSpanningTreeTask(user);
         }
@@ -264,7 +266,7 @@ public class TaskFactory {
                     .type(GraphTaskType.EDGE_SELECTION)
                     .specialValues("")
                     .build();
-        } else if (r == 2){
+        } else if (r == 2) {
             return Task.builder()
                     .uuid(UUID.randomUUID())
                     .user(user)
@@ -281,6 +283,24 @@ public class TaskFactory {
                     .specialValues("")
                     .build();
         }
+    }
+
+    private Task createHamiltonCycleTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_COMPLETE_GRAPH_VERTICES - Constants.MIN_COMPLETE_GRAPH_VERTICES + 1
+        ) + Constants.MIN_GRAPH_VERTICES + 1;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices)
+        ) + (graphVertices);
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.HAMILTON_CYCLE)
+                .type(GraphTaskType.VERTEX_SELECTION)
+                .specialValues("")
+                .build();
     }
 
     private Task createMinSpanningTreeTask(User user) {

@@ -96,6 +96,8 @@ public class GraphService {
                 } else {
                     return graphFactory.createRandomEulerianGraph();
                 }
+            case HAMILTON_CYCLE:
+                return graphFactory.createRandomHamiltonianGraph(task.getGraphVertices(), task.getGraphEdges());
             case MIN_SPANNING_TREE:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges(), true);
             default:
