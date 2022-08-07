@@ -7,6 +7,8 @@ import pl.edu.pg.eti.graphgame.config.Constants;
 import pl.edu.pg.eti.graphgame.graphs.factory.GraphFactory;
 import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
+import pl.edu.pg.eti.graphgame.graphs.model.WeightedAdjacencyMatrixGraph;
+import pl.edu.pg.eti.graphgame.graphs.model.WeightedGraph;
 
 import java.util.List;
 import java.util.Random;
@@ -199,6 +201,24 @@ public class GraphAlgorithmsTest {
         List<Integer> cycle = List.of(0, 1, 2, 0, 3, 2, 4, 5, 3, 4, 0);
 
         Assertions.assertThat(GraphAlgorithms.checkEulerCycle(graph, cycle)).isTrue();
+    }
+
+    @Test
+    public void minSpanningTreeTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 3, 0, 0, 1},
+                {3, 0, 5, 0, 4},
+                {0, 5, 0, 2, 6},
+                {0, 0, 2, 0, 7},
+                {1, 4, 6, 7, 0}
+        };
+        final int TEST_N = 5;
+        final int TEST_M = 7;
+        final int EXPECTED_WEIGHT = 11;
+
+        WeightedGraph graph = new WeightedAdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.getMinSpanningTreeTotalWeight(graph)).isEqualTo(EXPECTED_WEIGHT);
     }
 
 }

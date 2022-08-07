@@ -23,4 +23,8 @@ public class Constants {
     public static final int MIN_EULERIAN_VERTICES = 4;
     public static final int MAX_EULERIAN_VERTICES = 10;
 
+    public static final int MAX_EDGE_WEIGHT = 20;
+
+    public static final double PROBABILITY_GRAPH_MIGHT_NOT_BE_EULERIAN = 0.7;
+
 }

@@ -61,6 +61,8 @@ public class TaskFactory {
                 return createMinVertexCoverTask(user);
             case EULER_CYCLE:
                 return createEulerCycleTask(user);
+            case MIN_SPANNING_TREE:
+                return createMinSpanningTreeTask(user);
         }
     }
 
@@ -253,8 +255,8 @@ public class TaskFactory {
     }
 
     private Task createEulerCycleTask(User user) {
-        int r = RANDOM.nextInt(2);
-        if (r == 0) {
+        int r = RANDOM.nextInt(4);
+        if (r <= 1) {
             return Task.builder()
                     .uuid(UUID.randomUUID())
                     .user(user)
@@ -262,7 +264,7 @@ public class TaskFactory {
                     .type(GraphTaskType.EDGE_SELECTION)
                     .specialValues("")
                     .build();
-        } else {
+        } else if (r == 2){
             return Task.builder()
                     .uuid(UUID.randomUUID())
                     .user(user)
@@ -270,7 +272,35 @@ public class TaskFactory {
                     .type(GraphTaskType.VERTEX_SELECTION)
                     .specialValues("")
                     .build();
+        } else {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .subject(GraphTaskSubject.EULER_CYCLE)
+                    .type(GraphTaskType.BOOLEAN)
+                    .specialValues("")
+                    .build();
         }
+    }
+
+    private Task createMinSpanningTreeTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_MAX_CLIQUE_VERTICES - Constants.MIN_MAX_CLIQUE_VERTICES
+        ) + Constants.MIN_MAX_CLIQUE_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        graphEdges -= Math.max(RANDOM.nextInt(Constants.MIN_MAX_CLIQUE_VERTICES), graphVertices - 1);
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.MIN_SPANNING_TREE)
+                .type(GraphTaskType.EDGE_SELECTION)
+                .graphWeighted(true)
+                .specialValues("")
+                .build();
     }
 
 }

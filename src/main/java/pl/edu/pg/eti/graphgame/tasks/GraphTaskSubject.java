@@ -22,7 +22,8 @@ public enum GraphTaskSubject {
     MAX_CLIQUE("Max Clique Problem"),
     MAX_INDEPENDENT_SET("Max Independent Set Problem"),
     MIN_VERTEX_COVER("Min Vertex Cover"),
-    EULER_CYCLE("Eulerian Graphs");
+    EULER_CYCLE("Eulerian Graphs"),
+    MIN_SPANNING_TREE("Min Spanning Tree");
     //SPECIAL_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
     //BIPARTITE_GRAPHS("Bipartite Graphs"),

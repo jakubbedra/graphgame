@@ -6,8 +6,10 @@ import pl.edu.pg.eti.graphgame.exceptions.IncompleteTaskEntityException;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.GraphAlgorithms;
 import pl.edu.pg.eti.graphgame.graphs.GraphClassChecker;
+import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Edge;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
+import pl.edu.pg.eti.graphgame.graphs.model.WeightedGraph;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
 import java.util.Arrays;
@@ -43,32 +45,59 @@ public class TaskAnswerService {
     public boolean checkEdgeSelectionAnswer(List<Edge> edges, Task task, Graph graph) {
         switch (task.getSubject()) {
             case EULER_CYCLE:
-                if (edges.size() <= 1) {
-                    return false;
-                }
-                // checking if it even is a cycle
-                List<Integer> vertices = new LinkedList<>();
-                if (getCommonVertex(edges.get(0), edges.get(1)) == edges.get(0).getV1()) {
-                    vertices.add(edges.get(0).getV2());
-                } else {
-                    vertices.add(edges.get(0).getV1());
-                }
-                for (int i = 0; i < edges.size() - 1; i++) {
-                    int commonVertex = getCommonVertex(edges.get(i), edges.get(i + 1));
-                    if (commonVertex == -1) {
-                        return false;
-                    }
-                    vertices.add(commonVertex);
-                }
-                int commonVertex = getCommonVertex(edges.get(0), edges.get(edges.size() - 1));
-                if (commonVertex == -1) {
-                    return false;
-                }
-                vertices.add(commonVertex);
-                return GraphAlgorithms.checkEulerCycle(graph, vertices);
+                return checkEulerCycleEdgeSelection(edges, graph);
+            case MIN_SPANNING_TREE:
+                int totalWeight = edges.stream()
+                        .map(Edge::getWeight)
+                        .reduce(0, (subtotal, edge) -> subtotal += edge);
+                return totalWeight == GraphAlgorithms.getMinSpanningTreeTotalWeight((WeightedGraph) graph) &&
+                        GraphClassChecker.isConnected(getGraphFromEdges(edges, graph.getN()));
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
+    }
+
+    public boolean checkBooleanTaskAnswer(boolean answer, Task task, Graph graph) {
+        switch (task.getSubject()){
+            case EULER_CYCLE:
+                return answer == GraphClassChecker.isEulerian(graph);
+            default:
+                throw new UnsupportedTaskSubjectException("");
+        }
+    }
+
+    private Graph getGraphFromEdges(List<Edge> edges, int n) {
+        Graph g = new AdjacencyMatrixGraph(n);
+        for (int i = 0; i < edges.size(); i++) {
+            g.addEdge(edges.get(i).getV1(), edges.get(i).getV2());
+        }
+        return g;
+    }
+
+    private boolean checkEulerCycleEdgeSelection(List<Edge> edges, Graph graph) {
+        if (edges.size() <= 1) {
+            return false;
+        }
+        // checking if it even is a cycle
+        List<Integer> vertices = new LinkedList<>();
+        if (getCommonVertex(edges.get(0), edges.get(1)) == edges.get(0).getV1()) {
+            vertices.add(edges.get(0).getV2());
+        } else {
+            vertices.add(edges.get(0).getV1());
+        }
+        for (int i = 0; i < edges.size() - 1; i++) {
+            int commonVertex = getCommonVertex(edges.get(i), edges.get(i + 1));
+            if (commonVertex == -1) {
+                return false;
+            }
+            vertices.add(commonVertex);
+        }
+        int commonVertex = getCommonVertex(edges.get(0), edges.get(edges.size() - 1));
+        if (commonVertex == -1) {
+            return false;
+        }
+        vertices.add(commonVertex);
+        return GraphAlgorithms.checkEulerCycle(graph, vertices);
     }
 
     private int getCommonVertex(Edge e1, Edge e2) {

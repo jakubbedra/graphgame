@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,10 +14,10 @@ public class NeighbourListsGraph implements Graph {
     /**
      * Array list of linked lists, representing vertices and their neighbours
      */
-    private final List<List<Integer>> neighbourLists;
+    protected List<List<Integer>> neighbourLists;
 
-    private int n;
-    private int m;
+    protected int n;
+    protected int m;
 
     public NeighbourListsGraph() {
         neighbourLists = new ArrayList<>();

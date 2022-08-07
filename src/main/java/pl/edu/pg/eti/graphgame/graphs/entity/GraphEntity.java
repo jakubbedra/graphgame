@@ -1,7 +1,6 @@
 package pl.edu.pg.eti.graphgame.graphs.entity;
 
 import lombok.*;
-import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
 import javax.persistence.*;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.graphgame.graphs.model;
+package pl.edu.pg.eti.graphgame.tasks.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Edge {
+@NoArgsConstructor
+public class BooleanTaskAnswer {
 
-    private int v1;
-    private int v2;
-    private int weight = 1;
+    private boolean answer;
 
 }

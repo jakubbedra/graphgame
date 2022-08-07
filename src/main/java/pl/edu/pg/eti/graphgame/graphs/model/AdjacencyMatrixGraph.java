@@ -8,10 +8,10 @@ import java.util.List;
 
 public class AdjacencyMatrixGraph implements Graph {
 
-    private int matrix[][];
+    protected int matrix[][];
 
-    private int n;
-    private int m;
+    protected int n;
+    protected int m;
 
     public AdjacencyMatrixGraph() {
         this.matrix = new int[0][0];
@@ -23,6 +23,11 @@ public class AdjacencyMatrixGraph implements Graph {
         this.matrix = new int[n][n];
         this.n = n;
         this.m = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < 0; j++) {
+                matrix[i][j] = 0;
+            }
+        }
     }
 
     public AdjacencyMatrixGraph(int matrix[][], int n, int m) {
@@ -97,6 +102,9 @@ public class AdjacencyMatrixGraph implements Graph {
 
     @Override
     public void addEdge(int v1, int v2) {
+        if (edgeExists(v1, v2)) {
+            return;
+        }
         matrix[v1][v2] = 1;
         matrix[v2][v1] = 1;
         m++;

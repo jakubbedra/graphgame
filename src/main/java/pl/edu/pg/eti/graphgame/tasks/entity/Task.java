@@ -34,6 +34,8 @@ public class Task {
 
     private int graphEdges;
 
+    private boolean graphWeighted = false;
+
     private String specialValues;
 
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import pl.edu.pg.eti.graphgame.config.Constants;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.graphs.model.NeighbourListsGraph;
+import pl.edu.pg.eti.graphgame.graphs.model.WeightedAdjacencyMatrixGraph;
+import pl.edu.pg.eti.graphgame.graphs.model.WeightedGraph;
 
 import java.util.*;
 import java.util.ArrayList;
@@ -22,7 +24,16 @@ public class GraphFactory {
         this.RANDOM = new Random();
     }
 
+    public Graph createRandomMaybeEulerianGraph() {
+        boolean mightNotBeEulerian = RANDOM.nextDouble() < Constants.PROBABILITY_GRAPH_MIGHT_NOT_BE_EULERIAN;
+        return createRandomEulerianGraph(!mightNotBeEulerian);
+    }
+
     public Graph createRandomEulerianGraph() {
+        return createRandomEulerianGraph(true);
+    }
+
+    public Graph createRandomEulerianGraph(boolean shouldBeEulerian) {
         int n = RANDOM.nextInt(
                 Constants.MAX_EULERIAN_VERTICES - Constants.MIN_EULERIAN_VERTICES
         ) + Constants.MIN_EULERIAN_VERTICES;
@@ -41,12 +52,14 @@ public class GraphFactory {
         }
 
         for (int i = 1; i < unevenDegVerticesCount; i += 2) {
-            if (!graph.edgeExists(unevenDegVertices[i], unevenDegVertices[i - 1])) {
-                graph.addEdge(unevenDegVertices[i], unevenDegVertices[i - 1]);
-            } else {
-                graph.addVertex();
-                graph.addEdge(unevenDegVertices[i], graph.getN() - 1);
-                graph.addEdge(unevenDegVertices[i - 1], graph.getN() - 1);
+            if (shouldBeEulerian || RANDOM.nextBoolean()) {
+                if (!graph.edgeExists(unevenDegVertices[i], unevenDegVertices[i - 1])) {
+                    graph.addEdge(unevenDegVertices[i], unevenDegVertices[i - 1]);
+                } else {
+                    graph.addVertex();
+                    graph.addEdge(unevenDegVertices[i], graph.getN() - 1);
+                    graph.addEdge(unevenDegVertices[i - 1], graph.getN() - 1);
+                }
             }
         }
 
@@ -54,6 +67,10 @@ public class GraphFactory {
     }
 
     public Graph createRandomConnectedGraph(int n, int m) {
+        return createRandomConnectedGraph(n, m, false);
+    }
+
+    public Graph createRandomConnectedGraph(int n, int m, boolean randomWeights) {
         // create a spanning tree with n vertices O(n)
         List<List<Integer>> randomSpanningTree = createRandomSpanningTree(n);
         //System.out.println("BEFORE----------------------------------------------------------");
@@ -102,9 +119,9 @@ public class GraphFactory {
             graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
         }
 
-        // todo: the generator is not yet finished, something is bugged + higher count of vertices should
-        // appear much less often (use a better generator then your typical random for that one)
-
+        if (randomWeights) {
+            return addWeights(graph);
+        }
         // another possible method, that in certain cases should be more optimal, but is much worse overall:
         // O (n^3) n vertices, maximum of O(n^2) times
         // 1. make an array of all vertices that are not complete
@@ -115,6 +132,16 @@ public class GraphFactory {
         // 6. repeat 1 - 5 till m count is satisfied
 
         return graph;
+    }
+
+    private Graph addWeights(Graph graph) {
+        WeightedGraph graph2 = new WeightedAdjacencyMatrixGraph(graph);
+        for (int i = 0; i < graph.getN(); i++) {
+            for (int j = i + 1; j < graph.getN(); j++) {
+                graph2.setEdgeWeight(i, j, RANDOM.nextInt(Constants.MAX_EDGE_WEIGHT - 1) + 1);
+            }
+        }
+        return graph2;
     }
 
     private List<List<Integer>> createRandomSpanningTree(int n) {

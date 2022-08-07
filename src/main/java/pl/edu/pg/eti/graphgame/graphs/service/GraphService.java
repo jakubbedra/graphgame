@@ -2,17 +2,22 @@ package pl.edu.pg.eti.graphgame.graphs.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.entity.GraphEntity;
 import pl.edu.pg.eti.graphgame.graphs.factory.GraphFactory;
+import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.graphs.model.NeighbourListsGraph;
+import pl.edu.pg.eti.graphgame.graphs.model.WeightedAdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.repository.GraphRepository;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskType;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,7 +58,11 @@ public class GraphService {
     public Optional<Graph> findGraphByTask(Task task) {
         GraphEntity entity = graphRepository.findFirstByTask(task.getUuid()).get();
         try {
-            return Optional.of(graphFromJson(entity.getJson()));
+            if (!task.isGraphWeighted()) {
+                return Optional.of(graphFromJson(entity.getJson()));
+            } else {
+                return Optional.of(weightedGraphFromJson(entity.getJson()));
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return Optional.empty();
@@ -68,6 +77,10 @@ public class GraphService {
         return objectMapper.readValue(json, NeighbourListsGraph.class);
     }
 
+    private Graph weightedGraphFromJson(String json) throws JsonProcessingException {
+        return objectMapper.readValue(json, WeightedAdjacencyMatrixGraph.class);
+    }
+
     private Graph createGraphForTask(Task task) {
         GraphTaskSubject subject = task.getSubject();
         switch (subject) {
@@ -78,7 +91,13 @@ public class GraphService {
             case MIN_VERTEX_COVER:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
             case EULER_CYCLE:
-                return graphFactory.createRandomEulerianGraph();
+                if (task.getType() == GraphTaskType.BOOLEAN) {
+                    return graphFactory.createRandomMaybeEulerianGraph();
+                } else {
+                    return graphFactory.createRandomEulerianGraph();
+                }
+            case MIN_SPANNING_TREE:
+                return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges(), true);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

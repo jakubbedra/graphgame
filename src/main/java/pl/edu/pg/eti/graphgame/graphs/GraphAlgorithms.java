@@ -1,12 +1,8 @@
 package pl.edu.pg.eti.graphgame.graphs;
 
-import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
-import pl.edu.pg.eti.graphgame.graphs.model.Graph;
-import pl.edu.pg.eti.graphgame.graphs.model.NeighbourListsGraph;
+import pl.edu.pg.eti.graphgame.graphs.model.*;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GraphAlgorithms {
@@ -197,6 +193,86 @@ public class GraphAlgorithms {
             g2.removeEdge(vertices.get(i), vertices.get(i + 1));
         }
         return g2.getM() == 0;
+    }
+
+    /**
+     * Uses Kruskal's algorithm.
+     */
+    private static List<Edge> getMinSpanningTreeEdges(WeightedGraph g) {
+        List<Edge> edges = new LinkedList<>();
+        for (int i = 0; i < g.getN(); i++) {
+            for (int j = 1; j < g.getN(); j++) {
+                if (g.edgeExists(i, j)) {
+                    edges.add(new Edge(i, j, g.getEdgeWeight(i, j)));
+                }
+            }
+        }
+        edges.sort(Comparator.comparingInt(Edge::getWeight));
+        List<Edge> spanningTreeEdges = new LinkedList<>();
+        List<List<Integer>> vertexSets = new ArrayList<>(g.getN());
+        for (int i = 0; i < g.getN(); i++) {
+            vertexSets.add(new LinkedList<>());
+            vertexSets.get(i).add(i);
+        }
+
+        for (Edge e : edges) {
+            if (!inSameSet(e.getV1(), e.getV2(), vertexSets)) {
+                spanningTreeEdges.add(e);
+                vertexSets = mergeSets(e.getV1(), e.getV2(), vertexSets);
+            }
+            if (vertexSets.size() == 1) {
+                break;
+            }
+        }
+
+        return spanningTreeEdges;
+    }
+
+    private static boolean inSameSet(int v1, int v2, List<List<Integer>> vertexSets) {
+        for (int i = 0; i < vertexSets.size(); i++) {
+            boolean v1Found = false;
+            boolean v2Found = false;
+            for (int j : vertexSets.get(i)) {
+                if (j == v1) {
+                    v1Found = true;
+                } else if (j == v2) {
+                    v2Found = true;
+                }
+            }
+            if (v1Found && v2Found) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static List<List<Integer>> mergeSets(int v1, int v2, List<List<Integer>> vertexSets) {
+        List<List<Integer>> ret = new ArrayList<>(vertexSets.size() - 1);
+        List<Integer> tmp = new LinkedList<>();
+        int v1Ind = -1;
+        int v2Ind = -1;
+        for (int i = 0; i < vertexSets.size(); i++) {
+            if (v1Ind == -1 && vertexSets.get(i).contains(v1)) {
+                tmp.addAll(vertexSets.get(i));
+                v1Ind = i;
+            } else if (v2Ind == -1 && vertexSets.get(i).contains(v2)) {
+                tmp.addAll(vertexSets.get(i));
+                v2Ind = i;
+            }
+        }
+        ret.add(tmp);
+        for (int i = 0; i < vertexSets.size(); i++) {
+            if (i != v1Ind && i != v2Ind) {
+                ret.add(vertexSets.get(i));
+            }
+        }
+        return ret;
+    }
+
+    public static int getMinSpanningTreeTotalWeight(WeightedGraph g) {
+        return getMinSpanningTreeEdges(g).stream()
+                .map(Edge::getWeight)
+                .reduce(0, (subtotal, edge) -> subtotal += edge);
     }
 
 }

@@ -48,6 +48,11 @@ public class TaskQuestion {
     private int graphEdges;
 
     /**
+     * True if the graph has weighted edges.
+     */
+    private boolean graphWeighted;
+
+    /**
      * Integer value(s) that can be specific to a given task subject. Might be empty.
      */
     private List<Integer> specialValues;
@@ -65,8 +70,10 @@ public class TaskQuestion {
                 .type(taskEntity.getType())
                 .graphVertices(taskEntity.getGraphVertices())
                 .graphEdges(taskEntity.getGraphEdges())
+                .graphWeighted(taskEntity.isGraphWeighted())
                 .specialValues(specialValues)
                 .build();
     }
 
 }
+
