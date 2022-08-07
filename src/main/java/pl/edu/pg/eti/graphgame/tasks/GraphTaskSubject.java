@@ -56,8 +56,7 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        return GraphTaskSubject.HAMILTON_CYCLE;
-        //return VALUES.get(RANDOM.nextInt(SIZE));
+        return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }
