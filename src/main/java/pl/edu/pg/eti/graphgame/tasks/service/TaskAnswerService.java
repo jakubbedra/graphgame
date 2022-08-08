@@ -63,6 +63,8 @@ public class TaskAnswerService {
         switch (task.getSubject()){
             case EULER_CYCLE:
                 return answer == GraphClassChecker.isEulerian(graph);
+            case TREE_GRAPHS:
+                return answer == GraphClassChecker.isTree(graph);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

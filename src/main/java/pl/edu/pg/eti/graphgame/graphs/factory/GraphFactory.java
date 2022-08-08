@@ -154,7 +154,7 @@ public class GraphFactory {
         return graph2;
     }
 
-    private Edge[] createRandomPossibleEdges(Graph graph, int n){
+    private Edge[] createRandomPossibleEdges(Graph graph, int n) {
         // calculating possible edges
         Edge[] possibleEdges = new Edge[n * n - n];
         int possibleEdgesCount = 0;

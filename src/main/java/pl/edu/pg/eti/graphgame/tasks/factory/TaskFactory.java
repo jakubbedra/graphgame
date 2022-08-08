@@ -65,6 +65,8 @@ public class TaskFactory {
                 return createHamiltonCycleTask(user);
             case MIN_SPANNING_TREE:
                 return createMinSpanningTreeTask(user);
+            case TREE_GRAPHS:
+                return createTreeGraphsTask(user);
         }
     }
 
@@ -308,9 +310,9 @@ public class TaskFactory {
                 Constants.MAX_MAX_CLIQUE_VERTICES - Constants.MIN_MAX_CLIQUE_VERTICES
         ) + Constants.MIN_MAX_CLIQUE_VERTICES;
         int graphEdges = RANDOM.nextInt(
-                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
-        ) + (graphVertices - 1);
-        graphEdges -= Math.max(RANDOM.nextInt(Constants.MIN_MAX_CLIQUE_VERTICES), graphVertices - 1);
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices)
+        ) + (graphVertices);
+        graphEdges -= Math.max(RANDOM.nextInt(Constants.MIN_MAX_CLIQUE_VERTICES), graphVertices);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)
@@ -319,6 +321,28 @@ public class TaskFactory {
                 .subject(GraphTaskSubject.MIN_SPANNING_TREE)
                 .type(GraphTaskType.EDGE_SELECTION)
                 .graphWeighted(true)
+                .specialValues("")
+                .build();
+    }
+
+    private Task createTreeGraphsTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_MAX_CLIQUE_VERTICES - Constants.MIN_MAX_CLIQUE_VERTICES
+        ) + Constants.MIN_MAX_CLIQUE_VERTICES;
+        int graphEdges;
+        if (RANDOM.nextDouble() < Constants.PROBABILITY_GRAPH_MIGHT_BE_TREE) {
+            graphEdges = graphVertices - 1;
+        } else {
+            graphEdges = RANDOM.nextInt(graphVertices) + (graphVertices);
+        }
+
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.TREE_GRAPHS)
+                .type(GraphTaskType.BOOLEAN)
                 .specialValues("")
                 .build();
     }

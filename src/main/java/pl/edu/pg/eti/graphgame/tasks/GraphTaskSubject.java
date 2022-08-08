@@ -24,6 +24,7 @@ public enum GraphTaskSubject {
     MIN_VERTEX_COVER("Min Vertex Cover"),
     EULER_CYCLE("Eulerian Graphs"),
     MIN_SPANNING_TREE("Min Spanning Tree"),
+    TREE_GRAPHS("Tree Graphs"),
     HAMILTON_CYCLE("Hamiltonian Graphs");
     //SPECIAL_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
