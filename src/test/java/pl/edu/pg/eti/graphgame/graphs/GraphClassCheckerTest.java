@@ -376,5 +376,54 @@ public class GraphClassCheckerTest {
         Assertions.assertThat(GraphClassChecker.isHamiltonian(testGraph)).isFalse();
     }
 
+    @Test
+    public void isBipartiteTestBipartiteGraph() {
+        final int[][] TEST_MATRIX = {
+                {0, 0, 1, 1, 1},
+                {0, 0, 1, 1, 0},
+                {1, 1, 0, 0, 0},
+                {1, 1, 0, 0, 0},
+                {1, 0, 0, 0, 0}
+        };
+        final int TEST_N = 5;
+        final int TEST_M = 6;
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST_MATRIX, TEST_N, TEST_M
+        );
+        Assertions.assertThat(GraphClassChecker.isBipartite(testGraph)).isTrue();
+    }
+
+    @Test
+    public void isFullBipartiteTestBipartiteGraph() {
+        final int[][] TEST_MATRIX = {
+                {0, 0, 1, 1, 1},
+                {0, 0, 1, 1, 1},
+                {1, 1, 0, 0, 0},
+                {1, 1, 0, 0, 0},
+                {1, 1, 0, 0, 0}
+        };
+        final int TEST_N = 5;
+        final int TEST_M = 6;
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST_MATRIX, TEST_N, TEST_M
+        );
+        Assertions.assertThat(GraphClassChecker.isCompleteBipartite(testGraph, 2, 3)).isTrue();
+    }
+
+    @Test
+    public void isBipartiteTestNoBipartiteGraph() {
+        final int[][] TEST = {
+                {0, 1, 1, 1, 1},
+                {1, 0, 1, 1, 1},
+                {1, 1, 0, 1, 1},
+                {1, 1, 1, 0, 1},
+                {1, 1, 1, 1, 0}
+        };
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST, 5, 10
+        );
+        Assertions.assertThat(GraphClassChecker.isBipartite(testGraph)).isFalse();
+    }
+
 }
 

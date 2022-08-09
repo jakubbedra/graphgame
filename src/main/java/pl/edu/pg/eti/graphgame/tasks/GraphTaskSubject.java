@@ -25,14 +25,16 @@ public enum GraphTaskSubject {
     EULER_CYCLE("Eulerian Graphs"),
     MIN_SPANNING_TREE("Min Spanning Tree"),
     TREE_GRAPHS("Tree Graphs"),
-    HAMILTON_CYCLE("Hamiltonian Graphs");
-    //SPECIAL_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
+    HAMILTON_CYCLE("Hamiltonian Graphs"),
+    BIPARTITE_GRAPHS("Bipartite Graphs");//draw K_r,s + "Is the given graph bipartite?"
+    //PLANARITY(""),
+    //ISOMORPHISM(""),
+    //OTHER_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
     //BIPARTITE_GRAPHS("Bipartite Graphs"),
-    //HAMILTONIAN_GRAPHS("Hamiltonian Graphs"),//for this one aswell
+    //TRIPARTITE_GRAPHS("")
     //VERTEX_COLORING("Vertex Coloring"),
     //EDGE_COLORING("Edge Coloring"),
-    //VERTEX_COVER("Vertex Cover"),
 
     public final String label;
 

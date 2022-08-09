@@ -47,6 +47,8 @@ public class TaskFactory {
                 return createHypercubesTask(user);
             case REGULAR_GRAPHS:
                 return createRegularGraphTask(user);
+            case BIPARTITE_GRAPHS:
+                return createBipartiteGraphTask(user);
             default:
                 throw new UnsupportedTaskSubjectException("");
             case BFS:
@@ -165,6 +167,22 @@ public class TaskFactory {
                 .subject(GraphTaskSubject.HYPERCUBES)
                 .type(GraphTaskType.DRAW)
                 .specialValues("")
+                .build();
+    }
+
+    private Task createBipartiteGraphTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        int r = RANDOM.nextInt(graphVertices - 1) + 1;
+        int s = graphVertices - r;
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.BIPARTITE_GRAPHS)
+                .type(GraphTaskType.DRAW)
+                .specialValues(r + ";" + s + ";")
                 .build();
     }
 
@@ -312,7 +330,6 @@ public class TaskFactory {
         int graphEdges = RANDOM.nextInt(
                 (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices)
         ) + (graphVertices);
-        graphEdges -= Math.max(RANDOM.nextInt(Constants.MIN_MAX_CLIQUE_VERTICES), graphVertices);
         return Task.builder()
                 .uuid(UUID.randomUUID())
                 .user(user)

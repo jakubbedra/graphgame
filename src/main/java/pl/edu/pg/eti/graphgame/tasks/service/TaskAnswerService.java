@@ -60,7 +60,7 @@ public class TaskAnswerService {
     }
 
     public boolean checkBooleanTaskAnswer(boolean answer, Task task, Graph graph) {
-        switch (task.getSubject()){
+        switch (task.getSubject()) {
             case EULER_CYCLE:
                 return answer == GraphClassChecker.isEulerian(graph);
             case TREE_GRAPHS:
@@ -132,16 +132,28 @@ public class TaskAnswerService {
             case HYPERCUBES:
                 return GraphClassChecker.isHypercube(graph);
             case REGULAR_GRAPHS:
-                List<Integer> specialValues = new LinkedList<>();
-                if (!task.getSpecialValues().isEmpty()) {
-                    String[] split = task.getSpecialValues().split(";");
-                    Arrays.stream(split).forEach(s -> specialValues.add(Integer.parseInt(s)));
-                    return GraphClassChecker.isKRegular(graph, specialValues.get(0));
-                } else {
-                    throw new IncompleteTaskEntityException("");
-                }
+                List<Integer> specialValues = extractSpecialValues(task, 1);
+                return GraphClassChecker.isKRegular(graph, specialValues.get(0));
+            case BIPARTITE_GRAPHS:
+                List<Integer> specialValuesBG = extractSpecialValues(task, 2);
+                return GraphClassChecker.isConnected(graph) &&
+                        GraphClassChecker.isCompleteBipartite(graph, specialValuesBG.get(0), specialValuesBG.get(1));
             default:
                 throw new UnsupportedTaskSubjectException("");
+        }
+    }
+
+    private List<Integer> extractSpecialValues(Task task, int count) {
+        if (!task.getSpecialValues().isEmpty()) {
+            List<Integer> specialValues = new LinkedList<>();
+            String[] split = task.getSpecialValues().split(";");
+            Arrays.stream(split).forEach(s -> specialValues.add(Integer.parseInt(s)));
+            if (specialValues.size() != count) {
+                throw new IncompleteTaskEntityException("");
+            }
+            return specialValues;
+        } else {
+            throw new IncompleteTaskEntityException("");
         }
     }
 

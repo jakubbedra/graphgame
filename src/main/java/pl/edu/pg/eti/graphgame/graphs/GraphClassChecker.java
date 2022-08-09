@@ -151,6 +151,59 @@ public class GraphClassChecker {
         return isConnected(graph) && graph.getN() - graph.getM() == 1;
     }
 
+    private static boolean isBipartite(Graph g, int[] colors, int parent) {
+        LinkedList<Integer> q = new LinkedList<>();
+        q.add(parent);
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            for (int v = 0; v < g.getN(); v++) {
+                if (g.edgeExists(u, v) && colors[v] == -1) {
+                    if (colors[u] == 1) {
+                        colors[v] = 0;
+                    } else if (colors[u] == 0) {
+                        colors[v] = 1;
+                    }
+                    q.add(v);
+                } else if (g.edgeExists(u, v) && colors[u] == colors[v]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean isBipartite(Graph graph) {
+        if (graph.getN() <= 1) {
+            return false;
+        } else if (graph.getN() == 2) {
+            return true;
+        }
+        int[] colors = new int[graph.getN()];
+        for (int i = 0; i < graph.getN(); i++) {
+            colors[i] = -1; // no color assigned
+        }
+        colors[0] = 0;
+
+        return isBipartite(graph, colors, 0);
+    }
+
+    public static boolean isCompleteBipartite(Graph graph, int r, int s) {
+        if (!isBipartite(graph)) {
+            return false;
+        }
+        int group1 = 0;
+        int group2 = 0;
+        for (int i = 0; i < graph.getN(); i++) {
+            int degree = graph.degree(i);
+            if (degree == r) {
+                group2++;
+            } else if (degree == s) {
+                group1++;
+            }
+        }
+        return group1 == r && group2 == s;
+    }
+
     public static boolean isEulerian(Graph graph) {
         for (int i = 0; i < graph.getN(); i++) {
             if (graph.degree(i) % 2 != 0) {
