@@ -93,6 +93,50 @@ public class GraphFactory {
         return cycle;
     }
 
+    private List<List<Integer>> createPath(int n) {
+        List<List<Integer>> path = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            path.add(new LinkedList<>());
+        }
+        for (int i = 0; i < n - 1; i++) {
+            path.get(i).add(i + 1);
+            path.get(i + 1).add(i);
+        }
+        return path;
+    }
+
+    public Graph createRandomMaybeBipartiteGraph(int n){
+        return createRandomBipartiteGraph(
+                n, RANDOM.nextDouble() < Constants.PROBABILITY_GRAPH_MIGHT_NOT_BE_BIPARTITE
+        );
+    }
+
+    public Graph createRandomBipartiteGraph(int n, boolean mightNotBeBipartite) {
+        int r = RANDOM.nextInt(n - 1) + 1;
+        int s = n - r;
+        int m = (r == 1 || s == 1) ?  m = n - 1 : RANDOM.nextInt(r * s - (n - 1)) + (n - 1);
+
+        List<List<Integer>> path = createPath(n);
+        if (mightNotBeBipartite) {
+            path = randomizeVertices(path, n);
+        }
+
+        Graph graph = new NeighbourListsGraph(path, n, n - 1);
+        Edge[] possibleEdges;
+
+        if (mightNotBeBipartite) {
+            possibleEdges = createRandomPossibleEdges(graph, n);
+        } else {
+            possibleEdges = createRandomPossibleEdgesForBipartiteGraph(graph, n);
+        }
+
+        for (int i = 0; i < m - graph.getM(); i++) {
+            graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
+        }
+
+        return graph;
+    }
+
     public Graph createRandomConnectedGraph(int n, int m) {
         return createRandomConnectedGraph(n, m, false);
     }
@@ -152,6 +196,30 @@ public class GraphFactory {
             }
         }
         return graph2;
+    }
+
+    private Edge[] createRandomPossibleEdgesForBipartiteGraph(Graph graph, int n) {
+        // calculating possible edges
+        Edge[] possibleEdges = new Edge[n * n - n];
+        int possibleEdgesCount = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                if (i != j && !graph.edgeExists(i, j) && i % 2 == 0 && j % 2 == 1) {
+                    possibleEdges[possibleEdgesCount] = new Edge(i, j);
+                    possibleEdgesCount++;
+                }
+            }
+        }
+
+        // randomizing the edges
+        for (int i = 0; i < possibleEdgesCount; i++) {
+            Edge tmp = possibleEdges[i];
+            int r = RANDOM.nextInt(possibleEdgesCount - i) + i;
+            possibleEdges[i] = possibleEdges[r];
+            possibleEdges[r] = tmp;
+        }
+
+        return possibleEdges;
     }
 
     private Edge[] createRandomPossibleEdges(Graph graph, int n) {

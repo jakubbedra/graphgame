@@ -59,7 +59,8 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        return VALUES.get(RANDOM.nextInt(SIZE));
+        return BIPARTITE_GRAPHS;
+        //return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }

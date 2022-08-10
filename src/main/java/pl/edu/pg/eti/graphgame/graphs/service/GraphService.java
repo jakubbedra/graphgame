@@ -2,13 +2,11 @@ package pl.edu.pg.eti.graphgame.graphs.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.entity.GraphEntity;
 import pl.edu.pg.eti.graphgame.graphs.factory.GraphFactory;
-import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.graphs.model.NeighbourListsGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.WeightedAdjacencyMatrixGraph;
@@ -17,7 +15,6 @@ import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskType;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -101,6 +98,8 @@ public class GraphService {
                 return graphFactory.createRandomHamiltonianGraph(task.getGraphVertices(), task.getGraphEdges());
             case MIN_SPANNING_TREE:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges(), true);
+            case BIPARTITE_GRAPHS:
+                return graphFactory.createRandomMaybeBipartiteGraph(task.getGraphVertices());
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

@@ -22,6 +22,28 @@ public class GraphFactoryTest {
     }
 
     @Test
+    public void createRandomBipartiteGraphTest() {
+        final int TEST_N = 10;
+
+        Graph graph = graphFactory.createRandomBipartiteGraph(TEST_N, false);
+
+        Assertions.assertTrue(GraphClassChecker.isBipartite(graph));
+        Assertions.assertTrue(isConnected(graph));
+    }
+
+    @Test
+    public void createRandomBipartiteGraphTestALotOfGraphs() {
+        for (int i = 0; i < 10000; i++) {
+            int TEST_N = RANDOM.nextInt(Constants.MAX_GRAPH_VERTICES - 2) + 2;
+
+            Graph graph = graphFactory.createRandomBipartiteGraph(TEST_N, false);
+
+            Assertions.assertTrue(GraphClassChecker.isBipartite(graph));
+            Assertions.assertTrue(isConnected(graph));
+        }
+    }
+
+    @Test
     public void createRandomEulerianGraphTest() {
         Graph graph = graphFactory.createRandomEulerianGraph();
 

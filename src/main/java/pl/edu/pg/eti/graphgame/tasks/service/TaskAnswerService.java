@@ -65,6 +65,8 @@ public class TaskAnswerService {
                 return answer == GraphClassChecker.isEulerian(graph);
             case TREE_GRAPHS:
                 return answer == GraphClassChecker.isTree(graph);
+            case BIPARTITE_GRAPHS:
+                return answer == GraphClassChecker.isBipartite(graph);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

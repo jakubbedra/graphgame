@@ -176,14 +176,25 @@ public class TaskFactory {
         ) + Constants.MIN_GRAPH_VERTICES;
         int r = RANDOM.nextInt(graphVertices - 1) + 1;
         int s = graphVertices - r;
-        return Task.builder()
-                .uuid(UUID.randomUUID())
-                .user(user)
-                .graphVertices(graphVertices)
-                .subject(GraphTaskSubject.BIPARTITE_GRAPHS)
-                .type(GraphTaskType.DRAW)
-                .specialValues(r + ";" + s + ";")
-                .build();
+        if (RANDOM.nextBoolean()) {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .graphVertices(graphVertices)
+                    .subject(GraphTaskSubject.BIPARTITE_GRAPHS)
+                    .type(GraphTaskType.DRAW)
+                    .specialValues(r + ";" + s + ";")
+                    .build();
+        } else {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .graphVertices(graphVertices)
+                    .subject(GraphTaskSubject.BIPARTITE_GRAPHS)
+                    .type(GraphTaskType.BOOLEAN)
+                    .specialValues(r + ";" + s + ";")
+                    .build();
+        }
     }
 
     private Task createRegularGraphTask(User user) {
