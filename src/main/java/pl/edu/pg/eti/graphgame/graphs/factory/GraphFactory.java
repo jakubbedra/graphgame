@@ -24,6 +24,16 @@ public class GraphFactory {
         this.RANDOM = new Random();
     }
 
+    public WeightedGraph createRandomCompleteWeightedGraph(int n) {
+        Graph completeGraph = new NeighbourListsGraph(n);
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                completeGraph.addEdge(i, j);
+            }
+        }
+        return convertToRandomWeightedGraph(completeGraph);
+    }
+
     public Graph createRandomMaybeEulerianGraph() {
         boolean mightNotBeEulerian = RANDOM.nextDouble() < Constants.PROBABILITY_GRAPH_MIGHT_NOT_BE_EULERIAN;
         return createRandomEulerianGraph(!mightNotBeEulerian);
@@ -105,7 +115,7 @@ public class GraphFactory {
         return path;
     }
 
-    public Graph createRandomMaybeBipartiteGraph(int n){
+    public Graph createRandomMaybeBipartiteGraph(int n) {
         return createRandomBipartiteGraph(
                 n, RANDOM.nextDouble() < Constants.PROBABILITY_GRAPH_MIGHT_NOT_BE_BIPARTITE
         );
@@ -114,7 +124,7 @@ public class GraphFactory {
     public Graph createRandomBipartiteGraph(int n, boolean mightNotBeBipartite) {
         int r = RANDOM.nextInt(n - 1) + 1;
         int s = n - r;
-        int m = (r == 1 || s == 1) ?  m = n - 1 : RANDOM.nextInt(r * s - (n - 1)) + (n - 1);
+        int m = (r == 1 || s == 1) ? m = n - 1 : RANDOM.nextInt(r * s - (n - 1)) + (n - 1);
 
         List<List<Integer>> path = createPath(n);
         if (mightNotBeBipartite) {
@@ -188,7 +198,7 @@ public class GraphFactory {
         return graph;
     }
 
-    private Graph convertToRandomWeightedGraph(Graph graph) {
+    private WeightedGraph convertToRandomWeightedGraph(Graph graph) {
         WeightedGraph graph2 = new WeightedAdjacencyMatrixGraph(graph);
         for (int i = 0; i < graph.getN(); i++) {
             for (int j = i + 1; j < graph.getN(); j++) {

@@ -100,6 +100,8 @@ public class GraphService {
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges(), true);
             case BIPARTITE_GRAPHS:
                 return graphFactory.createRandomMaybeBipartiteGraph(task.getGraphVertices());
+            case TRAVELING_SALESMAN_PROBLEM:
+                return graphFactory.createRandomCompleteWeightedGraph(task.getGraphVertices());
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

@@ -48,15 +48,22 @@ public class TaskAnswerService {
         switch (task.getSubject()) {
             case EULER_CYCLE:
                 return checkEulerCycleEdgeSelection(edges, graph);
+            case TRAVELING_SALESMAN_PROBLEM:
+                List<Integer> vertices = edgesFormACycleVertices(edges);
+                return graph.getN() + 1 == vertices.size() &&
+                        sumTotalWeight(edges) == GraphAlgorithms.solveTSP((WeightedGraph) graph);
             case MIN_SPANNING_TREE:
-                int totalWeight = edges.stream()
-                        .map(Edge::getWeight)
-                        .reduce(0, (subtotal, edge) -> subtotal += edge);
-                return totalWeight == GraphAlgorithms.getMinSpanningTreeTotalWeight((WeightedGraph) graph) &&
+                return sumTotalWeight(edges) == GraphAlgorithms.getMinSpanningTreeTotalWeight((WeightedGraph) graph) &&
                         GraphClassChecker.isConnected(getGraphFromEdges(edges, graph.getN()));
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
+    }
+
+    private int sumTotalWeight(List<Edge> edges) {
+        return edges.stream()
+                .map(Edge::getWeight)
+                .reduce(0, (subtotal, edge) -> subtotal += edge);
     }
 
     public boolean checkBooleanTaskAnswer(boolean answer, Task task, Graph graph) {
@@ -84,8 +91,15 @@ public class TaskAnswerService {
         if (edges.size() <= 1) {
             return false;
         }
-        // checking if it even is a cycle
+        List<Integer> vertices = edgesFormACycleVertices(edges);
+        return graph.getN() + 1 == vertices.size() && GraphAlgorithms.checkEulerCycle(graph, vertices);
+    }
+
+    private List<Integer> edgesFormACycleVertices(List<Edge> edges) {
         List<Integer> vertices = new LinkedList<>();
+        if (edges.size() < 2) {
+            return vertices;
+        }
         if (getCommonVertex(edges.get(0), edges.get(1)) == edges.get(0).getV1()) {
             vertices.add(edges.get(0).getV2());
         } else {
@@ -94,16 +108,15 @@ public class TaskAnswerService {
         for (int i = 0; i < edges.size() - 1; i++) {
             int commonVertex = getCommonVertex(edges.get(i), edges.get(i + 1));
             if (commonVertex == -1) {
-                return false;
+                return vertices;
             }
             vertices.add(commonVertex);
         }
         int commonVertex = getCommonVertex(edges.get(0), edges.get(edges.size() - 1));
-        if (commonVertex == -1) {
-            return false;
+        if (commonVertex != -1) {
+            vertices.add(commonVertex);
         }
-        vertices.add(commonVertex);
-        return GraphAlgorithms.checkEulerCycle(graph, vertices);
+        return vertices;
     }
 
     private int getCommonVertex(Edge e1, Edge e2) {

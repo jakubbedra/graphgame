@@ -275,4 +275,29 @@ public class GraphAlgorithms {
                 .reduce(0, (subtotal, edge) -> subtotal += edge);
     }
 
+    private static int minPathTSP(WeightedGraph g, List<Integer> vertices, int depth) {
+        int minPathValue = Integer.MAX_VALUE;
+        if (depth != g.getN()) {
+            for (int i = 0; i < g.getN(); i++) {
+                if (!vertices.contains(i)) {
+                    vertices.add(i);
+                    minPathValue = Math.min(minPathValue, minPathTSP(g, vertices, depth + 1));
+                    vertices.remove((Integer)i);
+                }
+            }
+        } else {
+            minPathValue = 0;
+            for (int i = 0; i < vertices.size() - 1; i++) {
+                minPathValue += g.getEdgeWeight(vertices.get(i), vertices.get(i + 1));
+            }
+            minPathValue += g.getEdgeWeight(vertices.get(0), vertices.get(vertices.size() - 1));
+            return minPathValue;
+        }
+        return minPathValue;
+    }
+
+    public static int solveTSP(WeightedGraph g) {
+        return minPathTSP(g, new ArrayList<>(g.getN()), 0);
+    }
+
 }

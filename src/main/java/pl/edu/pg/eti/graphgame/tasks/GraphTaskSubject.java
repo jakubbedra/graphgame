@@ -26,7 +26,8 @@ public enum GraphTaskSubject {
     MIN_SPANNING_TREE("Min Spanning Tree"),
     TREE_GRAPHS("Tree Graphs"),
     HAMILTON_CYCLE("Hamiltonian Graphs"),
-    BIPARTITE_GRAPHS("Bipartite Graphs");//draw K_r,s + "Is the given graph bipartite?"
+    BIPARTITE_GRAPHS("Bipartite Graphs"),
+    TRAVELING_SALESMAN_PROBLEM("Traveling Salesman Problem");//draw K_r,s + "Is the given graph bipartite?"
     //PLANARITY(""),
     //ISOMORPHISM(""),
     //OTHER_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
@@ -59,7 +60,7 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        return BIPARTITE_GRAPHS;
+        return MIN_SPANNING_TREE;
         //return VALUES.get(RANDOM.nextInt(SIZE));
     }
 

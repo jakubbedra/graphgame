@@ -65,6 +65,8 @@ public class TaskFactory {
                 return createEulerCycleTask(user);
             case HAMILTON_CYCLE:
                 return createHamiltonCycleTask(user);
+            case TRAVELING_SALESMAN_PROBLEM:
+                return createTravelingSalesmanProblemTask(user);
             case MIN_SPANNING_TREE:
                 return createMinSpanningTreeTask(user);
             case TREE_GRAPHS:
@@ -330,6 +332,21 @@ public class TaskFactory {
                 .graphEdges(graphEdges)
                 .subject(GraphTaskSubject.HAMILTON_CYCLE)
                 .type(GraphTaskType.VERTEX_SELECTION)
+                .specialValues("")
+                .build();
+    }
+
+    private Task createTravelingSalesmanProblemTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_TSP_VERTICES - Constants.MIN_TSP_VERTICES
+        ) + Constants.MIN_TSP_VERTICES;
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.TRAVELING_SALESMAN_PROBLEM)
+                .type(GraphTaskType.EDGE_SELECTION)
+                .graphWeighted(true)
                 .specialValues("")
                 .build();
     }

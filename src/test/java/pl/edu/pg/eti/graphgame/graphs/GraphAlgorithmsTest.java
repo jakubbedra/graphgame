@@ -221,4 +221,21 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(GraphAlgorithms.getMinSpanningTreeTotalWeight(graph)).isEqualTo(EXPECTED_WEIGHT);
     }
 
+    @Test
+    public void travelingSalesmanProblemTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 10, 15, 20},
+                {10, 0, 35, 25},
+                {15, 35, 0, 30},
+                {20, 25, 30, 0}
+        };
+        final int TEST_N = 4;
+        final int TEST_M = 7;
+        final int EXPECTED_WEIGHT = 80;
+
+        WeightedGraph graph = new WeightedAdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.solveTSP(graph)).isEqualTo(EXPECTED_WEIGHT);
+    }
+
 }
