@@ -25,13 +25,33 @@ public class GraphFactory {
     }
 
     public WeightedGraph createRandomCompleteWeightedGraph(int n) {
+        Graph completeGraph = createRandomCompleteGraph(n, false);
+        return convertToRandomWeightedGraph(completeGraph);
+    }
+
+    public Graph createRandomMaybeCompleteGraph(int n) {
+        return createRandomCompleteGraph(n, RANDOM.nextDouble() < Constants.PROBABILITY_GRAPH_MIGHT_NOT_BE_COMPLETE);
+    }
+
+    private Graph createRandomCompleteGraph(int n, boolean mightNotBeComplete) {
         Graph completeGraph = new NeighbourListsGraph(n);
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 completeGraph.addEdge(i, j);
             }
         }
-        return convertToRandomWeightedGraph(completeGraph);
+        //delete random edges
+        if (mightNotBeComplete) {
+            int maxEdgesToDelete = RANDOM.nextInt(n - 1) + 1;
+            for (int i = 0; i < n; i++) {
+                for (int j = i + 1; j < n; j++) {
+                    if (RANDOM.nextDouble() < Constants.PROBABILITY_EDGE_REMOVAL) {
+                        completeGraph.removeEdge(i, j);
+                    }
+                }
+            }
+        }
+        return completeGraph;
     }
 
     public Graph createRandomMaybeEulerianGraph() {

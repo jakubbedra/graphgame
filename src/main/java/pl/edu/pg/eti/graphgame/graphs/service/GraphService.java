@@ -102,9 +102,12 @@ public class GraphService {
                 return graphFactory.createRandomMaybeBipartiteGraph(task.getGraphVertices());
             case TRAVELING_SALESMAN_PROBLEM:
                 return graphFactory.createRandomCompleteWeightedGraph(task.getGraphVertices());
+            case COMPLETE_GRAPHS:
+                return graphFactory.createRandomMaybeCompleteGraph(task.getGraphVertices());
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
     }
 
 }
+

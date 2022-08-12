@@ -31,5 +31,7 @@ public class Constants {
     public static final double PROBABILITY_GRAPH_MIGHT_NOT_BE_EULERIAN = 0.7;
     public static final double PROBABILITY_GRAPH_MIGHT_BE_TREE = 0.5;
     public static final double PROBABILITY_GRAPH_MIGHT_NOT_BE_BIPARTITE = 0.9;
+    public static final double PROBABILITY_GRAPH_MIGHT_NOT_BE_COMPLETE = 0.7;
+    public static final double PROBABILITY_EDGE_REMOVAL = 0.1;
 
 }

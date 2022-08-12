@@ -74,6 +74,8 @@ public class TaskAnswerService {
                 return answer == GraphClassChecker.isTree(graph);
             case BIPARTITE_GRAPHS:
                 return answer == GraphClassChecker.isBipartite(graph);
+            case COMPLETE_GRAPHS:
+                return answer == GraphClassChecker.isComplete(graph);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
