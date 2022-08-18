@@ -71,6 +71,8 @@ public class TaskFactory {
                 return createMinSpanningTreeTask(user);
             case TREE_GRAPHS:
                 return createTreeGraphsTask(user);
+            case PLANAR_GRAPHS:
+                return createPlanarGraphsTask(user);
         }
     }
 
@@ -398,5 +400,25 @@ public class TaskFactory {
                 .specialValues("")
                 .build();
     }
+
+    private Task createPlanarGraphsTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_MAX_CLIQUE_VERTICES - Constants.MIN_MAX_CLIQUE_VERTICES
+        ) + Constants.MIN_MAX_CLIQUE_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.PLANAR_GRAPHS)
+                .type(GraphTaskType.BOOLEAN)
+                .specialValues("")
+                .build();
+    }
+
+
 
 }

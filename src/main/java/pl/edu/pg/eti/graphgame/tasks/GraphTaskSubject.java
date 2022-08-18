@@ -27,7 +27,8 @@ public enum GraphTaskSubject {
     TREE_GRAPHS("Tree Graphs"),
     HAMILTON_CYCLE("Hamiltonian Graphs"),
     BIPARTITE_GRAPHS("Bipartite Graphs"),
-    TRAVELING_SALESMAN_PROBLEM("Traveling Salesman Problem");//draw K_r,s + "Is the given graph bipartite?"
+    TRAVELING_SALESMAN_PROBLEM("Traveling Salesman Problem"),
+    PLANAR_GRAPHS("Planar Graphs");
     //PLANARITY(""),
     //ISOMORPHISM(""),
     //OTHER_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess

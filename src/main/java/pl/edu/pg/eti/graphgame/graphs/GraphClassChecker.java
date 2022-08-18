@@ -1,11 +1,19 @@
 package pl.edu.pg.eti.graphgame.graphs;
 
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
+import pl.edu.pg.eti.graphgame.graphs.model.NeighbourListsGraph;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class GraphClassChecker {
+
+    /**
+     * Checks if the given graph is an empty graph
+     */
+    public static boolean isEmpty(Graph graph) {
+        return graph.getM() == 0;
+    }
 
     /**
      * Checks if the given graph is a complete graph
@@ -246,6 +254,11 @@ public class GraphClassChecker {
 
     public static boolean isHamiltonian(Graph graph) {
         return checkHamiltonCycle(graph, new LinkedList<>());
+    }
+
+    public static boolean isPlanar(Graph graph) {
+        KuratowskiPlanarityTester planarityTester = new KuratowskiPlanarityTester();
+        return planarityTester.isPlanar(graph);
     }
 
 }

@@ -39,7 +39,8 @@ public class NeighbourListsGraph implements Graph {
         this.m = g.getM();
         neighbourLists = new ArrayList<>(g.getN());
         for (int i = 0; i < g.getN(); i++) {
-            neighbourLists.add(g.neighbours(i));
+            neighbourLists.add(new LinkedList<>());
+            neighbourLists.get(i).addAll(g.neighbours(i));
         }
     }
 
@@ -72,10 +73,17 @@ public class NeighbourListsGraph implements Graph {
 
     @Override
     public void removeVertex(int v) {
+        //if (v == 1) {
+        //    System.out.println("XD");
+        //}
         List<Integer> neighbours = neighbourLists.get(v);
-        for (Integer neighbour : neighbours) {
-            neighbourLists.get(neighbour).remove((Integer) v);
-        }
+        //try {
+            for (Integer neighbour : neighbours) {
+                neighbourLists.get(neighbour).remove((Integer) v);
+            }
+        //} catch (Exception exc) {
+        //    System.out.println("xd");
+        //}
         neighbourLists.remove(v);
         for (List<Integer> n : neighbourLists) {
             for (int i = 0; i < n.size(); i++) {
@@ -83,11 +91,16 @@ public class NeighbourListsGraph implements Graph {
                 if (tmp > v) {
                     tmp--;
                     n.set(i, tmp);
+                } else if (tmp == v) {
+                    n.remove((Integer) tmp);
                 }
             }
         }
         m -= neighbours.size();
         n--;
+        //if (n == 3 && m == 1 && neighbourLists.size() == 3) {
+        //    System.out.println("CHUJ");
+        //}
     }
 
     @Override

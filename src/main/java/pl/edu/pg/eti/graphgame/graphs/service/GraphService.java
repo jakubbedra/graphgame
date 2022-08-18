@@ -87,6 +87,7 @@ public class GraphService {
             case MAX_INDEPENDENT_SET:
             case MIN_VERTEX_COVER:
             case TREE_GRAPHS:
+            case PLANAR_GRAPHS:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
             case EULER_CYCLE:
                 if (task.getType() == GraphTaskType.BOOLEAN) {

@@ -15,4 +15,10 @@ public class Edge {
     private int v2;
     private int weight = 1;
 
+    public Edge(int v1, int v2) {
+        this.v1 = v1;
+        this.v2 = v2;
+        this.weight = 1;
+    }
+
 }
