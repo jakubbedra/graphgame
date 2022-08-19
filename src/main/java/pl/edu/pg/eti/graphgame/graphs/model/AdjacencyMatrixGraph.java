@@ -150,6 +150,11 @@ public class AdjacencyMatrixGraph implements Graph {
         return neighbours;
     }
 
+    @Override
+    public void merge(Graph other) {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Method used to expand the array and fill the newly added columns and rows with the value of 0.
      *

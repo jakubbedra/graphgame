@@ -28,7 +28,8 @@ public enum GraphTaskSubject {
     HAMILTON_CYCLE("Hamiltonian Graphs"),
     BIPARTITE_GRAPHS("Bipartite Graphs"),
     TRAVELING_SALESMAN_PROBLEM("Traveling Salesman Problem"),
-    PLANAR_GRAPHS("Planar Graphs");
+    PLANAR_GRAPHS("Planar Graphs"),
+    ISOMORPHISM("Isomorphism");
     //PLANARITY(""),
     //ISOMORPHISM(""),
     //OTHER_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess

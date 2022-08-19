@@ -78,9 +78,9 @@ public class NeighbourListsGraph implements Graph {
         //}
         List<Integer> neighbours = neighbourLists.get(v);
         //try {
-            for (Integer neighbour : neighbours) {
-                neighbourLists.get(neighbour).remove((Integer) v);
-            }
+        for (Integer neighbour : neighbours) {
+            neighbourLists.get(neighbour).remove((Integer) v);
+        }
         //} catch (Exception exc) {
         //    System.out.println("xd");
         //}
@@ -110,9 +110,11 @@ public class NeighbourListsGraph implements Graph {
 
     @Override
     public void addEdge(int v1, int v2) {
-        neighbourLists.get(v1).add(v2);
-        neighbourLists.get(v2).add(v1);
-        m++;
+        if (!edgeExists(v1, v2)) {
+            neighbourLists.get(v1).add(v2);
+            neighbourLists.get(v2).add(v1);
+            m++;
+        }
     }
 
     @Override
@@ -146,6 +148,22 @@ public class NeighbourListsGraph implements Graph {
     @Override
     public List<Integer> neighbours(int v) {
         return neighbourLists.get(v);
+    }
+
+    @Override
+    public void merge(Graph other) {
+        if (!(other instanceof NeighbourListsGraph)) {
+            throw new UnsupportedOperationException();
+        }
+        // updating indices
+        for (List<Integer> neighbourList : ((NeighbourListsGraph) other).neighbourLists) {
+            for (int i = 0; i < neighbourList.size(); i++) {
+                neighbourList.set(i, (neighbourList.get(i) + this.n));
+            }
+        }
+        this.neighbourLists.addAll(((NeighbourListsGraph) other).neighbourLists);
+        this.n += ((NeighbourListsGraph) other).n;
+        this.m += ((NeighbourListsGraph) other).m;
     }
 
     //For testing purposes

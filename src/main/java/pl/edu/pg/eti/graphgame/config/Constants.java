@@ -14,6 +14,9 @@ public class Constants {
     public static final int MIN_MAX_CLIQUE_VERTICES = 5;
     public static final int MAX_MAX_CLIQUE_VERTICES = 10;
 
+    public static final int MIN_ISOMORPHISM_VERTICES = 3;
+    public static final int MAX_ISOMORPHISM_VERTICES = 7;
+
     //currently, no higher than Q_4 is allowed
     public static final int[] HYPERCUBE_VERTICES = {2, 4, 8, 16};
 

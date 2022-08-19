@@ -167,6 +167,40 @@ public class GraphFactory {
         return graph;
     }
 
+    public Graph createRandomGraphWith2ConnectedComponents(int n, int m) {
+        boolean shouldBeIsomorphic = RANDOM.nextBoolean();
+        if (!shouldBeIsomorphic) {
+            int n2 = RANDOM.nextInt(4) + n;
+            int m2 = Math.min(RANDOM.nextInt(6) + m, (n * n - n) / 2);
+            return createRandomGraphWith2ConnectedComponents(n, m, n2, m2, false);
+        }
+        return createRandomGraphWith2ConnectedComponents(n, m, n, m, true);
+    }
+
+    public Graph createRandomGraphWith2ConnectedComponents(int n1, int m1, int n2, int m2, boolean shouldBeIsomorphic) {
+        List<List<Integer>> randomSpanningTree = createRandomSpanningTree(n1);
+        randomSpanningTree = randomizeVertices(randomSpanningTree, n1);
+        Graph graph = new NeighbourListsGraph(randomSpanningTree, n1, n1 - 1);
+        Edge[] possibleEdges = createRandomPossibleEdges(graph, n1);
+        for (int i = 0; i < m1 - (n1 - 1); i++) {
+            graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
+        }
+
+        // creating a graph isomorphic to the first graph
+        Graph graph2 = null;
+
+        if (!shouldBeIsomorphic) {
+            graph2 = createRandomConnectedGraph(n2, m2);
+        } else {
+            List<List<Integer>> neighbourLists = ((NeighbourListsGraph) graph).getNeighbourLists();
+            neighbourLists = randomizeVertices(neighbourLists, n1);
+            graph2 = new NeighbourListsGraph(neighbourLists, n1, m1);
+        }
+
+        graph.merge(graph2);
+        return graph;
+    }
+
     public Graph createRandomConnectedGraph(int n, int m) {
         return createRandomConnectedGraph(n, m, false);
     }
@@ -174,47 +208,20 @@ public class GraphFactory {
     public Graph createRandomConnectedGraph(int n, int m, boolean randomWeights) {
         // create a spanning tree with n vertices O(n)
         List<List<Integer>> randomSpanningTree = createRandomSpanningTree(n);
-        //System.out.println("BEFORE----------------------------------------------------------");
-        //for (int i = 0; i < n; i++) {
-        //    System.out.print("[" + i + "] ");
-        //    randomSpanningTree.get(i).forEach(l -> System.out.print(l + ", "));
-        //    System.out.println();
-        //}
-        //System.out.println("----------------------------------------------------------");
         // remove bias by randomizing the vertex indices O(n)
         randomSpanningTree = randomizeVertices(randomSpanningTree, n);
-        //System.out.println("AFTER----------------------------------------------------------");
-        //for (int i = 0; i < n; i++) {
-        //    System.out.print("[" + i + "] ");
-        //    randomSpanningTree.get(i).forEach(l -> System.out.print(l + ", "));
-        //    System.out.println();
-        //}
-        //System.out.println("----------------------------------------------------------");
-
         // generate all the possible remaining edges and choose m - (n-1) random ones to add
         Graph graph = new NeighbourListsGraph(randomSpanningTree, n, n - 1);
-
         // O(n^2)
         // calculating possible edges
         Edge[] possibleEdges = createRandomPossibleEdges(graph, n);
-
         // adding the edges
         for (int i = 0; i < m - (n - 1); i++) {
             graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
         }
-
         if (randomWeights) {
             return convertToRandomWeightedGraph(graph);
         }
-        // another possible method, that in certain cases should be more optimal, but is much worse overall:
-        // O (n^3) n vertices, maximum of O(n^2) times
-        // 1. make an array of all vertices that are not complete
-        // 2. choose one at random
-        // 3. make an array of all the vertices which are not his neighbours
-        // 4. pick one at random
-        // 5. place an edge
-        // 6. repeat 1 - 5 till m count is satisfied
-
         return graph;
     }
 

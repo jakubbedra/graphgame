@@ -238,4 +238,60 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(GraphAlgorithms.solveTSP(graph)).isEqualTo(EXPECTED_WEIGHT);
     }
 
+    @Test
+    public void isomorphismTestIsomorphicGraphs() {
+        final int[][] TEST_MATRIX1 = {
+                {0, 1, 0, 0},
+                {1, 0, 1, 1},
+                {0, 1, 0, 1},
+                {0, 1, 1, 0}
+        };
+        final int TEST_N1 = 4;
+        final int TEST_M1 = 4;
+
+        final int[][] TEST_MATRIX2 = {
+                {0, 1, 1, 1},
+                {1, 0, 1, 0},
+                {1, 1, 0, 0},
+                {1, 0, 0, 0}
+        };
+        final int TEST_N2 = 4;
+        final int TEST_M2 = 4;
+
+        Graph graph1 = new AdjacencyMatrixGraph(TEST_MATRIX1, TEST_N1, TEST_M1);
+        Graph graph2 = new AdjacencyMatrixGraph(TEST_MATRIX2, TEST_N2, TEST_M2);
+
+        Assertions.assertThat(GraphAlgorithms.areGraphsIsomorphic(graph1, graph2)).isTrue();
+    }
+
+    @Test
+    public void isomorphismTestNotIsomorphicGraphs() {
+        final int[][] TEST_MATRIX1 = {
+                {0, 1, 1, 1, 0, 0},
+                {1, 0, 1, 1, 0, 0},
+                {1, 1, 0, 1, 1, 0},
+                {1, 1, 1, 0, 0, 0},
+                {0, 0, 1, 0, 0, 1},
+                {0, 0, 0, 0, 1, 0}
+        };
+        final int TEST_N1 = 6;
+        final int TEST_M1 = 8;
+
+        final int[][] TEST_MATRIX2 = {
+                {0, 0, 0, 0, 1, 0},
+                {0, 0, 0, 0, 0, 1},
+                {0, 0, 0, 1, 1, 1},
+                {0, 0, 1, 0, 1, 1},
+                {1, 0, 1, 1, 0, 1},
+                {0, 1, 1, 1, 1, 0}
+        };
+        final int TEST_N2 = 6;
+        final int TEST_M2 = 8;
+
+        Graph graph1 = new AdjacencyMatrixGraph(TEST_MATRIX1, TEST_N1, TEST_M1);
+        Graph graph2 = new AdjacencyMatrixGraph(TEST_MATRIX2, TEST_N2, TEST_M2);
+
+        Assertions.assertThat(GraphAlgorithms.areGraphsIsomorphic(graph1, graph2)).isFalse();
+    }
+
 }

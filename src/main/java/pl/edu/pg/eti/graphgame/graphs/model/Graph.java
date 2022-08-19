@@ -19,6 +19,8 @@ public interface Graph {
     List<Integer> neighbours(int v);
     //List<Integer> commonNeighbours(int v1, int v2);
 
+    void merge(Graph other);
+
     default boolean isSame(Graph g) {
         if (g.getN() != getN() || g.getM() != getM()) {
             return false;

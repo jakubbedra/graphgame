@@ -105,6 +105,8 @@ public class GraphService {
                 return graphFactory.createRandomCompleteWeightedGraph(task.getGraphVertices());
             case COMPLETE_GRAPHS:
                 return graphFactory.createRandomMaybeCompleteGraph(task.getGraphVertices());
+            case ISOMORPHISM:
+                return graphFactory.createRandomGraphWith2ConnectedComponents(task.getGraphVertices(), task.getGraphEdges());
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

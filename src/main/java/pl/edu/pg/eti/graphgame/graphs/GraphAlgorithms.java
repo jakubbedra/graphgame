@@ -282,7 +282,7 @@ public class GraphAlgorithms {
                 if (!vertices.contains(i)) {
                     vertices.add(i);
                     minPathValue = Math.min(minPathValue, minPathTSP(g, vertices, depth + 1));
-                    vertices.remove((Integer)i);
+                    vertices.remove((Integer) i);
                 }
             }
         } else {
@@ -298,6 +298,49 @@ public class GraphAlgorithms {
 
     public static int solveTSP(WeightedGraph g) {
         return minPathTSP(g, new ArrayList<>(g.getN()), 0);
+    }
+
+
+    private static boolean checkIsomorphism(Graph g1, Graph g2, List<Integer> vertices) {
+        if (vertices.size() == g1.getN()) {
+            int sameNeighbours = 0;
+            for (int i = 0; i < g1.getN(); i++) {
+                List<Integer> neighbours2 = g2.neighbours(i);
+                List<Integer> neighbours3 = new LinkedList<>();
+                for (int j = 0; j < neighbours2.size(); j++) {
+                    neighbours3.add(vertices.indexOf(neighbours2.get(j)));
+                }
+                for (int j = 0; j < g1.getN(); j++) {
+                    List<Integer> neighbours1 = g1.neighbours(j);
+                    if(neighbours1.containsAll(neighbours3) && neighbours3.containsAll(neighbours1)) {
+                        sameNeighbours++;
+                        break;
+                    }
+                }
+            }
+            if (sameNeighbours == g1.getN()) {
+                return true;
+            }
+        }
+        // do deeper
+        for (int i = 0; i < g1.getN(); i++) {
+            if (!vertices.contains((Integer) i)) {
+                vertices.add(i);
+                if (checkIsomorphism(g1, g2, vertices)) {
+                    return true;
+                }
+                vertices.remove((Integer) i);
+            }
+        }
+        return false;
+    }
+
+    public static boolean areGraphsIsomorphic(Graph g1, Graph g2) {
+        if (g1.getN() != g2.getN() || g1.getM() != g2.getM()) {
+            return false;
+        }
+
+        return checkIsomorphism(g1, g2, new ArrayList<>(g1.getN()));
     }
 
 }

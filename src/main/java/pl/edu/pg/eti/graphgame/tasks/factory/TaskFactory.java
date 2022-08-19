@@ -73,6 +73,8 @@ public class TaskFactory {
                 return createTreeGraphsTask(user);
             case PLANAR_GRAPHS:
                 return createPlanarGraphsTask(user);
+            case ISOMORPHISM:
+                return createIsomorphismTask(user);
         }
     }
 
@@ -80,7 +82,7 @@ public class TaskFactory {
         int graphVertices = RANDOM.nextInt(
                 Constants.MAX_COMPLETE_GRAPH_VERTICES - Constants.MIN_COMPLETE_GRAPH_VERTICES
         ) + Constants.MIN_GRAPH_VERTICES;
-        if(RANDOM.nextBoolean()) {
+        if (RANDOM.nextBoolean()) {
             return Task.builder()
                     .uuid(UUID.randomUUID())
                     .user(user)
@@ -89,7 +91,7 @@ public class TaskFactory {
                     .type(GraphTaskType.DRAW)
                     .specialValues("")
                     .build();
-        } else{
+        } else {
             return Task.builder()
                     .uuid(UUID.randomUUID())
                     .user(user)
@@ -420,5 +422,22 @@ public class TaskFactory {
     }
 
 
+    private Task createIsomorphismTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_ISOMORPHISM_VERTICES - Constants.MIN_ISOMORPHISM_VERTICES
+        ) + Constants.MIN_ISOMORPHISM_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.ISOMORPHISM)
+                .type(GraphTaskType.BOOLEAN)
+                .specialValues("")
+                .build();
+    }
 
 }

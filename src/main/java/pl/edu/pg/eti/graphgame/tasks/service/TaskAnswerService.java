@@ -1,11 +1,13 @@
 package pl.edu.pg.eti.graphgame.tasks.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import pl.edu.pg.eti.graphgame.exceptions.IncompleteTaskEntityException;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.GraphAlgorithms;
 import pl.edu.pg.eti.graphgame.graphs.GraphClassChecker;
+import pl.edu.pg.eti.graphgame.graphs.GraphUtils;
 import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Edge;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
@@ -78,6 +80,9 @@ public class TaskAnswerService {
                 return answer == GraphClassChecker.isComplete(graph);
             case PLANAR_GRAPHS:
                 return answer == GraphClassChecker.isPlanar(graph);
+            case ISOMORPHISM:
+                Pair<Graph, Graph> graphPair = GraphUtils.splitGraph(graph);
+                return answer == GraphAlgorithms.areGraphsIsomorphic(graphPair.getFirst(), graphPair.getSecond());
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
