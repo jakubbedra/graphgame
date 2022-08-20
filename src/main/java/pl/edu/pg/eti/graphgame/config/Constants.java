@@ -17,6 +17,8 @@ public class Constants {
     public static final int MIN_ISOMORPHISM_VERTICES = 3;
     public static final int MAX_ISOMORPHISM_VERTICES = 7;
 
+    public static final int MAX_EXTENDED_EDGES_HOMEOMORPHISM = 4;
+
     //currently, no higher than Q_4 is allowed
     public static final int[] HYPERCUBE_VERTICES = {2, 4, 8, 16};
 
@@ -36,5 +38,6 @@ public class Constants {
     public static final double PROBABILITY_GRAPH_MIGHT_NOT_BE_BIPARTITE = 0.9;
     public static final double PROBABILITY_GRAPH_MIGHT_NOT_BE_COMPLETE = 0.7;
     public static final double PROBABILITY_EDGE_REMOVAL = 0.1;
+    public static final double PROBABILITY_SHOULD_BE_HOMEOMORPHIC = 0.2;
 
 }

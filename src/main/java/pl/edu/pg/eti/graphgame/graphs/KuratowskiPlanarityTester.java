@@ -17,7 +17,7 @@ public class KuratowskiPlanarityTester {
             return false;
         }
         // removing all the deg 2 vertices
-        Graph graph2 = copyWithRetractedEdges(graph);
+        Graph graph2 = GraphUtils.copyWithRetractedEdges(graph);
 
         // finding clique 5
         if (graph2.getN() >= 5) {
@@ -116,32 +116,7 @@ public class KuratowskiPlanarityTester {
         return false;
     }
 
-    private Graph copyWithRetractedEdges(Graph graph) {
-        Graph graph2 = new AdjacencyMatrixGraph(graph);
-        boolean hasDeg2Vertex = false;
-        do {
-            hasDeg2Vertex = false;
-            int deg2V = -1;
-            for (int i = 0; i < graph2.getN(); i++) {
-                if (graph2.degree(i) == 2) {
-                    hasDeg2Vertex = true;
-                    deg2V = i;
-                    break;
-                }
-            }
-            if (hasDeg2Vertex) {
-                List<Integer> neighbours = graph2.neighbours(deg2V);
-                try {
-                    graph2.addEdge(neighbours.get(0), neighbours.get(1));
-                } catch (IndexOutOfBoundsException exc) {
-                    System.out.println("--------------------------------------");
-                    System.out.println(deg2V);
-                }
-                graph2.removeVertex(deg2V);
-            }
-        } while (hasDeg2Vertex);
-        return graph2;
-    }
+
 
     private static class RetractableAdjacencyMatrix extends AdjacencyMatrixGraph {
 

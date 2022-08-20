@@ -69,6 +69,7 @@ public class TaskAnswerService {
     }
 
     public boolean checkBooleanTaskAnswer(boolean answer, Task task, Graph graph) {
+        Pair<Graph, Graph> graphPair = null;
         switch (task.getSubject()) {
             case EULER_CYCLE:
                 return answer == GraphClassChecker.isEulerian(graph);
@@ -81,8 +82,11 @@ public class TaskAnswerService {
             case PLANAR_GRAPHS:
                 return answer == GraphClassChecker.isPlanar(graph);
             case ISOMORPHISM:
-                Pair<Graph, Graph> graphPair = GraphUtils.splitGraph(graph);
+                graphPair = GraphUtils.splitGraph(graph);
                 return answer == GraphAlgorithms.areGraphsIsomorphic(graphPair.getFirst(), graphPair.getSecond());
+            case HOMEOMORPHISM:
+                graphPair = GraphUtils.splitGraph(graph);
+                return answer == GraphAlgorithms.areGraphsHomeomorphic(graphPair.getFirst(), graphPair.getSecond());
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

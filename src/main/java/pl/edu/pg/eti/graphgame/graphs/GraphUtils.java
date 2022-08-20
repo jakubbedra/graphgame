@@ -1,6 +1,7 @@
 package pl.edu.pg.eti.graphgame.graphs;
 
 import org.springframework.data.util.Pair;
+import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.graphs.model.NeighbourListsGraph;
 
@@ -42,8 +43,33 @@ public class GraphUtils {
                 }
             }
         }
-        //todo: when checking isomorphism do a vertex -> label array for the second graph
         return Pair.of(g1, g2);
+    }
+
+    public static Graph copyWithRetractedEdges(Graph graph) {
+        Graph graph2 = new AdjacencyMatrixGraph(graph);
+        boolean hasDeg2Vertex = false;
+        do {
+            hasDeg2Vertex = false;
+            int deg2V = -1;
+            for (int i = 0; i < graph2.getN(); i++) {
+                if (graph2.degree(i) == 2) {
+                    hasDeg2Vertex = true;
+                    deg2V = i;
+                    break;
+                }
+            }
+            if (hasDeg2Vertex) {
+                List<Integer> neighbours = graph2.neighbours(deg2V);
+                try {
+                    graph2.addEdge(neighbours.get(0), neighbours.get(1));
+                } catch (IndexOutOfBoundsException exc) {
+                    exc.printStackTrace();
+                }
+                graph2.removeVertex(deg2V);
+            }
+        } while (hasDeg2Vertex);
+        return graph2;
     }
 
 }

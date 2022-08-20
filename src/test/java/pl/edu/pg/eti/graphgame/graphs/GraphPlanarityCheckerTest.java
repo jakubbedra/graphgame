@@ -2,7 +2,6 @@ package pl.edu.pg.eti.graphgame.graphs;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pl.edu.pg.eti.graphgame.graphs.factory.GraphFactory;
 import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 
@@ -27,7 +26,7 @@ public class GraphPlanarityCheckerTest {
                 TEST_MATRIX, TEST_N, TEST_M
         );
         KuratowskiPlanarityTester planarityChecker = new KuratowskiPlanarityTester();
-        Assertions.assertThat(planarityChecker.isPlanar2(testGraph)).isFalse();
+        Assertions.assertThat(planarityChecker.isPlanar(testGraph)).isFalse();
     }
 
     @Test
@@ -45,7 +44,7 @@ public class GraphPlanarityCheckerTest {
                 TEST_MATRIX, TEST_N, TEST_M
         );
         KuratowskiPlanarityTester planarityChecker = new KuratowskiPlanarityTester();
-        Assertions.assertThat(planarityChecker.isPlanar2(testGraph)).isTrue();
+        Assertions.assertThat(planarityChecker.isPlanar(testGraph)).isTrue();
     }
 
     @Test
@@ -67,7 +66,7 @@ public class GraphPlanarityCheckerTest {
                 TEST_MATRIX, TEST_N, TEST_M
         );
         KuratowskiPlanarityTester planarityChecker = new KuratowskiPlanarityTester();
-        Assertions.assertThat(planarityChecker.isPlanar2(testGraph)).isFalse();
+        Assertions.assertThat(planarityChecker.isPlanar(testGraph)).isFalse();
     }
 
 }

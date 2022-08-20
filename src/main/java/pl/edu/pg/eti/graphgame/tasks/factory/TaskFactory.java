@@ -75,6 +75,8 @@ public class TaskFactory {
                 return createPlanarGraphsTask(user);
             case ISOMORPHISM:
                 return createIsomorphismTask(user);
+            case HOMEOMORPHISM:
+                return createHomeomorphismTask(user);
         }
     }
 
@@ -435,6 +437,24 @@ public class TaskFactory {
                 .graphVertices(graphVertices)
                 .graphEdges(graphEdges)
                 .subject(GraphTaskSubject.ISOMORPHISM)
+                .type(GraphTaskType.BOOLEAN)
+                .specialValues("")
+                .build();
+    }
+
+    private Task createHomeomorphismTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_ISOMORPHISM_VERTICES - Constants.MIN_ISOMORPHISM_VERTICES
+        ) + Constants.MIN_ISOMORPHISM_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.HOMEOMORPHISM)
                 .type(GraphTaskType.BOOLEAN)
                 .specialValues("")
                 .build();

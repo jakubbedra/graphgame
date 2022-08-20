@@ -312,7 +312,7 @@ public class GraphAlgorithms {
                 }
                 for (int j = 0; j < g1.getN(); j++) {
                     List<Integer> neighbours1 = g1.neighbours(j);
-                    if(neighbours1.containsAll(neighbours3) && neighbours3.containsAll(neighbours1)) {
+                    if (neighbours1.containsAll(neighbours3) && neighbours3.containsAll(neighbours1)) {
                         sameNeighbours++;
                         break;
                     }
@@ -341,6 +341,26 @@ public class GraphAlgorithms {
         }
 
         return checkIsomorphism(g1, g2, new ArrayList<>(g1.getN()));
+    }
+
+    public static boolean areGraphsHomeomorphic(Graph g1, Graph g2) {
+        return areGraphsIsomorphic(retractEdges(g1), retractEdges(g2));
+    }
+
+    private static Graph retractEdges(Graph graph) {
+        int removableVertices = 0;
+        for (int i = 0; i < graph.getN(); i++) {
+            if (graph.degree(i) == 2) {
+                List<Integer> neighbours = graph.neighbours(i);
+                if (!graph.edgeExists(neighbours.get(0), neighbours.get(1))) {
+                    Graph g2 = new AdjacencyMatrixGraph(graph);
+                    g2.addEdge(neighbours.get(0), neighbours.get(1));
+                    g2.removeVertex(i);
+                    return retractEdges(g2);
+                }
+            }
+        }
+        return graph;
     }
 
 }

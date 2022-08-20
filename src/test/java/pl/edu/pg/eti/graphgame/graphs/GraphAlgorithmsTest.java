@@ -294,4 +294,34 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(GraphAlgorithms.areGraphsIsomorphic(graph1, graph2)).isFalse();
     }
 
+    @Test
+    public void homeomorphismTestHomeomorphicGraphs() {
+        final int[][] TEST_MATRIX1 = {
+                {0, 0, 0, 1, 0, 0, 1},
+                {0, 0, 0, 0, 0, 1, 0},
+                {0, 0, 0, 1, 0, 0, 0},
+                {1, 0, 1, 0, 0, 1, 0},
+                {0, 0, 0, 0, 0, 0, 1},
+                {0, 1, 0, 1, 0, 0, 0},
+                {1, 0, 0, 0, 1, 0, 0}
+        };
+        final int TEST_N1 = 7;
+        final int TEST_M1 = 6;
+
+        final int[][] TEST_MATRIX2 = {
+                {0, 0, 0, 1, 0},
+                {0, 0, 0, 1, 0},
+                {0, 0, 0, 0, 1},
+                {1, 1, 0, 0, 1},
+                {0, 0, 1, 1, 0}
+        };
+        final int TEST_N2 = 5;
+        final int TEST_M2 = 4;
+
+        Graph graph1 = new AdjacencyMatrixGraph(TEST_MATRIX1, TEST_N1, TEST_M1);
+        Graph graph2 = new AdjacencyMatrixGraph(TEST_MATRIX2, TEST_N2, TEST_M2);
+
+        Assertions.assertThat(GraphAlgorithms.areGraphsHomeomorphic(graph1, graph2)).isTrue();
+    }
+
 }

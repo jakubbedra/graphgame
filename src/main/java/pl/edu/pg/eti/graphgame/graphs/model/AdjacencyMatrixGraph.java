@@ -90,6 +90,9 @@ public class AdjacencyMatrixGraph implements Graph {
                 }
             }
             n--;
+            for (int i = 0; i < n; i++) {
+                matrix[i][i] = 0;
+            }
         } else {
             throw new NegativeVertexCountException("Current vertex count is 0.");
         }
@@ -97,7 +100,13 @@ public class AdjacencyMatrixGraph implements Graph {
 
     @Override
     public int degree(int v) {
-        return Arrays.stream(matrix[v]).reduce(0, (subtotal, edge) -> subtotal += edge > 0 ? 1 : 0);
+        int subtotal = 0;
+        for (int i = 0; i < n; i++) {
+            if (matrix[i][v] > 0) {
+                subtotal++;
+            }
+        }
+        return subtotal;
     }
 
     @Override

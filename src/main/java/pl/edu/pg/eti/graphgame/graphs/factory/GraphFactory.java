@@ -167,7 +167,77 @@ public class GraphFactory {
         return graph;
     }
 
-    public Graph createRandomGraphWith2ConnectedComponents(int n, int m) {
+    public Graph createRandomGraphWith2ConnectedComponentsHomeomorphism(int n, int m) {
+        boolean shouldBeHomeomorphic = RANDOM.nextDouble() < Constants.PROBABILITY_SHOULD_BE_HOMEOMORPHIC;
+        return createRandomGraphWith2ConnectedHomeomorphicComponents(n, m, n, m, shouldBeHomeomorphic);
+    }
+
+    public Graph createRandomGraphWith2ConnectedHomeomorphicComponents(int n1, int m1, int n2, int m2, boolean shouldBeHomeomorphic) {
+        List<List<Integer>> randomSpanningTree = createRandomSpanningTree(n1);
+        randomSpanningTree = randomizeVertices(randomSpanningTree, n1);
+        Graph graph = new NeighbourListsGraph(randomSpanningTree, n1, n1 - 1);
+        Edge[] possibleEdges = createRandomPossibleEdges(graph, n1);
+        for (int i = 0; i < m1 - (n1 - 1); i++) {
+            graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
+        }
+
+        // creating a graph isomorphic to the first graph
+        Graph graph2 = null;
+
+        if (!shouldBeHomeomorphic) {
+            graph2 = createRandomConnectedGraph(n2, m2);
+        } else {
+            List<List<Integer>> neighbourLists = randomizeVertices(((NeighbourListsGraph) graph).getNeighbourLists(), n1);
+            graph2 = new NeighbourListsGraph(neighbourLists, n1, m1);
+        }
+
+        graph = extendRandomEdges(graph);
+        // extend random edges
+        graph2 = extendRandomEdges(graph2);
+
+        graph.merge(graph2);
+        return graph;
+    }
+
+    private Graph extendRandomEdges(Graph graph) {
+        int toExtend = RANDOM.nextInt(Constants.MAX_EXTENDED_EDGES_HOMEOMORPHISM);
+        Edge[] randomEdgesToExtend = getRandomEdgesToExtend(graph, graph.getN());
+        for (int i = 0; i < toExtend && i < graph.getN(); i++) {
+            Edge e = randomEdgesToExtend[i];
+            if (e != null) {
+                graph.addVertex();
+                graph.addEdge(e.getV1(), graph.getN() - 1);
+                graph.addEdge(e.getV2(), graph.getN() - 1);
+                graph.removeEdge(e.getV1(), e.getV2());
+            }
+        }
+        return graph;
+    }
+
+    private Edge[] getRandomEdgesToExtend(Graph graph, int n) {
+        Edge[] possibleEdges = new Edge[n * n - n];
+        int possibleEdgesCount = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                if (i != j && graph.edgeExists(i, j)) {
+                    possibleEdges[possibleEdgesCount] = new Edge(i, j);
+                    possibleEdgesCount++;
+                }
+            }
+        }
+
+        // randomizing the edges
+        for (int i = 0; i < possibleEdgesCount; i++) {
+            Edge tmp = possibleEdges[i];
+            int r = RANDOM.nextInt(possibleEdgesCount - i) + i;
+            possibleEdges[i] = possibleEdges[r];
+            possibleEdges[r] = tmp;
+        }
+
+        return possibleEdges;
+    }
+
+    public Graph createRandomGraphWith2ConnectedComponentsIsomorphism(int n, int m) {
         boolean shouldBeIsomorphic = RANDOM.nextBoolean();
         if (!shouldBeIsomorphic) {
             int n2 = RANDOM.nextInt(4) + n;
