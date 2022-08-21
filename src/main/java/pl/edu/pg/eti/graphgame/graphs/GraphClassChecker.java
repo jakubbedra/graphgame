@@ -71,6 +71,9 @@ public class GraphClassChecker {
      * Checks if the given graph is a Cycle Graph
      */
     public static boolean isCycle(Graph graph) {
+        if (graph.getN() < 3) {
+            return false;
+        }
         if (!isConnected(graph)) {
             return false;
         }
