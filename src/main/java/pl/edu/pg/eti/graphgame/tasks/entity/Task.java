@@ -38,4 +38,6 @@ public class Task {
 
     private String specialValues;
 
+    private String descriptionDetails = "";
+
 }

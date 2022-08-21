@@ -57,6 +57,11 @@ public class TaskQuestion {
      */
     private List<Integer> specialValues;
 
+    /**
+     * Used for non-trivial description details, such as a special name for the graphs;
+     */
+    private String descriptionDetails;
+
     public static TaskQuestion map(Task taskEntity) {
         List<Integer> specialValues = new LinkedList<>();
         if (!taskEntity.getSpecialValues().isEmpty()) {
@@ -72,6 +77,7 @@ public class TaskQuestion {
                 .graphEdges(taskEntity.getGraphEdges())
                 .graphWeighted(taskEntity.isGraphWeighted())
                 .specialValues(specialValues)
+                .descriptionDetails(taskEntity.getDescriptionDetails())
                 .build();
     }
 

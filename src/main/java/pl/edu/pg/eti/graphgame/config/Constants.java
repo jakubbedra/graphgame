@@ -40,4 +40,6 @@ public class Constants {
     public static final double PROBABILITY_EDGE_REMOVAL = 0.1;
     public static final double PROBABILITY_SHOULD_BE_HOMEOMORPHIC = 0.2;
 
+    public static final String[] GRAPH_NAMES = {"Petersen Graph", "Diamond", "Triangle", "Butterfly"};
+
 }

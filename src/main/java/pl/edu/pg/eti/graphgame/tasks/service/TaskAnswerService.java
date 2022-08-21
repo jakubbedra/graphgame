@@ -8,10 +8,12 @@ import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.GraphAlgorithms;
 import pl.edu.pg.eti.graphgame.graphs.GraphClassChecker;
 import pl.edu.pg.eti.graphgame.graphs.GraphUtils;
+import pl.edu.pg.eti.graphgame.graphs.NamedGraphsChecker;
 import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Edge;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 import pl.edu.pg.eti.graphgame.graphs.model.WeightedGraph;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 
 import java.util.Arrays;
@@ -143,7 +145,7 @@ public class TaskAnswerService {
     }
 
     public boolean checkDrawGraphAnswer(Graph graph, Task task) {
-        if (graph.getN() != task.getGraphVertices()) {
+        if (graph.getN() != task.getGraphVertices() && task.getSubject() != GraphTaskSubject.NAMED_GRAPHS) {
             return false;
         }
         switch (task.getSubject()) {
@@ -166,9 +168,25 @@ public class TaskAnswerService {
                 List<Integer> specialValuesBG = extractSpecialValues(task, 2);
                 return GraphClassChecker.isConnected(graph) &&
                         GraphClassChecker.isCompleteBipartite(graph, specialValuesBG.get(0), specialValuesBG.get(1));
+            case NAMED_GRAPHS:
+                return checkNamedGraphsTaskAnswer(graph, task.getDescriptionDetails());
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
+    }
+
+    private boolean checkNamedGraphsTaskAnswer(Graph graph, String descriptionDetails) {
+        switch (descriptionDetails) {
+            case "Petersen Graph":
+                return NamedGraphsChecker.isPetersenGraph(graph);
+            case "Butterfly":
+                return NamedGraphsChecker.isButterflyGraph(graph);
+            case "Diamond":
+                return NamedGraphsChecker.isDiamondGraph(graph);
+            case "Triangle":
+                return NamedGraphsChecker.isTriangleGraph(graph);
+        }
+        return false;
     }
 
     private List<Integer> extractSpecialValues(Task task, int count) {

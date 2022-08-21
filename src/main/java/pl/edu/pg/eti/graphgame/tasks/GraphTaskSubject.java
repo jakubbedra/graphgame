@@ -30,7 +30,8 @@ public enum GraphTaskSubject {
     TRAVELING_SALESMAN_PROBLEM("Traveling Salesman Problem"),
     PLANAR_GRAPHS("Planar Graphs"),
     ISOMORPHISM("Isomorphism"),
-    HOMEOMORPHISM("Homeomorphism");
+    HOMEOMORPHISM("Homeomorphism"),
+    NAMED_GRAPHS("Named Graphs");
     //PLANARITY(""),
     //ISOMORPHISM(""),
     //OTHER_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
@@ -63,7 +64,7 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-     return HOMEOMORPHISM;
+     return NAMED_GRAPHS;
         //   return VALUES.get(RANDOM.nextInt(SIZE));
     }
 

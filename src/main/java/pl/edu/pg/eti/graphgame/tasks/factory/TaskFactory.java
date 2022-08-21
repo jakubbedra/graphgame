@@ -77,6 +77,8 @@ public class TaskFactory {
                 return createIsomorphismTask(user);
             case HOMEOMORPHISM:
                 return createHomeomorphismTask(user);
+            case NAMED_GRAPHS:
+                return createNamedGraphsTask(user);
         }
     }
 
@@ -457,6 +459,18 @@ public class TaskFactory {
                 .subject(GraphTaskSubject.HOMEOMORPHISM)
                 .type(GraphTaskType.BOOLEAN)
                 .specialValues("")
+                .build();
+    }
+
+    private Task createNamedGraphsTask(User user) {
+        String graphName = Constants.GRAPH_NAMES[RANDOM.nextInt(Constants.GRAPH_NAMES.length)];
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .subject(GraphTaskSubject.NAMED_GRAPHS)
+                .type(GraphTaskType.DRAW)
+                .specialValues("")
+                .descriptionDetails(graphName)
                 .build();
     }
 
