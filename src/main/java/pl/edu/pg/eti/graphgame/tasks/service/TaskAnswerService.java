@@ -3,6 +3,7 @@ package pl.edu.pg.eti.graphgame.tasks.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import pl.edu.pg.eti.graphgame.config.Constants;
 import pl.edu.pg.eti.graphgame.exceptions.IncompleteTaskEntityException;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.GraphAlgorithms;
@@ -43,9 +44,25 @@ public class TaskAnswerService {
                 return GraphAlgorithms.checkEulerCycle(graph, vertices);
             case HAMILTON_CYCLE:
                 return GraphClassChecker.isHamiltonCycle(graph, vertices);
+            case TRIVIAL_QUESTIONS:
+                return checkTrivialQuestionVertexSelection(graph, vertices, task.getDescriptionDetails());
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
+    }
+
+    private boolean checkTrivialQuestionVertexSelection(Graph graph, List<Integer> vertices, String descriptionDetails) {
+        if (descriptionDetails.equals(Constants.MIN_CLIQUE)) {
+            return vertices.size() == 1;
+        } else if (descriptionDetails.equals(Constants.MAX_VERTEX_COVER)) {
+            for (int i = 0; i < graph.getN(); i++) {
+                if (!vertices.contains((Integer) i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public boolean checkEdgeSelectionAnswer(List<Edge> edges, Task task, Graph graph) {
@@ -172,6 +189,10 @@ public class TaskAnswerService {
                         GraphClassChecker.isCompleteBipartite(graph, specialValuesBG.get(0), specialValuesBG.get(1));
             case NAMED_GRAPHS:
                 return checkNamedGraphsTaskAnswer(graph, task.getDescriptionDetails());
+            case TRIVIAL_QUESTIONS:
+                if (task.getDescriptionDetails().equals(Constants.EMPTY_GRAPH)) {
+                    return GraphClassChecker.isEmpty(graph);
+                }
             default:
                 throw new UnsupportedTaskSubjectException("");
         }

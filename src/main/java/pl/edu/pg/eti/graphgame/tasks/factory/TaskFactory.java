@@ -79,6 +79,8 @@ public class TaskFactory {
                 return createHomeomorphismTask(user);
             case NAMED_GRAPHS:
                 return createNamedGraphsTask(user);
+            case TRIVIAL_QUESTIONS:
+                return createTrivialQuestionTask(user);
         }
     }
 
@@ -483,6 +485,37 @@ public class TaskFactory {
                 .specialValues("")
                 .descriptionDetails(graphName)
                 .build();
+    }
+
+    private Task createTrivialQuestionTask(User user) {
+        String question = Constants.TRIVIAL_QUESTIONS[RANDOM.nextInt(Constants.TRIVIAL_QUESTIONS.length)];
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_GRAPH_VERTICES - Constants.MIN_GRAPH_VERTICES
+        ) + Constants.MIN_GRAPH_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        if (question.equals(Constants.EMPTY_GRAPH)) {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .graphVertices(graphVertices)
+                    .graphEdges(graphEdges)
+                    .subject(GraphTaskSubject.TRIVIAL_QUESTIONS)
+                    .type(GraphTaskType.DRAW)
+                    .descriptionDetails(question)
+                    .build();
+        } else {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .graphVertices(graphVertices)
+                    .graphEdges(graphEdges)
+                    .subject(GraphTaskSubject.TRIVIAL_QUESTIONS)
+                    .type(GraphTaskType.VERTEX_SELECTION)
+                    .descriptionDetails(question)
+                    .build();
+        }
     }
 
 }

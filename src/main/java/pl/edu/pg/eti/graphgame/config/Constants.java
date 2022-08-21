@@ -1,8 +1,5 @@
 package pl.edu.pg.eti.graphgame.config;
 
-/*
-todo: create a config file instead...
- */
 public class Constants {
 
     public static final int MIN_GRAPH_VERTICES = 3;
@@ -41,5 +38,10 @@ public class Constants {
     public static final double PROBABILITY_SHOULD_BE_HOMEOMORPHIC = 0.2;
 
     public static final String[] GRAPH_NAMES = {"Petersen Graph", "Diamond", "Triangle", "Butterfly"};
+
+    public static final String MIN_CLIQUE = "Minimum Clique";
+    public static final String MAX_VERTEX_COVER = "Maximum Vertex Cover";
+    public static final String EMPTY_GRAPH = "Empty Graph";
+    public static final String[] TRIVIAL_QUESTIONS = {MIN_CLIQUE, MAX_VERTEX_COVER, EMPTY_GRAPH};
 
 }
