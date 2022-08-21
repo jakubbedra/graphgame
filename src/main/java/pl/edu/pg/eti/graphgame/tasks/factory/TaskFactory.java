@@ -340,15 +340,26 @@ public class TaskFactory {
         int graphEdges = RANDOM.nextInt(
                 (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices)
         ) + (graphVertices);
-        return Task.builder()
-                .uuid(UUID.randomUUID())
-                .user(user)
-                .graphVertices(graphVertices)
-                .graphEdges(graphEdges)
-                .subject(GraphTaskSubject.HAMILTON_CYCLE)
-                .type(GraphTaskType.VERTEX_SELECTION)
-                .specialValues("")
-                .build();
+        double p = RANDOM.nextDouble();
+        if (p < 0.5) {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .graphVertices(graphVertices)
+                    .graphEdges(graphEdges)
+                    .subject(GraphTaskSubject.HAMILTON_CYCLE)
+                    .type(GraphTaskType.VERTEX_SELECTION)
+                    .build();
+        } else {
+            return Task.builder()
+                    .uuid(UUID.randomUUID())
+                    .user(user)
+                    .graphVertices(graphVertices)
+                    .graphEdges(graphEdges)
+                    .subject(GraphTaskSubject.HAMILTON_CYCLE)
+                    .type(GraphTaskType.BOOLEAN)
+                    .build();
+        }
     }
 
     private Task createTravelingSalesmanProblemTask(User user) {

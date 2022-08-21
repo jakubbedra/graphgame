@@ -75,6 +75,8 @@ public class TaskAnswerService {
         switch (task.getSubject()) {
             case EULER_CYCLE:
                 return answer == GraphClassChecker.isEulerian(graph);
+            case HAMILTON_CYCLE:
+                return answer == GraphClassChecker.isHamiltonian(graph);
             case TREE_GRAPHS:
                 return answer == GraphClassChecker.isTree(graph);
             case BIPARTITE_GRAPHS:

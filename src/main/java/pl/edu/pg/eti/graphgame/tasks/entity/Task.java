@@ -36,7 +36,7 @@ public class Task {
 
     private boolean graphWeighted = false;
 
-    private String specialValues;
+    private String specialValues = "";
 
     private String descriptionDetails = "";
 

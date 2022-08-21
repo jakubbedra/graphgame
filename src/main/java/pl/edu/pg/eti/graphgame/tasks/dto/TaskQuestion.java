@@ -64,7 +64,7 @@ public class TaskQuestion {
 
     public static TaskQuestion map(Task taskEntity) {
         List<Integer> specialValues = new LinkedList<>();
-        if (!taskEntity.getSpecialValues().isEmpty()) {
+        if (taskEntity.getSpecialValues() != null && !taskEntity.getSpecialValues().isEmpty()) {
             String[] split = taskEntity.getSpecialValues().split(";");
             Arrays.stream(split).forEach(s -> specialValues.add(Integer.parseInt(s)));
         }

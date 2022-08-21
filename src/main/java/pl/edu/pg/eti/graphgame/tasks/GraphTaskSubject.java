@@ -32,11 +32,8 @@ public enum GraphTaskSubject {
     ISOMORPHISM("Isomorphism"),
     HOMEOMORPHISM("Homeomorphism"),
     NAMED_GRAPHS("Named Graphs");
-    //PLANARITY(""),
-    //ISOMORPHISM(""),
     //OTHER_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
-    //BIPARTITE_GRAPHS("Bipartite Graphs"),
     //TRIPARTITE_GRAPHS("")
     //VERTEX_COLORING("Vertex Coloring"),
     //EDGE_COLORING("Edge Coloring"),
@@ -64,7 +61,7 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-     return NAMED_GRAPHS;
+     return HAMILTON_CYCLE;
         //   return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
