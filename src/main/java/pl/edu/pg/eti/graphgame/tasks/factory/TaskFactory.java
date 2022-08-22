@@ -81,6 +81,8 @@ public class TaskFactory {
                 return createNamedGraphsTask(user);
             case TRIVIAL_QUESTIONS:
                 return createTrivialQuestionTask(user);
+            case DISTANCES:
+                return createDistancesTask(user);
         }
     }
 
@@ -516,6 +518,31 @@ public class TaskFactory {
                     .descriptionDetails(question)
                     .build();
         }
+    }
+
+    private Task createDistancesTask(User user) {
+        String question = Constants.DISTANCES[RANDOM.nextInt(Constants.DISTANCES.length)];
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_DISTANCES_VERTICES - Constants.MIN_DISTANCES_VERTICES
+        ) + Constants.MIN_DISTANCES_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                2 * graphVertices - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        graphEdges = Math.min(graphEdges, (graphVertices * graphVertices - graphVertices) / 2);
+        int v = -1;
+        if (question.equals(Constants.ECCENTRICITY)) {
+            v = RANDOM.nextInt(graphVertices);
+        }
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.DISTANCES)
+                .type(GraphTaskType.VERTEX_SELECTION)
+                .specialValues(v == -1 ? "" : v + ";")
+                .descriptionDetails(question)
+                .build();
     }
 
 }

@@ -363,4 +363,54 @@ public class GraphAlgorithms {
         return graph;
     }
 
+    private static int[] distances(Graph graph, int s) {
+        int[] d = new int[graph.getN()];
+        int[] predecessor = new int[graph.getN()];
+        List<Integer> vertices = new LinkedList<>();
+        for (int i = 0; i < graph.getN(); i++) {
+            d[i] = Integer.MAX_VALUE;
+            predecessor[i] = -1;
+            vertices.add(i);
+        }
+        d[s] = 0;
+        PriorityQueue<Integer> q = new PriorityQueue<>(Comparator.comparingInt(v -> d[v]));
+        q.addAll(vertices);
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            q.add(u);
+            u = q.poll();
+            for (int v : graph.neighbours(u)) {
+                if (d[v] > d[u] + 1 && d[u] != Integer.MAX_VALUE) {
+                    d[v] = d[u] + 1;
+                    predecessor[v] = u;
+                }
+            }
+        }
+        return d;
+    }
+
+    public static int distance(Graph graph, int s, int t) {
+        return distances(graph, s)[t];
+    }
+
+    public static int eccentricity(Graph graph, int v) {
+        return Arrays.stream(distances(graph, v)).max().getAsInt();
+    }
+
+    public static int radius(Graph graph) {
+        int[] e = new int[graph.getN()];
+        for (int i = 0; i < graph.getN(); i++) {
+            e[i] = eccentricity(graph, i);
+        }
+        return Arrays.stream(e).min().getAsInt();
+    }
+
+    public static int diameter(Graph graph) {
+        int[] d = new int[graph.getN()];
+        for (int i = 0; i < graph.getN(); i++) {
+            d[i] = eccentricity(graph, i);
+        }
+        return Arrays.stream(d).max().getAsInt();
+    }
+
 }

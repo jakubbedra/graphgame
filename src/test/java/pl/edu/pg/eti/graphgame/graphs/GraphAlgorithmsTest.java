@@ -324,4 +324,84 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(GraphAlgorithms.areGraphsHomeomorphic(graph1, graph2)).isTrue();
     }
 
+    @Test
+    public void distanceTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 1, 0, 0, 1, 1, 0, 0, 0, 0},
+                {1, 0, 1, 0, 0, 0, 1, 0, 0, 0},
+                {0, 1, 0, 1, 0, 0, 0, 1, 0, 0},
+                {0, 0, 1, 0, 1, 0, 0, 0, 1, 0},
+                {1, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+                {1, 0, 0, 0, 0, 0, 0, 1, 1, 0},
+                {0, 1, 0, 0, 0, 0, 0, 0, 1, 1},
+                {0, 0, 1, 0, 0, 1, 0, 0, 0, 1},
+                {0, 0, 0, 1, 0, 1, 1, 0, 0, 0},
+                {0, 0, 0, 0, 1, 0, 1, 1, 0, 0}
+        };
+        final int TEST_N = 10;
+        final int TEST_M = 15;
+
+        Graph graph = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.distance(graph, 0, 2)).isEqualTo(2);
+    }
+
+    @Test
+    public void eccentricityTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {1, 1, 0, 1, 1, 1, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0, 1, 0},
+        };
+        final int TEST_N = 7;
+        final int TEST_M = 6;
+
+        Graph graph = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.eccentricity(graph, 1)).isEqualTo(3);
+        Assertions.assertThat(GraphAlgorithms.eccentricity(graph, 2)).isEqualTo(2);
+    }
+
+    @Test
+    public void radiusTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {1, 1, 0, 1, 1, 1, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0, 1, 0},
+        };
+        final int TEST_N = 7;
+        final int TEST_M = 6;
+
+        Graph graph = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.radius(graph)).isEqualTo(2);
+    }
+
+    @Test
+    public void diameterTest() {
+        final int[][] TEST_MATRIX = {
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {1, 1, 0, 1, 1, 1, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0, 1, 0},
+        };
+        final int TEST_N = 7;
+        final int TEST_M = 6;
+
+        Graph graph = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.diameter(graph)).isEqualTo(3);
+    }
+
 }

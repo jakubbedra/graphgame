@@ -46,9 +46,36 @@ public class TaskAnswerService {
                 return GraphClassChecker.isHamiltonCycle(graph, vertices);
             case TRIVIAL_QUESTIONS:
                 return checkTrivialQuestionVertexSelection(graph, vertices, task.getDescriptionDetails());
+            case DISTANCES:
+                return checkDistancesVertexSelection(graph, vertices, task);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
+    }
+
+    private boolean checkDistancesVertexSelection(Graph graph, List<Integer> vertices, Task task) {
+        switch (task.getDescriptionDetails()) {
+            case Constants.ECCENTRICITY:
+                List<Integer> specialValues = extractSpecialValues(task, 1);
+                return vertices.size() - 1 == GraphAlgorithms.eccentricity(graph, specialValues.get(0))
+                        && verticesFormAPath(vertices);
+            case Constants.RADIUS:
+                return vertices.size() - 1 == GraphAlgorithms.radius(graph) && verticesFormAPath(vertices);
+            case Constants.DIAMETER:
+                return vertices.size() - 1 == GraphAlgorithms.diameter(graph) && verticesFormAPath(vertices);
+        }
+        return false;
+    }
+
+    private boolean verticesFormAPath(List<Integer> vertices) {
+        for (int i = 0; i < vertices.size(); i++) {
+            for (int j = 0; j < vertices.size(); j++) {
+                if (vertices.get(i) == vertices.get(j) && i != j) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private boolean checkTrivialQuestionVertexSelection(Graph graph, List<Integer> vertices, String descriptionDetails) {

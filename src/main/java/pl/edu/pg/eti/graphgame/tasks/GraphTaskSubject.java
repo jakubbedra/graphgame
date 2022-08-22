@@ -32,7 +32,8 @@ public enum GraphTaskSubject {
     ISOMORPHISM("Isomorphism"),
     HOMEOMORPHISM("Homeomorphism"),
     NAMED_GRAPHS("Named Graphs"),
-    TRIVIAL_QUESTIONS("Trivial Questions");
+    TRIVIAL_QUESTIONS("Trivial Questions"),
+    DISTANCES("Distances");
     //OTHER_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
     //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
     //TRIPARTITE_GRAPHS("")
@@ -62,7 +63,7 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        //return TRIVIAL_QUESTIONS;
+        //return DISTANCES;
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
 

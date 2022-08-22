@@ -28,6 +28,9 @@ public class Constants {
     public static final int MAX_TSP_VERTICES = 6;
     public static final int MIN_TSP_VERTICES = 3;
 
+    public static final int MAX_DISTANCES_VERTICES = 6;
+    public static final int MIN_DISTANCES_VERTICES = 4;
+
     public static final int MAX_EDGE_WEIGHT = 20;
 
     public static final double PROBABILITY_GRAPH_MIGHT_NOT_BE_EULERIAN = 0.7;
@@ -43,5 +46,10 @@ public class Constants {
     public static final String MAX_VERTEX_COVER = "Maximum Vertex Cover";
     public static final String EMPTY_GRAPH = "Empty Graph";
     public static final String[] TRIVIAL_QUESTIONS = {MIN_CLIQUE, MAX_VERTEX_COVER, EMPTY_GRAPH};
+
+    public static final String ECCENTRICITY = "Eccentricity";
+    public static final String RADIUS = "Radius";
+    public static final String DIAMETER = "Diameter";
+    public static final String[] DISTANCES = {ECCENTRICITY, RADIUS, DIAMETER};
 
 }
