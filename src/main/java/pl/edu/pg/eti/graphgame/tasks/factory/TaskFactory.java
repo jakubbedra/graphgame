@@ -63,6 +63,8 @@ public class TaskFactory {
                 return createMinVertexCoverTask(user);
             case EULER_CYCLE:
                 return createEulerCycleTask(user);
+            case CHINESE_POSTMAN_PROBLEM:
+                return createChinesePostmanProblemTask(user);
             case HAMILTON_CYCLE:
                 return createHamiltonCycleTask(user);
             case TRAVELING_SALESMAN_PROBLEM:
@@ -335,6 +337,21 @@ public class TaskFactory {
                     .specialValues("")
                     .build();
         }
+    }
+
+    private Task createChinesePostmanProblemTask(User user) {
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_TSP_VERTICES - Constants.MIN_TSP_VERTICES
+        ) + Constants.MIN_TSP_VERTICES;
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.CHINESE_POSTMAN_PROBLEM)
+                .type(GraphTaskType.EDGE_SELECTION)
+                .graphWeighted(true)
+                .specialValues("")
+                .build();
     }
 
     private Task createHamiltonCycleTask(User user) {

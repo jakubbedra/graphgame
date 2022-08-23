@@ -26,7 +26,7 @@ public class Constants {
     public static final int MAX_EULERIAN_VERTICES = 10;
 
     public static final int MAX_TSP_VERTICES = 6;
-    public static final int MIN_TSP_VERTICES = 3;
+    public static final int MIN_TSP_VERTICES = 4;
 
     public static final int MAX_DISTANCES_VERTICES = 6;
     public static final int MIN_DISTANCES_VERTICES = 4;

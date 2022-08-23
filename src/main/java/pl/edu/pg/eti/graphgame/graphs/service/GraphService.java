@@ -109,6 +109,7 @@ public class GraphService {
             case BIPARTITE_GRAPHS:
                 return graphFactory.createRandomMaybeBipartiteGraph(task.getGraphVertices());
             case TRAVELING_SALESMAN_PROBLEM:
+            case CHINESE_POSTMAN_PROBLEM:
                 return graphFactory.createRandomCompleteWeightedGraph(task.getGraphVertices());
             case COMPLETE_GRAPHS:
                 return graphFactory.createRandomMaybeCompleteGraph(task.getGraphVertices());

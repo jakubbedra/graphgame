@@ -93,19 +93,33 @@ public class TaskAnswerService {
     }
 
     public boolean checkEdgeSelectionAnswer(List<Edge> edges, Task task, Graph graph) {
+        List<Integer> vertices = null;
         switch (task.getSubject()) {
             case EULER_CYCLE:
                 return checkEulerCycleEdgeSelection(edges, graph);
             case TRAVELING_SALESMAN_PROBLEM:
-                List<Integer> vertices = edgesFormACycleVertices(edges);
-                return graph.getN() + 1 == vertices.size() &&
+                vertices = edgesFormACycleVertices(edges);
+                return graph.getN() + 1 == vertices.size() && allVerticesIncluded(graph, vertices) &&
                         sumTotalWeight(edges) == GraphAlgorithms.solveTSP((WeightedGraph) graph);
+            case CHINESE_POSTMAN_PROBLEM:
+                vertices = edgesFormACycleVertices(edges);
+                return allVerticesIncluded(graph, vertices) &&
+                        sumTotalWeight(edges) == GraphAlgorithms.solveCPP((WeightedGraph) graph);
             case MIN_SPANNING_TREE:
                 return sumTotalWeight(edges) == GraphAlgorithms.getMinSpanningTreeTotalWeight((WeightedGraph) graph) &&
                         GraphClassChecker.isConnected(getGraphFromEdges(edges, graph.getN()));
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
+    }
+
+    private boolean allVerticesIncluded(Graph graph, List<Integer> vertices) {
+        for (int i = 0; i < graph.getN(); i++) {
+            if (!vertices.contains(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int sumTotalWeight(List<Edge> edges) {

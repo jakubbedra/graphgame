@@ -380,8 +380,9 @@ public class GraphAlgorithms {
             q.add(u);
             u = q.poll();
             for (int v : graph.neighbours(u)) {
-                if (d[v] > d[u] + 1 && d[u] != Integer.MAX_VALUE) {
-                    d[v] = d[u] + 1;
+                int weight = graph instanceof WeightedGraph ? ((WeightedGraph) graph).getEdgeWeight(u, v) : 1;
+                if (d[v] > d[u] + weight && d[u] != Integer.MAX_VALUE) {
+                    d[v] = d[u] + weight;
                     predecessor[v] = u;
                 }
             }
@@ -411,6 +412,50 @@ public class GraphAlgorithms {
             d[i] = eccentricity(graph, i);
         }
         return Arrays.stream(d).max().getAsInt();
+    }
+
+    public static int solveCPP(WeightedGraph graph) {
+        int totalDistance = 0;
+        for (int i = 0; i < graph.getN(); i++) {
+            for (int j = i + 1; j < graph.getN(); j++) {
+                totalDistance += graph.getEdgeWeight(i, j);
+            }
+        }
+        if (GraphClassChecker.isEulerian(graph)) {
+            return totalDistance;
+        }
+        // finding the odd vertices
+        List<Integer> oddVertices = new LinkedList<>();
+        for (int i = 0; i < graph.getN(); i++) {
+            if (graph.degree(i) % 2 != 0) {
+                oddVertices.add(i);
+            }
+        }
+        return totalDistance + addShortest(graph, oddVertices);
+    }
+
+    private static int addShortest(WeightedGraph graph, List<Integer> oddVertices) {
+        int additionalDistance = 0;
+        while (!oddVertices.isEmpty()) {
+            int shortestDistance = Integer.MAX_VALUE;
+            int v1 = -1;
+            int v2 = -1;
+            for (int i = 0; i < oddVertices.size(); i++) {
+                for (int j = i + 1; j < oddVertices.size(); j++) {
+                    int d = distance(graph, oddVertices.get(i), oddVertices.get(j));
+                    if (d < shortestDistance) {
+                        shortestDistance = d;
+                        v1 = oddVertices.get(i);
+                        v2 = oddVertices.get(j);
+                    }
+                }
+            }
+            oddVertices.remove((Integer) v1);
+            oddVertices.remove((Integer) v2);
+            // add the path (?)
+            additionalDistance += shortestDistance;
+        }
+        return additionalDistance;
     }
 
 }

@@ -33,9 +33,8 @@ public enum GraphTaskSubject {
     HOMEOMORPHISM("Homeomorphism"),
     NAMED_GRAPHS("Named Graphs"),
     TRIVIAL_QUESTIONS("Trivial Questions"),
-    DISTANCES("Distances");
-    //OTHER_GRAPHS("Special Graphs"),//todo: extend the dto for that, I guess
-    //EMPTY_GRAPHS("Empty Graphs"), //trivial, should have a lower probability of choosing it;
+    DISTANCES("Distances"),
+    CHINESE_POSTMAN_PROBLEM("Chinese Postman Problem");
     //TRIPARTITE_GRAPHS("")
     //VERTEX_COLORING("Vertex Coloring"),
     //EDGE_COLORING("Edge Coloring"),
@@ -63,8 +62,8 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        //return DISTANCES;
-        return VALUES.get(RANDOM.nextInt(SIZE));
+        return CHINESE_POSTMAN_PROBLEM;
+        //return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }

@@ -404,4 +404,22 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(GraphAlgorithms.diameter(graph)).isEqualTo(3);
     }
 
+    @Test
+    public void testChinesePostmanProblem(){
+        final int[][] TEST_MATRIX = {
+                {0, 3, 1, 0, 5, 0},
+                {3, 0, 0, 1, 0, 6},
+                {1, 0, 0, 0, 2, 0},
+                {0, 1, 0, 0, 0, 1},
+                {5, 0, 2, 0, 0, 4},
+                {0, 6, 0, 1, 4, 0}
+        };
+        final int TEST_N = 6;
+        final int TEST_M = 8;
+
+        WeightedGraph graph = new WeightedAdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.solveCPP(graph)).isEqualTo(28);
+    }
+
 }
