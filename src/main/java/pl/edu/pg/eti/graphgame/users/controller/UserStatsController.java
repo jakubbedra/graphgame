@@ -182,18 +182,14 @@ public class UserStatsController {
     public ResponseEntity<Void> updateDailyUserStats(
             @PathVariable("userId") Long userId,
             @PathVariable("taskName") String taskName,
-            //@PathVariable("taskId") Long taskId,
             @RequestBody UpdateStatsRequest request,
             @RequestParam("token") String token
     ) {
         Optional<User> user = userService.findUser(userId);
-
         if(!userSessionService.hasAccess(token, userId)) {
             return userSessionService.getResponseTokenAccessUser(token,
                 userId);
         }
-
-        //Optional<TaskSubject> task = taskService.findTaskById(taskId);
         GraphTaskSubject taskSubject = GraphTaskSubject.valueOf(taskName);
         if (user.isEmpty() || taskSubject == null) {
             return ResponseEntity.notFound().build();

@@ -12,6 +12,7 @@ import pl.edu.pg.eti.graphgame.users.service.UserService;
 
 import javax.annotation.PostConstruct;
 import java.sql.Date;
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -65,87 +66,49 @@ public class TestDataHardcoder {
         userService.registerNewUserAccountWithPassword(user10, "xD");
     }
 
+    private final static Random RANDOM = new Random();
+
+    private void randomStatsForUser(String username, Date date) {
+        GraphTaskSubject[] values = GraphTaskSubject.values();
+        for (GraphTaskSubject subject : values) {
+            statsService.saveStats(
+                    Stats.builder()
+                            .uuid(UUID.randomUUID())
+                            .user(userService.findUserByName(username).get())
+                            .graphTaskSubject(subject)
+                            .correct(Math.abs((int)RANDOM.nextGaussian() * RANDOM.nextInt(20)))
+                            .wrong(Math.abs((int)RANDOM.nextGaussian() * RANDOM.nextInt(20)))
+                            .date(date)
+                            .build()
+            );
+        }
+    }
+
     private void hardcodeStats() {
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 1").get())
-                        .graphTaskSubject(GraphTaskSubject.BFS)
-                        .correct(2)
-                        .wrong(14)
-                        .date(new Date(System.currentTimeMillis()))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 1").get())
-                        .graphTaskSubject(GraphTaskSubject.COMPLETE_GRAPHS)
-                        .correct(2)
-                        .wrong(1)
-                        .date(new Date(System.currentTimeMillis()))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 1").get())
-                        .graphTaskSubject(GraphTaskSubject.BFS)
-                        .correct(4)
-                        .wrong(3)
-                        .date(new Date(System.currentTimeMillis() - DAY_MILLIS))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 1").get())
-                        .graphTaskSubject(GraphTaskSubject.COMPLETE_GRAPHS)
-                        .correct(0)
-                        .wrong(2)
-                        .date(new Date(System.currentTimeMillis() - DAY_MILLIS))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 1").get())
-                        .graphTaskSubject(GraphTaskSubject.BFS)
-                        .correct(2)
-                        .wrong(10)
-                        .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 1").get())
-                        .graphTaskSubject(GraphTaskSubject.COMPLETE_GRAPHS)
-                        .correct(6)
-                        .wrong(17)
-                        .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 2").get())
-                        .graphTaskSubject(GraphTaskSubject.COMPLETE_GRAPHS)
-                        .correct(2)
-                        .wrong(1)
-                        .date(new Date(System.currentTimeMillis()-2*DAY_MILLIS))
-                        .build()
-        );
-        statsService.saveStats(
-                Stats.builder()
-                        .uuid(UUID.randomUUID())
-                        .user(userService.findUserByName("sample user 2").get())
-                        .graphTaskSubject(GraphTaskSubject.BFS)
-                        .correct(3)
-                        .wrong(7)
-                        .date(new Date(System.currentTimeMillis()-1*DAY_MILLIS))
-                        .build()
-        );
+        for (int i = 0; i < 100; i++) {
+            randomStatsForUser("sample user 1", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+        }
+        for (int i = 0; i < 100; i++) {
+            randomStatsForUser("sample user 2", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+        }
+        for (int i = 0; i < 100; i++) {
+            randomStatsForUser("sample user 3", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+        }
+        for (int i = 0; i < 100; i++) {
+            randomStatsForUser("sample user 4", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+        }
+        for (int i = 0; i < 100; i++) {
+            randomStatsForUser("sample user 5", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+        }
+        for (int i = 0; i < 100; i++) {
+            randomStatsForUser("sample user 6", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+        }
+        for (int i = 0; i < 100; i++) {
+            randomStatsForUser("sample user 7", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+        }
+        for (int i = 0; i < 100; i++) {
+            randomStatsForUser("sample user 8", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+        }
     }
 
     private void initUsersAndTasks() {
