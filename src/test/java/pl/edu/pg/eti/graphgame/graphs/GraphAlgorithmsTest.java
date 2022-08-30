@@ -72,15 +72,14 @@ public class GraphAlgorithmsTest {
     @Test
     public void maxCliqueSpeedTest() {
         final Random RANDOM = new Random();
-        final int NUMBER_OF_ITERATIONS = 100;
-        final int ADDITIONAL_MAX_VERTEX_COUNT = 12;
+        final int NUMBER_OF_ITERATIONS = 1000;
         GraphFactory factory = new GraphFactory();
         int verticesAvg = 0;
         int edgesAvg = 0;
         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
             int graphVertices = RANDOM.nextInt(
-                    Constants.MAX_GRAPH_VERTICES + ADDITIONAL_MAX_VERTEX_COUNT - Constants.MIN_GRAPH_VERTICES
-            ) + Constants.MIN_GRAPH_VERTICES;
+                    Constants.MAX_MAX_CLIQUE_VERTICES - Constants.MIN_MAX_CLIQUE_VERTICES
+            ) + Constants.MIN_MAX_CLIQUE_VERTICES;
             int graphEdges = RANDOM.nextInt(
                     (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
             ) + (graphVertices - 1);

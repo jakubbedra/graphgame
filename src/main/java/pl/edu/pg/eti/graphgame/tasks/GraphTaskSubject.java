@@ -62,8 +62,8 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        //return CHINESE_POSTMAN_PROBLEM;
-        return VALUES.get(RANDOM.nextInt(SIZE));
+        return EULER_CYCLE;
+        //return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }

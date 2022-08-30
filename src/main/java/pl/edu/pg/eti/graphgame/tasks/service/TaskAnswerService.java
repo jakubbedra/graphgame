@@ -167,7 +167,7 @@ public class TaskAnswerService {
             return false;
         }
         List<Integer> vertices = edgesFormACycleVertices(edges);
-        return graph.getN() + 1 == vertices.size() && GraphAlgorithms.checkEulerCycle(graph, vertices);
+        return GraphAlgorithms.checkEulerCycle(graph, vertices);
     }
 
     private List<Integer> edgesFormACycleVertices(List<Edge> edges) {

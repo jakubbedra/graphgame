@@ -45,8 +45,9 @@ public class GraphFactory {
             int maxEdgesToDelete = RANDOM.nextInt(n - 1) + 1;
             for (int i = 0; i < n; i++) {
                 for (int j = i + 1; j < n; j++) {
-                    if (RANDOM.nextDouble() < Constants.PROBABILITY_EDGE_REMOVAL) {
+                    if (RANDOM.nextDouble() < Constants.PROBABILITY_EDGE_REMOVAL && maxEdgesToDelete > 0) {
                         completeGraph.removeEdge(i, j);
+                        maxEdgesToDelete--;
                     }
                 }
             }
