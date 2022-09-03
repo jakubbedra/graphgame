@@ -34,9 +34,8 @@ public enum GraphTaskSubject {
     NAMED_GRAPHS("Named Graphs"),
     TRIVIAL_QUESTIONS("Trivial Questions"),
     DISTANCES("Distances"),
-    CHINESE_POSTMAN_PROBLEM("Chinese Postman Problem");
-    //TRIPARTITE_GRAPHS("")
-    //VERTEX_COLORING("Vertex Coloring"),
+    CHINESE_POSTMAN_PROBLEM("Chinese Postman Problem"),
+    VERTEX_COLORING("Vertex Coloring");
     //EDGE_COLORING("Edge Coloring"),
 
     public final String label;
@@ -62,8 +61,7 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        return EULER_CYCLE;
-        //return VALUES.get(RANDOM.nextInt(SIZE));
+        return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }

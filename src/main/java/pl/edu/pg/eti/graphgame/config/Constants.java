@@ -14,6 +14,9 @@ public class Constants {
     public static final int MIN_ISOMORPHISM_VERTICES = 3;
     public static final int MAX_ISOMORPHISM_VERTICES = 7;
 
+    public static final int MIN_VERTEX_COLORING_VERTICES = 4;
+    public static final int MAX_VERTEX_COLORING_VERTICES = 8;
+
     public static final int MAX_EXTENDED_EDGES_HOMEOMORPHISM = 4;
 
     //currently, no higher than Q_4 is allowed

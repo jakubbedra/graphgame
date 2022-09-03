@@ -4,6 +4,7 @@ import pl.edu.pg.eti.graphgame.graphs.model.AdjacencyMatrixGraph;
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class KuratowskiPlanarityTester {
@@ -42,7 +43,7 @@ public class KuratowskiPlanarityTester {
 
         //choose edge
         RetractableAdjacencyMatrix g = new RetractableAdjacencyMatrix(graph);
-        if(hasK5OrK3_3(g)){
+        if (hasK5OrK3_3(g)) {
             return false;
         }
 
@@ -50,12 +51,16 @@ public class KuratowskiPlanarityTester {
     }
 
     private boolean hasK5OrK3_3(RetractableAdjacencyMatrix g) {
+        if (g.getN() <= 4) {
+            return false;
+        }
         if (g.getN() == 5) {
             if (GraphClassChecker.isComplete(g)) {
                 return true;
             }
         } else if (g.getN() == 6) {
-            if (isSubgraphK3_3(g, List.of(0, 1, 2, 3, 4, 5))) {
+            //if (isSubgraphK3_3(g, List.of(0, 1, 2, 3, 4, 5))) {
+            if (containsK3_3(g, new LinkedList<>())) {
                 return true;
             }
         }
@@ -115,7 +120,6 @@ public class KuratowskiPlanarityTester {
         }
         return false;
     }
-
 
 
     private static class RetractableAdjacencyMatrix extends AdjacencyMatrixGraph {

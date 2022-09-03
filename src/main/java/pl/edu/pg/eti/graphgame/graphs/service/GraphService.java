@@ -91,6 +91,7 @@ public class GraphService {
             case PLANAR_GRAPHS:
             case TRIVIAL_QUESTIONS:
             case DISTANCES:
+            case VERTEX_COLORING:
                 return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
             case EULER_CYCLE:
                 if (task.getType() == GraphTaskType.BOOLEAN) {

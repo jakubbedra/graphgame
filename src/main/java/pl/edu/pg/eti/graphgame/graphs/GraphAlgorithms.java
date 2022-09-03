@@ -275,29 +275,29 @@ public class GraphAlgorithms {
                 .reduce(0, (subtotal, edge) -> subtotal += edge);
     }
 
-    private static int minPathTSP(WeightedGraph g, List<Integer> vertices, int depth) {
-        int minPathValue = Integer.MAX_VALUE;
+    private static int minCycleTSP(WeightedGraph g, List<Integer> vertices, int depth) {
+        int minCycleValue = Integer.MAX_VALUE;
         if (depth != g.getN()) {
             for (int i = 0; i < g.getN(); i++) {
                 if (!vertices.contains(i)) {
                     vertices.add(i);
-                    minPathValue = Math.min(minPathValue, minPathTSP(g, vertices, depth + 1));
+                    minCycleValue = Math.min(minCycleValue, minCycleTSP(g, vertices, depth + 1));
                     vertices.remove((Integer) i);
                 }
             }
         } else {
-            minPathValue = 0;
+            minCycleValue = 0;
             for (int i = 0; i < vertices.size() - 1; i++) {
-                minPathValue += g.getEdgeWeight(vertices.get(i), vertices.get(i + 1));
+                minCycleValue += g.getEdgeWeight(vertices.get(i), vertices.get(i + 1));
             }
-            minPathValue += g.getEdgeWeight(vertices.get(0), vertices.get(vertices.size() - 1));
-            return minPathValue;
+            minCycleValue += g.getEdgeWeight(vertices.get(0), vertices.get(vertices.size() - 1));
+            return minCycleValue;
         }
-        return minPathValue;
+        return minCycleValue;
     }
 
     public static int solveTSP(WeightedGraph g) {
-        return minPathTSP(g, new ArrayList<>(g.getN()), 0);
+        return minCycleTSP(g, new ArrayList<>(g.getN()), 0);
     }
 
 
@@ -456,6 +456,75 @@ public class GraphAlgorithms {
             additionalDistance += shortestDistance;
         }
         return additionalDistance;
+    }
+
+    private static int[] colorVerticesInOrder(Graph g, List<Integer> vertices) {
+        int[] colors = new int[g.getN()];
+        for (int i = 0; i < g.getN(); i++) {
+            colors[i] = -1;
+        }
+        for (int v : vertices) {
+            List<Integer> neighbours = g.neighbours(v);
+            int max = Integer.MIN_VALUE;
+            for (int u : neighbours) {
+                if (colors[u] > max) {
+                    max = colors[u];
+                }
+            }
+            for (int i = 0; i < max; i++) {
+                // check if a neighbour has this color
+                boolean neighbourHasThisColor = false;
+                for (int u : neighbours) {
+                    if (colors[u] == i) {
+                        neighbourHasThisColor = true;
+                    }
+                }
+                if (!neighbourHasThisColor) {
+                    colors[v] = i;
+                    break;
+                }
+            }
+            // must use a new color
+            if (colors[v] == -1) {
+                colors[v] = max + 1;
+            }
+        }
+        return colors;
+    }
+
+    private static int getMinMaxColor(Graph g, List<Integer> vertices) {
+        if (vertices.size() == g.getN()) {
+            return Arrays.stream(colorVerticesInOrder(g, vertices)).max().getAsInt();
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < g.getN(); i++) {
+            if (!vertices.contains((Integer) i)) {
+                vertices.add((Integer) i);
+                min = Math.min(min, getMinMaxColor(g, vertices));
+                vertices.remove((Integer) i);
+            }
+        }
+        return min;
+    }
+
+    public static int calculateChromaticNumber(Graph g) {
+        return getMinMaxColor(g, new LinkedList<>()) + 1;
+    }
+
+    public static boolean isColoringValid(Graph g, int[] colors) {
+        for (int v = 0; v < g.getN(); v++) {
+            List<Integer> neighbours = g.neighbours(v);
+            for (int u : neighbours) {
+                if (colors[v] == colors[u]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static int calculateChromaticIndex(Graph g) {
+        return 0;
     }
 
 }

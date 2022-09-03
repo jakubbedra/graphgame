@@ -113,6 +113,28 @@ public class TaskAnswerService {
         }
     }
 
+    public boolean checkVertexColoringTaskAnswer(int[] colors, Task task, Graph graph) {
+        switch (task.getSubject()) {
+            case VERTEX_COLORING:
+                return GraphAlgorithms.isColoringValid(graph, colors) &&
+                        getNumberOfColorsUsed(colors, graph.getN()) == GraphAlgorithms.calculateChromaticNumber(graph);
+            default:
+                throw new UnsupportedTaskSubjectException("");
+        }
+    }
+
+    private int getNumberOfColorsUsed(int[] colors, int n) {
+        List<Integer> checkedColors = new LinkedList<>();
+        int numberOfColors = 0;
+        for (int i = 0; i < n; i++) {
+            if (!checkedColors.contains((Integer)colors[i])) {
+                numberOfColors++;
+                checkedColors.add(colors[i]);
+            }
+        }
+        return numberOfColors;
+    }
+
     private boolean allVerticesIncluded(Graph graph, List<Integer> vertices) {
         for (int i = 0; i < graph.getN(); i++) {
             if (!vertices.contains(i)) {

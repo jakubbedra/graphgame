@@ -85,6 +85,8 @@ public class TaskFactory {
                 return createTrivialQuestionTask(user);
             case DISTANCES:
                 return createDistancesTask(user);
+            case VERTEX_COLORING:
+                return createVertexColoringTask(user);
         }
     }
 
@@ -559,6 +561,24 @@ public class TaskFactory {
                 .type(GraphTaskType.VERTEX_SELECTION)
                 .specialValues(v == -1 ? "" : v + ";")
                 .descriptionDetails(question)
+                .build();
+    }
+
+    private Task createVertexColoringTask(User user){
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_VERTEX_COLORING_VERTICES - Constants.MIN_VERTEX_COLORING_VERTICES
+        ) + Constants.MIN_VERTEX_COLORING_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.VERTEX_COLORING)
+                .type(GraphTaskType.VERTEX_COLORING)
+                .specialValues("")
                 .build();
     }
 

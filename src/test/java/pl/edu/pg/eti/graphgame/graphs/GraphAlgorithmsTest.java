@@ -421,4 +421,39 @@ public class GraphAlgorithmsTest {
         Assertions.assertThat(GraphAlgorithms.solveCPP(graph)).isEqualTo(28);
     }
 
+    @Test
+    public void testCalculateChromaticNumberCompleteGraph(){
+        final int[][] TEST_MATRIX = {
+                {0, 1, 1, 1, 1, 1},
+                {1, 0, 1, 1, 1, 1},
+                {1, 1, 0, 1, 1, 1},
+                {1, 1, 1, 0, 1, 1},
+                {1, 1, 1, 1, 0, 1},
+                {1, 1, 1, 1, 1, 0}
+        };
+        final int TEST_N = 6;
+        final int TEST_M = 15;
+
+        Graph g = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.calculateChromaticNumber(g)).isEqualTo(TEST_N);
+    }
+
+    @Test
+    public void testCalculateChromaticNumberPlanarGraph(){
+        final int[][] TEST_MATRIX = {
+                {0, 1, 1, 1, 1},
+                {1, 0, 1, 1, 1},
+                {1, 1, 0, 1, 1},
+                {1, 1, 1, 0, 0},
+                {1, 1, 1, 0, 0}
+        };
+        final int TEST_N = 5;
+        final int TEST_M = 9;
+
+        Graph g = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.calculateChromaticNumber(g)).isEqualTo(4);
+    }
+
 }
