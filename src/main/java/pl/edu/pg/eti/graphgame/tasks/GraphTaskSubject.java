@@ -35,8 +35,8 @@ public enum GraphTaskSubject {
     TRIVIAL_QUESTIONS("Trivial Questions"),
     DISTANCES("Distances"),
     CHINESE_POSTMAN_PROBLEM("Chinese Postman Problem"),
-    VERTEX_COLORING("Vertex Coloring");
-    //EDGE_COLORING("Edge Coloring"),
+    VERTEX_COLORING("Vertex Coloring"),
+    EDGE_COLORING("Edge Coloring");
 
     public final String label;
 
@@ -61,7 +61,8 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        return VALUES.get(RANDOM.nextInt(SIZE));
+        return EDGE_COLORING;
+        //return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }

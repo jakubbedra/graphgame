@@ -404,7 +404,7 @@ public class GraphAlgorithmsTest {
     }
 
     @Test
-    public void testChinesePostmanProblem(){
+    public void testChinesePostmanProblem() {
         final int[][] TEST_MATRIX = {
                 {0, 3, 1, 0, 5, 0},
                 {3, 0, 0, 1, 0, 6},
@@ -422,7 +422,7 @@ public class GraphAlgorithmsTest {
     }
 
     @Test
-    public void testCalculateChromaticNumberCompleteGraph(){
+    public void testCalculateChromaticNumberCompleteGraph() {
         final int[][] TEST_MATRIX = {
                 {0, 1, 1, 1, 1, 1},
                 {1, 0, 1, 1, 1, 1},
@@ -440,7 +440,7 @@ public class GraphAlgorithmsTest {
     }
 
     @Test
-    public void testCalculateChromaticNumberPlanarGraph(){
+    public void testCalculateChromaticNumberPlanarGraph() {
         final int[][] TEST_MATRIX = {
                 {0, 1, 1, 1, 1},
                 {1, 0, 1, 1, 1},
@@ -454,6 +454,56 @@ public class GraphAlgorithmsTest {
         Graph g = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
 
         Assertions.assertThat(GraphAlgorithms.calculateChromaticNumber(g)).isEqualTo(4);
+    }
+
+    @Test
+    public void testCalculateChromaticIndexStarGraph() {
+        final int[][] TEST_MATRIX = {
+                {0, 1, 0, 0, 0, 0},
+                {1, 0, 1, 1, 1, 1},
+                {0, 1, 0, 0, 0, 0},
+                {0, 1, 0, 0, 0, 0},
+                {0, 1, 0, 0, 0, 0},
+                {0, 1, 0, 0, 0, 0}
+        };
+        final int TEST_N = 6;
+        final int TEST_M = 5;
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST_MATRIX, TEST_N, TEST_M
+        );
+
+        Graph g = new AdjacencyMatrixGraph(TEST_MATRIX, TEST_N, TEST_M);
+
+        Assertions.assertThat(GraphAlgorithms.calculateChromaticIndex(g)).isEqualTo(5);
+    }
+
+    //@Test
+    public void edgeColoringSpeedTest(){
+        final Random RANDOM = new Random();
+        final int NUMBER_OF_ITERATIONS = 1000;
+        GraphFactory factory = new GraphFactory();
+        int verticesAvg = 0;
+        int edgesAvg = 0;
+        for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+            int graphVertices = RANDOM.nextInt(
+                    Constants.MAX_VERTEX_COLORING_VERTICES - Constants.MIN_VERTEX_COLORING_VERTICES
+            ) + Constants.MIN_VERTEX_COLORING_VERTICES;
+            int graphEdges = RANDOM.nextInt(
+                    Constants.MAX_EDGE_COLORING_EDGES - (graphVertices - 1)
+            ) + (graphVertices - 1);
+            Graph g = factory.createRandomConnectedGraph(
+                    graphVertices, graphEdges
+            );
+            // speed test
+            GraphAlgorithms.calculateChromaticIndex(g);
+
+            verticesAvg += graphVertices;
+            edgesAvg += graphEdges;
+        }
+        verticesAvg /= NUMBER_OF_ITERATIONS;
+        edgesAvg /= NUMBER_OF_ITERATIONS;
+        System.out.println("Average number of vertices: " + verticesAvg);
+        System.out.println("Average number of edges: " + edgesAvg);
     }
 
 }

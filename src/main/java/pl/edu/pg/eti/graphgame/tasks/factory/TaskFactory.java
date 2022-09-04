@@ -87,6 +87,8 @@ public class TaskFactory {
                 return createDistancesTask(user);
             case VERTEX_COLORING:
                 return createVertexColoringTask(user);
+            case EDGE_COLORING:
+                return createEdgeColoringTask(user);
         }
     }
 
@@ -578,6 +580,24 @@ public class TaskFactory {
                 .graphEdges(graphEdges)
                 .subject(GraphTaskSubject.VERTEX_COLORING)
                 .type(GraphTaskType.VERTEX_COLORING)
+                .specialValues("")
+                .build();
+    }
+
+    private Task createEdgeColoringTask(User user){
+        int graphVertices = RANDOM.nextInt(
+                Constants.MAX_VERTEX_COLORING_VERTICES - Constants.MIN_VERTEX_COLORING_VERTICES
+        ) + Constants.MIN_VERTEX_COLORING_VERTICES;
+        int graphEdges = RANDOM.nextInt(
+                (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
+        ) + (graphVertices - 1);
+        return Task.builder()
+                .uuid(UUID.randomUUID())
+                .user(user)
+                .graphVertices(graphVertices)
+                .graphEdges(graphEdges)
+                .subject(GraphTaskSubject.EDGE_COLORING)
+                .type(GraphTaskType.EDGE_COLORING)
                 .specialValues("")
                 .build();
     }

@@ -492,7 +492,7 @@ public class GraphAlgorithms {
         return colors;
     }
 
-    private static int getMinMaxColor(Graph g, List<Integer> vertices) {
+    private static int getMinMaxColorVertex(Graph g, List<Integer> vertices) {
         if (vertices.size() == g.getN()) {
             return Arrays.stream(colorVerticesInOrder(g, vertices)).max().getAsInt();
         }
@@ -500,18 +500,14 @@ public class GraphAlgorithms {
         for (int i = 0; i < g.getN(); i++) {
             if (!vertices.contains((Integer) i)) {
                 vertices.add((Integer) i);
-                min = Math.min(min, getMinMaxColor(g, vertices));
+                min = Math.min(min, getMinMaxColorVertex(g, vertices));
                 vertices.remove((Integer) i);
             }
         }
         return min;
     }
 
-    public static int calculateChromaticNumber(Graph g) {
-        return getMinMaxColor(g, new LinkedList<>()) + 1;
-    }
-
-    public static boolean isColoringValid(Graph g, int[] colors) {
+    public static boolean isVertexColoringValid(Graph g, int[] colors) {
         for (int v = 0; v < g.getN(); v++) {
             List<Integer> neighbours = g.neighbours(v);
             for (int u : neighbours) {
@@ -523,8 +519,96 @@ public class GraphAlgorithms {
         return true;
     }
 
+    public static int calculateChromaticNumber(Graph g) {
+        return getMinMaxColorVertex(g, new LinkedList<>()) + 1;
+    }
+
+    private static int colorEdgesInOrder(Graph g, List<Edge> edges) {
+        int[][] colors = new int[g.getN()][g.getN()];
+        for (int i = 0; i < g.getN(); i++) {
+            for (int j = 0; j < g.getN(); j++) {
+                colors[i][j] = -1;
+            }
+        }
+        int colorsUsed = -1;
+        for (Edge e : edges) {
+            // check all the edges of v1
+            List<Integer> foundColors = new LinkedList<>();
+            int v1 = e.getV1();
+            for (int i = 0; i < g.getN(); i++) {
+                if (v1 != i && colors[v1][i] != -1 && !foundColors.contains((Integer) colors[v1][i])) {
+                    foundColors.add(colors[v1][i]);
+                }
+            }
+            // check all the edges of v2
+            int v2 = e.getV2();
+            for (int i = 0; i < g.getN(); i++) {
+                if (v2 != i && colors[v2][i] != -1 && !foundColors.contains((Integer) colors[v2][i])) {
+                    foundColors.add(colors[v2][i]);
+                }
+            }
+            // find the minimum available color
+            int maxColor = -1;
+            foundColors.sort(Comparator.comparingInt(Integer::intValue));
+            for (int c : foundColors) {
+                if (c > maxColor + 1) {
+                    break;
+                }
+                maxColor = c;
+            }
+            colors[v1][v2] = maxColor + 1;
+            colors[v2][v1] = maxColor + 1;
+            colorsUsed = Math.max(colorsUsed, maxColor+1);
+        }
+        return colorsUsed + 1;
+    }
+
+    private static int getMinMaxColorEdges(Graph g, List<Edge> edges) {
+        if (edges.size() == g.getM()) {
+            return colorEdgesInOrder(g, edges);
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < g.getN(); i++) {
+            for (int j = 0; j < g.getN(); j++) {
+                if (g.edgeExists(i, j)) {
+                    Edge e = new Edge(i, j);
+                    if (!containsEdge(edges, e)) {
+                        edges.add(e);
+                        min = Math.min(min, getMinMaxColorEdges(g, edges));
+                        edges.remove(e);
+                    }
+                }
+            }
+        }
+        return min;
+    }
+
+    private static boolean containsEdge(List<Edge> edges, Edge e) {
+        for (Edge e1 : edges) {
+            if (e1.getV2() == e.getV2() && e1.getV1() == e.getV1() ||
+                    e1.getV2() == e.getV1() && e1.getV1() == e.getV2()
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isEdgeColoringValid(Graph g, int[][] colors) {
+        for (int i = 0; i < g.getN(); i++) {
+            List<Integer> colorsInRow = new LinkedList<>();
+            for (int j = 0; j < g.getN(); j++) {
+                if (colorsInRow.contains(colors[i][j])) {
+                    return false;
+                }
+                colorsInRow.add(colors[i][j]);
+            }
+        }
+        return true;
+    }
+
     public static int calculateChromaticIndex(Graph g) {
-        return 0;
+        return getMinMaxColorEdges(g, new LinkedList<>());
     }
 
 }

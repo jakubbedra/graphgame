@@ -116,18 +116,42 @@ public class TaskAnswerService {
     public boolean checkVertexColoringTaskAnswer(int[] colors, Task task, Graph graph) {
         switch (task.getSubject()) {
             case VERTEX_COLORING:
-                return GraphAlgorithms.isColoringValid(graph, colors) &&
+                return GraphAlgorithms.isVertexColoringValid(graph, colors) &&
                         getNumberOfColorsUsed(colors, graph.getN()) == GraphAlgorithms.calculateChromaticNumber(graph);
             default:
                 throw new UnsupportedTaskSubjectException("");
         }
     }
 
+    public boolean checkEdgeColoringTaskAnswer(int[][] colors, Task task, Graph graph) {
+        switch (task.getSubject()) {
+            case EDGE_COLORING:
+                int delta = graph.delta();
+                int colorsCount = countEdgeColors(colors, graph.getN());
+                return (colorsCount == delta || colorsCount == delta + 1) &&
+                        GraphAlgorithms.isEdgeColoringValid(graph, colors);
+            default:
+                throw new UnsupportedTaskSubjectException("");
+        }
+    }
+
+    private int countEdgeColors(int[][] colors, int n) {
+        List<Integer> foundColors = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (colors[i][j] != -1 && !foundColors.contains((Integer) colors[i][j])) {
+                    foundColors.add(i);
+                }
+            }
+        }
+        return foundColors.size();
+    }
+
     private int getNumberOfColorsUsed(int[] colors, int n) {
         List<Integer> checkedColors = new LinkedList<>();
         int numberOfColors = 0;
         for (int i = 0; i < n; i++) {
-            if (!checkedColors.contains((Integer)colors[i])) {
+            if (!checkedColors.contains((Integer) colors[i])) {
                 numberOfColors++;
                 checkedColors.add(colors[i]);
             }

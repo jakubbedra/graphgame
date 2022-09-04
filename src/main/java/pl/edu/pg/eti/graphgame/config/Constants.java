@@ -17,6 +17,8 @@ public class Constants {
     public static final int MIN_VERTEX_COLORING_VERTICES = 4;
     public static final int MAX_VERTEX_COLORING_VERTICES = 8;
 
+    public static final int MAX_EDGE_COLORING_EDGES = 11;
+
     public static final int MAX_EXTENDED_EDGES_HOMEOMORPHISM = 4;
 
     //currently, no higher than Q_4 is allowed
