@@ -140,7 +140,7 @@ public class TaskAnswerService {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (colors[i][j] != -1 && !foundColors.contains((Integer) colors[i][j])) {
-                    foundColors.add(i);
+                    foundColors.add(colors[i][j]);
                 }
             }
         }

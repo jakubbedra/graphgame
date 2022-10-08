@@ -598,7 +598,7 @@ public class GraphAlgorithms {
         for (int i = 0; i < g.getN(); i++) {
             List<Integer> colorsInRow = new LinkedList<>();
             for (int j = 0; j < g.getN(); j++) {
-                if (colorsInRow.contains(colors[i][j])) {
+                if (colors[i][j] != -1 && colorsInRow.contains(colors[i][j])) {
                     return false;
                 }
                 colorsInRow.add(colors[i][j]);
