@@ -61,8 +61,7 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
-        return EDGE_COLORING;
-        //return VALUES.get(RANDOM.nextInt(SIZE));
+        return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }
