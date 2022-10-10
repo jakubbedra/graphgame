@@ -63,7 +63,8 @@ public enum GraphTaskSubject {
     public static GraphTaskSubject randomSubject() {
         GraphTaskSubject[] castratedSubjectList = {DFS, BFS,COMPLETE_GRAPHS, PATH_GRAPHS, STAR_GRAPHS, CYCLE_GRAPHS,
         WHEEL_GRAPHS, HYPERCUBES, REGULAR_GRAPHS, MAX_CLIQUE, MAX_INDEPENDENT_SET};
-        return VALUES.get(RANDOM.nextInt(SIZE));
+        return castratedSubjectList[RANDOM.nextInt(castratedSubjectList.length)];
+        //return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }
