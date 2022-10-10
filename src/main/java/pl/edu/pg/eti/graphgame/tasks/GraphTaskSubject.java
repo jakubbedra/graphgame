@@ -20,7 +20,7 @@ public enum GraphTaskSubject {
     HYPERCUBES("Hypercubes"),
     REGULAR_GRAPHS("Regular Graphs"),
     MAX_CLIQUE("Max Clique Problem"),
-    MAX_INDEPENDENT_SET("Max Independent Set Problem"),
+    MAX_INDEPENDENT_SET("Max Independent Set Problem"),////////////////
     MIN_VERTEX_COVER("Min Vertex Cover"),
     EULER_CYCLE("Eulerian Graphs"),
     MIN_SPANNING_TREE("Min Spanning Tree"),
@@ -61,6 +61,8 @@ public enum GraphTaskSubject {
     }
 
     public static GraphTaskSubject randomSubject() {
+        GraphTaskSubject[] castratedSubjectList = {DFS, BFS,COMPLETE_GRAPHS, PATH_GRAPHS, STAR_GRAPHS, CYCLE_GRAPHS,
+        WHEEL_GRAPHS, HYPERCUBES, REGULAR_GRAPHS, MAX_CLIQUE, MAX_INDEPENDENT_SET};
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
