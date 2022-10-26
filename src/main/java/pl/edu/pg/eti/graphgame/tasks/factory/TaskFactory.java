@@ -31,6 +31,10 @@ public class TaskFactory {
         return createTask(GraphTaskSubject.randomSubject(), user);
     }
 
+    public Task createNotRandomTask(User user, GraphTaskSubject subject){
+        return createTask(subject, user);
+    }
+
     private Task createTask(GraphTaskSubject subject, User user) {
         switch (subject) {
             case COMPLETE_GRAPHS:

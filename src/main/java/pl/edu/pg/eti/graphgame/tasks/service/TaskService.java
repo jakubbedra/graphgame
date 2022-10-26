@@ -3,6 +3,7 @@ package pl.edu.pg.eti.graphgame.tasks.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
 import pl.edu.pg.eti.graphgame.tasks.factory.TaskFactory;
 import pl.edu.pg.eti.graphgame.tasks.repository.TaskRepository;
@@ -42,6 +43,12 @@ public class TaskService {
 
     public Task createAndSaveTaskForUser(User user) {
         Task task = taskFactory.createRandomTask(user);
+        taskRepository.save(task);
+        return task;
+    }
+
+    public Task createAndSaveTaskForUser(User user, GraphTaskSubject subject) {
+        Task task = taskFactory.createNotRandomTask(user, subject);
         taskRepository.save(task);
         return task;
     }

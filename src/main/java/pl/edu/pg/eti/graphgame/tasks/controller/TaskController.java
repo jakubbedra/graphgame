@@ -110,7 +110,8 @@ public class TaskController {
     @PostMapping("/user/{id}")
     public ResponseEntity<Void> createTask(
             @PathVariable("id") Long id,
-            @RequestParam("token") String token
+            @RequestParam("token") String token,
+            @RequestParam(name = "subject", required = false) Optional<GraphTaskSubject> subject
     ) {
         if(!userSessionService.hasAccess(token, id)) {
             return userSessionService.getResponseTokenAccessUser(token,
@@ -119,7 +120,8 @@ public class TaskController {
 
         Optional<User> user = userService.findUser(id);
         if (user.isPresent()) {
-            Task task = taskService.createAndSaveTaskForUser(user.get());
+            Task task = subject.isEmpty() ? taskService.createAndSaveTaskForUser(user.get()) :
+                    taskService.createAndSaveTaskForUser(user.get(), subject.get());
             if (taskRequiresGraph(task)) {
                 graphService.createAndSaveGraphForTask(task);
             }
