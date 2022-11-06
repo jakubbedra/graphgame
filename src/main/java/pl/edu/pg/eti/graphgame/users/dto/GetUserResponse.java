@@ -14,13 +14,11 @@ import java.util.function.Function;
 public class GetUserResponse {
 
     private String username;
-    private String email;
     private String password;
 
     public static Function<User, GetUserResponse> entityToDtoMapper() {
         return user -> GetUserResponse.builder()
-                .username(user.getLogin())
-                .email(user.getEmail())
+                .username(user.getUsername())
                 .password(user.getPasswordEncoded())
                 .build();
     }

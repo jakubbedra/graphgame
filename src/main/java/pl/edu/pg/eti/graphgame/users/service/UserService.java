@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.edu.pg.eti.graphgame.exceptions.EmailAlreadyInUseException;
+import pl.edu.pg.eti.graphgame.exceptions.UsernameAlreadyInUseException;
 import pl.edu.pg.eti.graphgame.exceptions.UserAlreadyExistsException;
 import pl.edu.pg.eti.graphgame.exceptions.UserSessionTokenAlreadyExistsException;
 import pl.edu.pg.eti.graphgame.users.entity.User;
@@ -39,9 +39,9 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder(11);
     }
 	
-	public Optional<UserSession> loginUserWithPassword(String email, String password) throws
+	public Optional<UserSession> loginUserWithPassword(String username, String password) throws
 		UserSessionTokenAlreadyExistsException {
-		Optional<User> user = findUserByEmail(email);
+		Optional<User> user = findUserByUsername(username);
 		if(user.isEmpty())
 			return Optional.empty();
 		if(!passwordEncoder.matches(password, user.get().getPasswordEncoded()))
@@ -57,14 +57,10 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public Optional<User> findUserByName(String name) {
-        return userRepository.findByLogin(name);
-    }
-
     @Transactional
     public void registerNewUserAccountWithPassword(User user, String password) throws UserAlreadyExistsException {
-        if(emailExists(user.getEmail())) {
-            throw new UserAlreadyExistsException("A user with the given email already exists.");
+        if(usernameExists(user.getUsername())) {
+            throw new UserAlreadyExistsException("A user with the given username already exists.");
         }
 		user.setPasswordEncoded(passwordEncoder.encode(password));
         userRepository.save(user);
@@ -80,12 +76,12 @@ public class UserService {
 		userRepository.delete(user);
     }
 
-    private boolean emailExists(String email) {
-        return userRepository.findByEmail(email).isPresent();
+    private boolean usernameExists(String username) {
+        return userRepository.findByUsername(username).isPresent();
     }
 
-    private Optional<User> findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<User> findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
 	@Transactional
@@ -95,17 +91,11 @@ public class UserService {
 	}
 
 	@Transactional
-	public void updateEmail(User user, String email)
-		throws EmailAlreadyInUseException {
-		if(emailExists(user.getEmail())) {
-			throw new EmailAlreadyInUseException("New email is already in use.");
+	public void updateUsername(User user, String login) throws UsernameAlreadyInUseException {
+		if(usernameExists(user.getUsername())) {
+			throw new UsernameAlreadyInUseException("New login is already in use.");
 		}
-		user.setEmail(email);
-		updateUser(user);
-	}
-
-	public void updateLogin(User user, String login) {
-		user.setLogin(login);
+		user.setUsername(login);
 		updateUser(user);
 	}
 }

@@ -48,7 +48,7 @@ public class GetTopUsersResponse {
                 topUsers.add(
                         TopUser.builder()
                                 .id(stats.getUser().getId())
-                                .username(stats.getUser().getLogin())
+                                .username(stats.getUser().getUsername())
                                 .place(i + placeOfFirstUser)
                                 .correctTotal(stats.getCorrect())
                                 .wrongTotal(stats.getWrong())

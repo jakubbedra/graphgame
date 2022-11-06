@@ -1,11 +1,10 @@
 package pl.edu.pg.eti.graphgame.users.controller;
 
-import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.mail.javamail.JavaMailSender;
-import pl.edu.pg.eti.graphgame.exceptions.EmailAlreadyInUseException;
+import pl.edu.pg.eti.graphgame.exceptions.UsernameAlreadyInUseException;
 import pl.edu.pg.eti.graphgame.exceptions.UserAlreadyExistsException;
 import pl.edu.pg.eti.graphgame.exceptions.UserSessionTokenAlreadyExistsException;
 import pl.edu.pg.eti.graphgame.users.dto.*;
@@ -46,7 +45,7 @@ public class UserController {
         Optional<UserSession> session = userSessionService.findSessionByToken(token);
         if (session.isEmpty())
             return ResponseEntity.notFound().build();
-        String resp = token + " : " + session.get().getUser().getEmail() + " ; " + session.get().getExpirationDatetime();
+        String resp = token + " : " + session.get().getUser().getUsername() + " ; " + session.get().getExpirationDatetime();
         return ResponseEntity.ok(resp);
     }
 
@@ -71,10 +70,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginUserResponse> loginUser(@RequestBody LoginUserRequest request)
             throws UserSessionTokenAlreadyExistsException {
-        Optional<UserSession> userSession = userService.loginUserWithPassword(request.getEmail(), request.getPassword());
+        Optional<UserSession> userSession = userService.loginUserWithPassword(request.getUsername(), request.getPassword());
         return userSession.map(session -> ResponseEntity
                         .ok(LoginUserResponse.builder()
-                                .username(session.getUser().getLogin())
+                                .username(session.getUser().getUsername())
                                 ._token(session.getToken())
                                 ._tokenExpirationTime(UserSessionService.DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS + "")
                                 .user_id(session.getUser().getId())
@@ -85,13 +84,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Void> registerUser(@RequestBody CreateUserRequest request) {
         User user = User.builder()
-                .login(request.getUsername())
-                .email(request.getEmail())
+                .username(request.getUsername())
                 .roles(DEFAULT_USER_ROLE)
                 .build();
         try {
             userService.registerNewUserAccountWithPassword(user, request.getPassword());
-            sendAccountActivationEmail(user);
         } catch (UserAlreadyExistsException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -125,7 +122,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@RequestBody UpdateUserRequest request, @PathVariable("id") Long id, @RequestParam("token") String token)
-            throws EmailAlreadyInUseException {
+            throws UsernameAlreadyInUseException {
         if(!userSessionService.hasAccess(token, id)) {
             return userSessionService.getResponseTokenAccessUser(token,
                 id);
@@ -140,11 +137,7 @@ public class UserController {
             }
             if (request.getUsername() != null) {
                 if (!request.getUsername().equals(""))
-                    userService.updateLogin(user.get(), request.getUsername());
-            }
-            if (request.getEmail() != null) {
-                if (!request.getEmail().equals(""))
-                    userService.updateEmail(user.get(), request.getEmail());
+                    userService.updateUsername(user.get(), request.getUsername());
             }
             return ResponseEntity.accepted().build();
         } else {
@@ -165,10 +158,6 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    private void sendAccountActivationEmail(User user) {
-
     }
 
 }

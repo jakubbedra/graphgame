@@ -25,7 +25,6 @@ public class GetUsersResponse {
 
         private Long id;
         private String username;
-        private String email;
         private String password;
 
     }
@@ -39,8 +38,7 @@ public class GetUsersResponse {
             users.stream()
                     .map(user -> UserDto.builder()
                             .id(user.getId())
-                            .username(user.getLogin())
-                            .email(user.getEmail())
+                            .username(user.getUsername())
                             .password(user.getPasswordEncoded())
                             .build())
                     .forEach(response::user);

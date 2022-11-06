@@ -74,7 +74,7 @@ public class TestDataHardcoder {
             statsService.saveStats(
                     Stats.builder()
                             .uuid(UUID.randomUUID())
-                            .user(userService.findUserByName(username).get())
+                            .user(userService.findUserByUsername(username).get())
                             .graphTaskSubject(subject)
                             .correct(Math.abs((int)RANDOM.nextGaussian() * RANDOM.nextInt(20)))
                             .wrong(Math.abs((int)RANDOM.nextGaussian() * RANDOM.nextInt(20)))
@@ -86,81 +86,71 @@ public class TestDataHardcoder {
 
     private void hardcodeStats() {
         for (int i = 0; i < 100; i++) {
-            randomStatsForUser("sample user 1", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+            randomStatsForUser(user1.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
         for (int i = 0; i < 100; i++) {
-            randomStatsForUser("sample user 2", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+            randomStatsForUser(user2.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
         for (int i = 0; i < 100; i++) {
-            randomStatsForUser("sample user 3", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+            randomStatsForUser(user3.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
         for (int i = 0; i < 100; i++) {
-            randomStatsForUser("sample user 4", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+            randomStatsForUser(user4.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
         for (int i = 0; i < 100; i++) {
-            randomStatsForUser("sample user 5", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+            randomStatsForUser(user5.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
         for (int i = 0; i < 100; i++) {
-            randomStatsForUser("sample user 6", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+            randomStatsForUser(user6.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
         for (int i = 0; i < 100; i++) {
-            randomStatsForUser("sample user 7", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+            randomStatsForUser(user7.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
         for (int i = 0; i < 100; i++) {
-            randomStatsForUser("sample user 8", new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
+            randomStatsForUser(user8.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
     }
 
     private void initUsersAndTasks() {
         user1 = User.builder()
                 .id(21L)
-                .login("sample user 1")
-                .email("user1@example.com")
+                .username("user1")
                 .build();
         user2 = User.builder()
                 .id(37L)
-                .login("sample user 2")
-                .email("user2@example.com")
+                .username("user2")
                 .build();
         user3 = User.builder()
                 .id(21L)
-                .login("sample user 3")
-                .email("user3@example.com")
+                .username("user3")
                 .build();
         user4 = User.builder()
                 .id(37L)
-                .login("sample user 4")
-                .email("user4@example.com")
+                .username("user4")
                 .build();
         user5 = User.builder()
                 .id(21L)
-                .login("sample user 5")
-                .email("user5@example.com")
+                .username("user5")
                 .build();
         user6 = User.builder()
                 .id(37L)
-                .login("sample user 6")
-                .email("user6@example.com")
+                .username("user6")
                 .build();
         user7 = User.builder()
                 .id(21L)
-                .login("sample user 7")
-                .email("user7@example.com")
+                .username("user7")
                 .build();
         user8 = User.builder()
                 .id(37L)
-                .login("sample user 8")
-                .email("user8@example.com")
+                .username("user8")
                 .build();
         user9 = User.builder()
                 .id(21L)
-                .login("sample user 9")
-                .email("user9@example.com")
+                .username("user9")
                 .build();
         user10 = User.builder()
                 .id(37L)
-                .login("sample user 10")
-                .email("user10@example.com")
+                .username("user10")
                 .build();
     }
 
