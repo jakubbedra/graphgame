@@ -31,9 +31,9 @@ public class TaskAnswerService {
     public boolean checkVertexSelectionAnswer(List<Integer> vertices, Task task, Graph graph) {
         switch (task.getSubject()) {
             case BFS:
-                return vertices.equals(GraphAlgorithms.breadthFirstSearch(graph));
+                return GraphAlgorithms.breadthFirstSearch(graph, vertices);
             case DFS:
-                return vertices.equals(GraphAlgorithms.depthFirstSearch(graph));
+                return GraphAlgorithms.depthFirstSearch(graph, vertices);
             case MAX_CLIQUE:
                 return vertices.size() == GraphAlgorithms.maxCliqueSize(graph) && GraphAlgorithms.checkClique(graph, vertices);
             case MAX_INDEPENDENT_SET:
