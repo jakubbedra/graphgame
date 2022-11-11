@@ -6,6 +6,89 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GraphAlgorithms {
+	
+	
+	
+    public static List<Integer> breadthFirstSearch(Graph graph, List<Integer> answer) {
+        Queue<Integer> queue = new LinkedList<>();
+        List<Integer> visitedVertices = new LinkedList<>();
+        boolean[] visited = new boolean[graph.getN()];
+        for (int i = 0; i < graph.getN(); i++) {
+            visited[i] = false;
+        }
+
+        int v = 0;
+        visited[v] = true;
+        queue.add(v);
+
+        while (!queue.isEmpty()) {
+            v = queue.poll();
+            visitedVertices.add(v);
+
+            List<Integer> neighbours = graph.neighbours(v).stream().sorted().collect(Collectors.toList());
+            for (int neighbour : neighbours) {
+                if (!visited[neighbour]) {
+                    visited[neighbour] = true;
+                    queue.add(neighbour);
+                }
+            }
+        }
+
+        return visitedVertices;
+    }
+
+    public static List<Integer> depthFirstSearch(Graph graph, List<Integer> answer) {
+        List<Integer> visitOrder = new LinkedList<>();
+        boolean[] visited = new boolean[graph.getN()];
+
+        for (int i = 0; i < visited.length; i++) {
+            visited[i] = false;
+        }
+
+        dfsVisit(graph, 0, visited, visitOrder);
+
+        return visitOrder;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
     public static List<Integer> breadthFirstSearch(Graph graph) {
         Queue<Integer> queue = new LinkedList<>();
