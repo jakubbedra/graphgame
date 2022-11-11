@@ -7,39 +7,54 @@ import java.util.stream.Collectors;
 
 public class GraphAlgorithms {
 	
-	
-	
-    public static boolean breadthFirstSearch(Graph graph, List<Integer> answer) {
-        Queue<Integer> queue = new LinkedList<>();
-        List<Integer> visitedVertices = new LinkedList<>();
-        boolean[] visited = new boolean[graph.getN()];
-        for (int i = 0; i < graph.getN(); i++) {
-            visited[i] = false;
-        }
-
-        int v = 0;
-        visited[v] = true;
-        queue.add(v);
-
-        while (!queue.isEmpty()) {
-            v = queue.poll();
-            visitedVertices.add(v);
-
-            List<Integer> neighbours = graph.neighbours(v).stream().sorted().collect(Collectors.toList());
-            for (int neighbour : neighbours) {
-                if (!visited[neighbour]) {
-                    visited[neighbour] = true;
-                    queue.add(neighbour);
-                }
-            }
-        }
-
-        return visitedVertices.equals(answer);
-    }
-	
 	public static void Debug(int line, String txt) {
 		System.out.println(line + "  " + txt);
 	}
+	
+	
+	
+	
+	
+	
+	
+    public static boolean breadthFirstSearch(Graph graph, List<Integer> answer) {
+		System.out.println("\n\n\n\n\n BFS");
+		if(answer.size() == graph.getN()) {
+			if(answer.stream().distinct().count() != answer.size()) {
+				Debug(1, "false");
+				return false;
+			}
+		} else {
+			Debug(2, "false");
+			return false;
+		}
+        boolean[] visited = new boolean[graph.getN()];
+        for(int i = 0; i < visited.length; i++) {
+            visited[i] = false;
+        }
+		
+		List<List<Integer>> steps = new LinkedList<>();
+		
+		steps.add(graph.neighbours(answer.get(0)));
+		
+		for(int i=1; i<answer.size(); ++i) {
+			int next = answer.get(i);
+			while(steps.isEmpty() == false) {
+				steps.set(0, steps.get(0).stream().filter(n->visited[n]==false).collect(Collectors.toList()));
+				List<Integer> neigh = steps.get(0);
+				if(neigh.isEmpty()) {
+					steps.remove(0);
+				} else {
+
+					
+					
+				}
+			}
+		}
+
+        return true;
+    }
+	
 
 	
 	
@@ -49,8 +64,7 @@ public class GraphAlgorithms {
 	
 	
     public static boolean depthFirstSearch(Graph graph, List<Integer> answer) {
-        List<Integer> visitOrder = new LinkedList<>();
-		List<Integer> stack = new LinkedList<>();
+		System.out.println("\n\n\n\n\n DFS");
 		if(answer.size() == graph.getN()) {
 			if(answer.stream().distinct().count() != answer.size()) {
 				Debug(1, "false");
@@ -93,10 +107,10 @@ public class GraphAlgorithms {
 			int next = answer.get(step[0]);
 			
 			if(neighbours.isEmpty()) {
-				break;
+				Debug(6, "true");
+				return true;
 			}
 			if(neighbours.contains(next)) {
-				//step[0]++;
 				if(dfs_step_any_order(next, g, answer, visited, step) == false) {
 					Debug(4, "false");
 					return false;
@@ -105,11 +119,7 @@ public class GraphAlgorithms {
 				Debug(5, "false");
 				return false;
 			}
-			
 		}
-		
-		Debug(6, "true");
-		return true;
 	}
 	
 	
