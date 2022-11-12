@@ -49,8 +49,22 @@ public class TestDataHardcoder {
 
     @PostConstruct
     public void hardcodeData() throws UserAlreadyExistsException {
-        hardcodeUsers();
-        hardcodeStats();
+		var user = userService.findUserByUsername("user1");
+		System.out.println("------------------------");
+		System.out.println("------------------------");
+		System.out.println("------------------------");
+		System.out.println("------------------------");
+		System.out.println("------------------------");
+		System.out.println("------------------------");
+		System.out.println("------------------------");
+		System.out.println("------------------------");
+		if(user.isEmpty()) {
+			hardcodeUsers();
+			hardcodeStats();
+			System.out.println("Hardcoder: generating users");
+		} else {
+			System.out.println("Hardcoder: not generating, because of: " + user.get());
+		}
     }
 
     private void hardcodeUsers() throws UserAlreadyExistsException {
@@ -85,28 +99,29 @@ public class TestDataHardcoder {
     }
 
     private void hardcodeStats() {
-        for (int i = 0; i < 100; i++) {
+		int limit = 5;
+        for (int i = 0; i < limit; i++) {
             randomStatsForUser(user1.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < limit; i++) {
             randomStatsForUser(user2.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < limit; i++) {
             randomStatsForUser(user3.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < limit; i++) {
             randomStatsForUser(user4.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < limit; i++) {
             randomStatsForUser(user5.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < limit; i++) {
             randomStatsForUser(user6.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < limit; i++) {
             randomStatsForUser(user7.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < limit; i++) {
             randomStatsForUser(user8.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
     }

@@ -22,7 +22,7 @@ public class GraphEntity {
     private UUID task;
 
     // TODO: test whether varchar length limit works
-    @Column(length=2047)
+    @Column(length=4095)
     private String json;
 
 }

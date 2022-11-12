@@ -1,4 +1,4 @@
 
 run:
-	mvn spring-boot:run
+	rm -r target && mvn clean && mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug"
 
