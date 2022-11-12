@@ -33,25 +33,23 @@ public class GraphAlgorithms {
             visited[i] = false;
         }
 		
-		List<List<Integer>> steps = new LinkedList<>();
+		int current = 0;
+		visited[answer.get(0)] = true;
+		int added = 1;
 		
-		steps.add(graph.neighbours(answer.get(0)));
-		
-		for(int i=1; i<answer.size(); ++i) {
-			int next = answer.get(i);
-			while(steps.isEmpty() == false) {
-				steps.set(0, steps.get(0).stream().filter(n->visited[n]==false).collect(Collectors.toList()));
-				List<Integer> neigh = steps.get(0);
-				if(neigh.isEmpty()) {
-					steps.remove(0);
-				} else {
-
-					
-					
-				}
+		while(current < answer.size()) {
+			List<Integer> neigh = graph.neighbours(answer.get(current)).stream().filter(n->visited[n]==false).collect(Collectors.toList());
+			List<Integer> nexts = answer.stream().skip(added).limit(neigh.size()).collect(Collectors.toList());
+			
+			if(nexts.containsAll(neigh) && neigh.containsAll(nexts)) {
+				neigh.forEach(n -> visited[n] = true);
+				added += neigh.size();
+				current++;
+			} else {
+				return false;
 			}
 		}
-
+		
         return true;
     }
 	
