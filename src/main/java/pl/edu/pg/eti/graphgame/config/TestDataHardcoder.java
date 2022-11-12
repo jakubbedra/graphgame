@@ -50,20 +50,9 @@ public class TestDataHardcoder {
     @PostConstruct
     public void hardcodeData() throws UserAlreadyExistsException {
 		var user = userService.findUserByUsername("user1");
-		System.out.println("------------------------");
-		System.out.println("------------------------");
-		System.out.println("------------------------");
-		System.out.println("------------------------");
-		System.out.println("------------------------");
-		System.out.println("------------------------");
-		System.out.println("------------------------");
-		System.out.println("------------------------");
 		if(user.isEmpty()) {
 			hardcodeUsers();
 			hardcodeStats();
-			System.out.println("Hardcoder: generating users");
-		} else {
-			System.out.println("Hardcoder: not generating, because of: " + user.get());
 		}
     }
 

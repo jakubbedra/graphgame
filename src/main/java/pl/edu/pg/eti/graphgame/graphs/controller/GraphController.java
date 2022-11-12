@@ -40,17 +40,21 @@ public class GraphController {
             @RequestParam("token") String token
     ) {
         Optional<Task> task = taskService.findTask(uuid);
-        if (task.isEmpty()) {
+		
+        if(task.isEmpty()) {
+			System.out.println("   ...   There is no task with UUID: " + uuid.toString());
             return ResponseEntity.notFound().build();
         } else {
-            if (!userSessionService.hasTaskAccess(token, uuid)) {
-                return userSessionService.getResponseTokenAccessTask(token,
-                        uuid);
+            if(!userSessionService.hasTaskAccess(token, uuid)) {
+				System.out.println("   ...   There is no task "+uuid+" in the session: " + token);
+                return userSessionService.getResponseTokenAccessTask(token, uuid);
             }
             Optional<Graph> graph = graphService.findGraphByTask(task.get());
-            if (graph.isEmpty()) {
+            if(graph.isEmpty()) {
+				System.out.println("   ...   Graph is empty");
                 return ResponseEntity.notFound().build();
             }
+			System.out.println("   ...   Everything is ok");
             return ResponseEntity.ok(
                     GetGraphResponse.map(graph.get())
             );
@@ -64,16 +68,19 @@ public class GraphController {
     ) {
         Optional<Task> task = taskService.findTask(uuid);
         if (task.isEmpty()) {
+			System.out.println("   ...   There is no task with UUID: " + uuid.toString());
             return ResponseEntity.notFound().build();
         } else {
             if (!userSessionService.hasTaskAccess(token, uuid)) {
-                return userSessionService.getResponseTokenAccessTask(token,
-                        uuid);
+				System.out.println("   ...   There is no task "+uuid+" in the session: " + token);
+                return userSessionService.getResponseTokenAccessTask(token, uuid);
             }
             Optional<Graph> graph = graphService.findGraphByTask(task.get());
             if (graph.isEmpty()) {
+				System.out.println("   ...   Graph is empty");
                 return ResponseEntity.notFound().build();
             }
+			System.out.println("   ...   Everything is ok");
             return ResponseEntity.ok(
                     GetWeightedGraphResponse.map((WeightedGraph) graph.get())
             );
