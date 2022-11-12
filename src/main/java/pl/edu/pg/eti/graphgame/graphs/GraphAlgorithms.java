@@ -7,25 +7,12 @@ import java.util.stream.Collectors;
 
 public class GraphAlgorithms {
 	
-	public static void Debug(int line, String txt) {
-		System.out.println(line + "  " + txt);
-	}
-	
-	
-	
-	
-	
-	
-	
     public static boolean breadthFirstSearch(Graph graph, List<Integer> answer) {
-		System.out.println("\n\n\n\n\n BFS");
 		if(answer.size() == graph.getN()) {
 			if(answer.stream().distinct().count() != answer.size()) {
-				Debug(1, "false");
 				return false;
 			}
 		} else {
-			Debug(2, "false");
 			return false;
 		}
         boolean[] visited = new boolean[graph.getN()];
@@ -53,23 +40,12 @@ public class GraphAlgorithms {
         return true;
     }
 	
-
-	
-	
-	
-	
-	
-	
-	
     public static boolean depthFirstSearch(Graph graph, List<Integer> answer) {
-		System.out.println("\n\n\n\n\n DFS");
 		if(answer.size() == graph.getN()) {
 			if(answer.stream().distinct().count() != answer.size()) {
-				Debug(1, "false");
 				return false;
 			}
 		} else {
-			Debug(2, "false");
 			return false;
 		}
         boolean[] visited = new boolean[graph.getN()];
@@ -79,83 +55,35 @@ public class GraphAlgorithms {
 		
 		Integer step[] = new Integer[]{0};
 		boolean ret =  dfs_step_any_order(answer.get(0), graph, answer, visited, step);
-		System.out.println("\n\n\n");
 		return ret;
     }
 	
 	public static boolean dfs_step_any_order(int from, Graph g, List<Integer> answer, boolean[] visited, Integer step[]) {
 		step[0]++;
-		Debug(3, "enter step=" + step[0] + " vert=" + from);
 		visited[from] = true;
 		
 		
 		while(true) {
 			if(step[0]+1 >= answer.size()) {
-				Debug(3, "true");
 				return true;
 			}
 			
-			Debug(3, "step=" + step[0] + " from=" + from);
-			
-			Debug(3, "neighbours from: " + from);
 			Set<Integer> neighbours = g.neighbours(from).stream().filter(n->visited[n]==false).collect(Collectors.toSet());
-			neighbours.stream().sorted().forEach(n->System.out.println("   " + n));
-			System.out.println("");
 			
 			int next = answer.get(step[0]);
 			
 			if(neighbours.isEmpty()) {
-				Debug(6, "true");
 				return true;
 			}
 			if(neighbours.contains(next)) {
 				if(dfs_step_any_order(next, g, answer, visited, step) == false) {
-					Debug(4, "false");
 					return false;
 				}
 			} else {
-				Debug(5, "false");
 				return false;
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 
