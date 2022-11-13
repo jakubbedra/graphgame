@@ -43,7 +43,7 @@ public class GraphService {
             String json = graphToJson(graph);
 
             graphRepository.save(GraphEntity.builder()
-                    .uuid(UUID.randomUUID())
+                    .uuid(UUID.randomUUID().toString())
                     .task(task.getUuid())
                     .json(json)
                     .build()

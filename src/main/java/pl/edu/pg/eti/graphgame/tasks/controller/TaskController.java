@@ -68,7 +68,7 @@ public class TaskController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<TaskQuestion> getTask(
-            @PathVariable("uuid") UUID uuid,
+            @PathVariable("uuid") String uuid,
             @RequestParam("token") String token
     ) {
         if(!userSessionService.hasTaskAccess(token, uuid)) {
@@ -133,7 +133,7 @@ public class TaskController {
 
     @PostMapping("/answer/vertexSelection/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
-            @PathVariable("uuid") UUID uuid,
+            @PathVariable("uuid") String uuid,
             @RequestBody VertexSelectionTaskAnswer answer,
             @RequestParam("token") String token
     ) {
@@ -167,7 +167,7 @@ public class TaskController {
 
     @PostMapping("/answer/edgeSelection/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
-            @PathVariable("uuid") UUID uuid,
+            @PathVariable("uuid") String uuid,
             @RequestBody EdgeSelectionTaskAnswer answer,
             @RequestParam("token") String token
     ) {
@@ -197,7 +197,7 @@ public class TaskController {
 
     @PostMapping("/answer/boolean/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
-            @PathVariable("uuid") UUID uuid,
+            @PathVariable("uuid") String uuid,
             @RequestBody BooleanTaskAnswer answer,
             @RequestParam("token") String token
     ) {
@@ -227,7 +227,7 @@ public class TaskController {
 
     @PostMapping("/answer/vertexColoring/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
-            @PathVariable("uuid") UUID uuid,
+            @PathVariable("uuid") String uuid,
             @RequestBody VertexColoringTaskAnswer answer,
             @RequestParam("token") String token
     ) {
@@ -261,7 +261,7 @@ public class TaskController {
 
     @PostMapping("/answer/edgeColoring/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
-            @PathVariable("uuid") UUID uuid,
+            @PathVariable("uuid") String uuid,
             @RequestBody EdgeColoringTaskAnswer answer,
             @RequestParam("token") String token
     ) {
@@ -295,7 +295,7 @@ public class TaskController {
 
     @PostMapping("/answer/draw/{uuid}")
     public ResponseEntity<Boolean> checkTaskAnswer(
-            @PathVariable("uuid") UUID uuid,
+            @PathVariable("uuid") String uuid,
             @RequestBody DrawGraphTaskAnswer answer,
             @RequestParam("token") String token
     ) {
@@ -330,7 +330,7 @@ public class TaskController {
     private void updateStats(Task task, boolean isCorrectAnswer) {
         statsService.updateCurrentStats(
                 Stats.builder()
-                        .uuid(UUID.randomUUID())
+                        .uuid(UUID.randomUUID().toString())
                         .user(task.getUser())
                         .graphTaskSubject(task.getSubject())
                         .correct(isCorrectAnswer ? 1 : 0)

@@ -196,7 +196,7 @@ public class UserStatsController {
         }
         statsService.updateCurrentStats(
                 Stats.builder()
-                        .uuid(UUID.randomUUID())
+                        .uuid(UUID.randomUUID().toString())
                         .user(user.get())
                         .graphTaskSubject(taskSubject)
                         .date(new Date(System.currentTimeMillis()))

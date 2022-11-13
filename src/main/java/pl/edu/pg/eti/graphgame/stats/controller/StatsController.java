@@ -54,14 +54,14 @@ public class StatsController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<GetStatsResponse> getStats(@PathVariable("uuid") String uuid) {
-        return statsService.findStatsByUuid(UUID.fromString(uuid))
+        return statsService.findStatsByUuid(uuid)
                 .map(value -> ResponseEntity.ok(GetStatsResponse.entityToDtoMapper().apply(value)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{uuid}")
     public ResponseEntity<Void> updateStats(@RequestBody UpdateStatsRequest request, @PathVariable("uuid") String uuid) {
-        Optional<Stats> stats = statsService.findStatsByUuid(UUID.fromString(uuid));
+        Optional<Stats> stats = statsService.findStatsByUuid(uuid);
         if (stats.isPresent()) {
             UpdateStatsRequest.dtoToEntityUpdater().apply(stats.get(), request);
             statsService.updateStats(stats.get());
@@ -73,7 +73,7 @@ public class StatsController {
 
     @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> deleteStats(@PathVariable("uuid") String uuid) {
-        Optional<Stats> stats = statsService.findStatsByUuid(UUID.fromString(uuid));
+        Optional<Stats> stats = statsService.findStatsByUuid(uuid);
         if (stats.isPresent()) {
             statsService.deleteStats(stats.get());
             return ResponseEntity.accepted().build();

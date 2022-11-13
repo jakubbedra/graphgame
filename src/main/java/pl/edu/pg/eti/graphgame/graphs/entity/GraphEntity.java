@@ -17,9 +17,11 @@ import java.util.UUID;
 public class GraphEntity {
 
     @Id
-    private UUID uuid;
+    @Column(length=36)
+    private String uuid;
 
-    private UUID task;
+    @Column(length=36)
+    private String task;
 
     // TODO: test whether varchar length limit works
     @Column(length=4095)

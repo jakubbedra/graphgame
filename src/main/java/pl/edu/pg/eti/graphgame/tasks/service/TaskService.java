@@ -33,7 +33,7 @@ public class TaskService {
         this.taskFactory = taskFactory;
     }
 
-    public Optional<Task> findTask(UUID uuid) {
+    public Optional<Task> findTask(String uuid) {
         return taskRepository.findById(uuid);
     }
 

@@ -8,7 +8,7 @@ import pl.edu.pg.eti.graphgame.users.entity.User;
 import java.util.List;
 import java.util.UUID;
 
-public interface StatsRepository extends CrudRepository<Stats, UUID> {
+public interface StatsRepository extends CrudRepository<Stats, String> {
 
     List<Stats> findAllByUser(User user);
 

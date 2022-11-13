@@ -28,7 +28,7 @@ public class StatsService {
         this.statsRepository = statsRepository;
     }
 
-    public Optional<Stats> findStatsByUuid(UUID uuid) {
+    public Optional<Stats> findStatsByUuid(String uuid) {
         return statsRepository.findById(uuid);
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface TaskRepository extends CrudRepository<Task, UUID> {
+public interface TaskRepository extends CrudRepository<Task, String> {
 
     List<Task> getAllByUser(User user);
 

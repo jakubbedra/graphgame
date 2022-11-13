@@ -20,7 +20,8 @@ import java.util.UUID;
 public class Task {
 
     @Id
-    private UUID uuid;
+    @Column(length=36)
+    private String uuid;
 
     @ManyToOne
     @JoinColumn(name = "user")

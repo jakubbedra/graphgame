@@ -31,7 +31,7 @@ public class CreateStatsRequest {
             Supplier<Date> dateSupplier
     ) {
         return request -> Stats.builder()
-                .uuid(UUID.randomUUID())
+                .uuid(UUID.randomUUID().toString())
                 .user(userFunction.apply(request.getUserId()))
                 .graphTaskSubject(taskFunction.apply(request.getTaskName()))
                 .date(dateSupplier.get())

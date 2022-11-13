@@ -25,7 +25,7 @@ public class GetStatsListResponse {
     @EqualsAndHashCode
     public static class StatsDto {
 
-        private UUID uuid;
+        private String uuid;
 
         private Long userId;
         private String taskName;

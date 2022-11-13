@@ -76,7 +76,7 @@ public class TestDataHardcoder {
         for (GraphTaskSubject subject : values) {
             statsService.saveStats(
                     Stats.builder()
-                            .uuid(UUID.randomUUID())
+                            .uuid(UUID.randomUUID().toString())
                             .user(userService.findUserByUsername(username).get())
                             .graphTaskSubject(subject)
                             .correct(Math.abs((int)RANDOM.nextGaussian() * RANDOM.nextInt(20)))

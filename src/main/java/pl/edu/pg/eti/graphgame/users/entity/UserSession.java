@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class UserSession {
 
     @Id
+    @Column(length=36)
     private String token;
 	
 	@ManyToOne

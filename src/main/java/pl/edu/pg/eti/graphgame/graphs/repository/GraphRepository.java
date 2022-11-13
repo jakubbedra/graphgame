@@ -6,8 +6,8 @@ import pl.edu.pg.eti.graphgame.graphs.entity.GraphEntity;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface GraphRepository extends CrudRepository<GraphEntity, UUID> {
+public interface GraphRepository extends CrudRepository<GraphEntity, String> {
 
-    Optional<GraphEntity> findFirstByTask(UUID task);
+    Optional<GraphEntity> findFirstByTask(String task);
 
 }

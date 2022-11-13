@@ -105,10 +105,10 @@ public class UserSessionService {
 		return null;
 	}
 
-	public boolean hasTaskAccess(String token, UUID taskUuid) {
+	public boolean hasTaskAccess(String token, String taskUuid) {
 		return getResponseTokenAccessTask(token, taskUuid)==null;
 	}
-	public ResponseEntity getResponseTokenAccessTask(String token, UUID taskUuid) {
+	public ResponseEntity getResponseTokenAccessTask(String token, String taskUuid) {
 		if(taskUuid == null)
 			return ResponseEntity.status(404).body("task uuid = null");
 		Optional<Task> task = taskService.findTask(taskUuid);

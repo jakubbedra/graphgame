@@ -20,7 +20,7 @@ public class TaskQuestion {
     /**
      * The UUID of the task.
      */
-    private UUID taskUuid;
+    private String taskUuid;
 
     /**
      * The uuid of the user who has this task assigned.

@@ -22,7 +22,8 @@ import java.util.UUID;
 public class Stats {
 
     @Id
-    private UUID uuid;
+    @Column(length=36)
+    private String uuid;
 
     @ManyToOne
     @JoinColumn(name = "user")
