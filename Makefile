@@ -8,8 +8,8 @@ clone_ui:
 	git clone https://github.com/jakubbedra/graphgame-ui.git ../ui
 	
 build:
-	rm src/main/resources/public/*
-	rm -r target
+	rm -rf src/main/resources/public/*
+	rm -rf target
 	cd ../ui && npm install
 	cd ../ui && ng build
 	cp ../ui/dist/graphgame-ui/* src/main/resources/public/
