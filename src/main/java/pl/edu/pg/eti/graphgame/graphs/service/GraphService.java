@@ -82,6 +82,8 @@ public class GraphService {
     private Graph createGraphForTask(Task task) {
         GraphTaskSubject subject = task.getSubject();
         switch (subject) {
+            case PATH_GRAPHS:
+                return graphFactory.createRandomPathGraph(task.getGraphVertices());
             case BFS:
             case DFS:
             case MAX_CLIQUE:

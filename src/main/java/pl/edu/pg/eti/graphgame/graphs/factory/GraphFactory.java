@@ -432,6 +432,16 @@ public class GraphFactory {
         return ret;
     }
 
+    public Graph createRandomPathGraph(int n) {
+        Graph g = new NeighbourListsGraph(n);
+
+        for (int i = 1; i < n; i++) {
+            g.addEdge(i, i-1);
+        }
+
+        return g;
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor
