@@ -14,7 +14,7 @@ build:
 	cd ../ui && ng build
 	cp ../ui/dist/graphgame-ui/* src/main/resources/public/
 	mvn clean
-	mvn package
+	mvn package -Dmaven.test.skip
 
 upload:
 	scp target/graphgame-0.0.1-SNAPSHOT.jar admin@54.93.168.155:/home/admin/
