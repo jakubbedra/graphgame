@@ -234,7 +234,8 @@ public class TaskFactory {
         )+Constants.MIN_GRAPH_VERTICES;
         int r = RANDOM.nextInt(graphVertices-1)+1;
         int s = graphVertices-r;
-        if(RANDOM.nextBoolean()) {
+        int R = RANDOM.nextInt(6);
+        if(R < 2) {
             return Task.builder()
                 .uuid(UUID.randomUUID().toString())
                 .user(user)
@@ -243,13 +244,22 @@ public class TaskFactory {
                 .type(GraphTaskType.DRAW)
                 .specialValues(r+";"+s+";")
                 .build();
-        } else {
+        } else if(R < 4) {
             return Task.builder()
                 .uuid(UUID.randomUUID().toString())
                 .user(user)
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.BIPARTITE_GRAPHS)
                 .type(GraphTaskType.BOOLEAN)
+                .specialValues(r+";"+s+";")
+                .build();
+        } else {
+            return Task.builder()
+                .uuid(UUID.randomUUID().toString())
+                .user(user)
+                .graphVertices(graphVertices)
+                .subject(GraphTaskSubject.BIPARTITE_GRAPHS)
+                .type(R < 5 ? GraphTaskType.EDGE_COLORING : GraphTaskType.VERTEX_COLORING)
                 .specialValues(r+";"+s+";")
                 .build();
         }

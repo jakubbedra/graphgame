@@ -95,6 +95,8 @@ public class GraphService {
             } else {
                 return graphFactory.createRandomTreeGraph(task.getGraphVertices());
             }
+        case STAR_GRAPHS:
+            return graphFactory.createRandomStarGraph(task.getGraphVertices());
         case BFS:
         case DFS:
         case MAX_CLIQUE:

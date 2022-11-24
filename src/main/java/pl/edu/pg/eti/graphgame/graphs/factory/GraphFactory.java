@@ -506,6 +506,20 @@ public class GraphFactory {
         return graph;
     }
 
+    public Graph createRandomStarGraph(int n) {
+        Graph g = new NeighbourListsGraph(n);
+
+        int x = RANDOM.nextInt(n);
+
+        for(int i = 0; i<n; i++) {
+            if(i != x) {
+                g.addEdge(i, x);
+            }
+        }
+
+        return g;
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor
