@@ -93,7 +93,7 @@ public class GraphService {
                 return graphFactory.createRandomConnectedGraph(
                     task.getGraphVertices(), task.getGraphEdges());
             } else {
-                graphFactory.createRandomTreeGraph(task.getGraphVertices());
+                return graphFactory.createRandomTreeGraph(task.getGraphVertices());
             }
         case BFS:
         case DFS:
@@ -129,7 +129,7 @@ public class GraphService {
                 return graphFactory.createRandomMaybeBipartiteGraph(
                     task.getGraphVertices());
             } else {
-                graphFactory.createRandomBipartiteGraph(task.getGraphVertices(), false);
+                return graphFactory.createRandomBipartiteGraph(task.getGraphVertices(), false);
             }
         case TRAVELING_SALESMAN_PROBLEM:
         case CHINESE_POSTMAN_PROBLEM:
