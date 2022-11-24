@@ -29,8 +29,8 @@ public class GraphService {
 
     @Autowired
     public GraphService(
-            GraphFactory graphFactory,
-            GraphRepository graphRepository
+        GraphFactory graphFactory,
+        GraphRepository graphRepository
     ) {
         this.graphFactory = graphFactory;
         this.graphRepository = graphRepository;
@@ -43,25 +43,26 @@ public class GraphService {
             String json = graphToJson(graph);
 
             graphRepository.save(GraphEntity.builder()
-                    .uuid(UUID.randomUUID().toString())
-                    .task(task.getUuid())
-                    .json(json)
-                    .build()
+                .uuid(UUID.randomUUID().toString())
+                .task(task.getUuid())
+                .json(json)
+                .build()
             );
-        } catch (JsonProcessingException e) {
+        } catch(JsonProcessingException e) {
             e.printStackTrace();
         }
     }
 
     public Optional<Graph> findGraphByTask(Task task) {
-        GraphEntity entity = graphRepository.findFirstByTask(task.getUuid()).get();
+        GraphEntity entity = graphRepository.findFirstByTask(task.getUuid())
+            .get();
         try {
-            if (!task.isGraphWeighted()) {
+            if(!task.isGraphWeighted()) {
                 return Optional.of(graphFromJson(entity.getJson()));
             } else {
                 return Optional.of(weightedGraphFromJson(entity.getJson()));
             }
-        } catch (JsonProcessingException e) {
+        } catch(JsonProcessingException e) {
             e.printStackTrace();
             return Optional.empty();
         }
@@ -75,56 +76,81 @@ public class GraphService {
         return objectMapper.readValue(json, NeighbourListsGraph.class);
     }
 
-    private Graph weightedGraphFromJson(String json) throws JsonProcessingException {
+    private Graph weightedGraphFromJson(String json)
+        throws JsonProcessingException {
         return objectMapper.readValue(json, WeightedAdjacencyMatrixGraph.class);
     }
 
     private Graph createGraphForTask(Task task) {
         GraphTaskSubject subject = task.getSubject();
-        switch (subject) {
-            case PATH_GRAPHS:
-                return graphFactory.createRandomPathGraph(task.getGraphVertices());
-            case CYCLE_GRAPHS:
-                return graphFactory.createRandomCycleGraph(task.getGraphVertices());
-            case BFS:
-            case DFS:
-            case MAX_CLIQUE:
-            case MAX_INDEPENDENT_SET:
-            case MIN_VERTEX_COVER:
-            case TREE_GRAPHS:
-            case PLANAR_GRAPHS:
-            case TRIVIAL_QUESTIONS:
-            case DISTANCES:
-            case VERTEX_COLORING:
-            case EDGE_COLORING:
-                return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
-            case EULER_CYCLE:
-                if (task.getType() == GraphTaskType.BOOLEAN) {
-                    return graphFactory.createRandomMaybeEulerianGraph();
-                } else {
-                    return graphFactory.createRandomEulerianGraph();
-                }
-            case HAMILTON_CYCLE:
-                if (task.getType() == GraphTaskType.BOOLEAN) {
-                    return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges());
-                } else {
-                    return graphFactory.createRandomHamiltonianGraph(task.getGraphVertices(), task.getGraphEdges());
-                }
-            case MIN_SPANNING_TREE:
-                return graphFactory.createRandomConnectedGraph(task.getGraphVertices(), task.getGraphEdges(), true);
-            case BIPARTITE_GRAPHS:
-                return graphFactory.createRandomMaybeBipartiteGraph(task.getGraphVertices());
-            case TRAVELING_SALESMAN_PROBLEM:
-            case CHINESE_POSTMAN_PROBLEM:
-                return graphFactory.createRandomCompleteWeightedGraph(task.getGraphVertices());
-            case COMPLETE_GRAPHS:
-                return graphFactory.createRandomMaybeCompleteGraph(task.getGraphVertices());
-            case ISOMORPHISM:
-                return graphFactory.createRandomGraphWith2ConnectedComponentsIsomorphism(task.getGraphVertices(), task.getGraphEdges());
-            case HOMEOMORPHISM:
-                return graphFactory.createRandomGraphWith2ConnectedComponentsHomeomorphism(task.getGraphVertices(), task.getGraphEdges());
-            default:
-                throw new UnsupportedTaskSubjectException("");
+        switch(subject) {
+        case PATH_GRAPHS:
+            return graphFactory.createRandomPathGraph(task.getGraphVertices());
+        case CYCLE_GRAPHS:
+            return graphFactory.createRandomCycleGraph(task.getGraphVertices());
+        case TREE_GRAPHS:
+            if(task.getType() == GraphTaskType.BOOLEAN) {
+                return graphFactory.createRandomConnectedGraph(
+                    task.getGraphVertices(), task.getGraphEdges());
+            } else {
+                graphFactory.createRandomTreeGraph(task.getGraphVertices());
+            }
+        case BFS:
+        case DFS:
+        case MAX_CLIQUE:
+        case MAX_INDEPENDENT_SET:
+        case MIN_VERTEX_COVER:
+        case PLANAR_GRAPHS:
+        case TRIVIAL_QUESTIONS:
+        case DISTANCES:
+        case VERTEX_COLORING:
+        case EDGE_COLORING:
+            return graphFactory.createRandomConnectedGraph(
+                task.getGraphVertices(), task.getGraphEdges());
+        case EULER_CYCLE:
+            if(task.getType()==GraphTaskType.BOOLEAN) {
+                return graphFactory.createRandomMaybeEulerianGraph();
+            } else {
+                return graphFactory.createRandomEulerianGraph();
+            }
+        case HAMILTON_CYCLE:
+            if(task.getType()==GraphTaskType.BOOLEAN) {
+                return graphFactory.createRandomConnectedGraph(
+                    task.getGraphVertices(), task.getGraphEdges());
+            } else {
+                return graphFactory.createRandomHamiltonianGraph(
+                    task.getGraphVertices(), task.getGraphEdges());
+            }
+        case MIN_SPANNING_TREE:
+            return graphFactory.createRandomConnectedGraph(
+                task.getGraphVertices(), task.getGraphEdges(), true);
+        case BIPARTITE_GRAPHS:
+            if(task.getType() == GraphTaskType.BOOLEAN) {
+                return graphFactory.createRandomMaybeBipartiteGraph(
+                    task.getGraphVertices());
+            } else {
+                graphFactory.createRandomBipartiteGraph(task.getGraphVertices(), false);
+            }
+        case TRAVELING_SALESMAN_PROBLEM:
+        case CHINESE_POSTMAN_PROBLEM:
+            return graphFactory.createRandomCompleteWeightedGraph(
+                task.getGraphVertices());
+        case COMPLETE_GRAPHS:
+            if(task.getType()==GraphTaskType.BOOLEAN) {
+                return graphFactory.createRandomMaybeCompleteGraph(
+                    task.getGraphVertices());
+            } else {
+                return graphFactory.createCompleteGraph(
+                    task.getGraphVertices());
+            }
+        case ISOMORPHISM:
+            return graphFactory.createRandomGraphWith2ConnectedComponentsIsomorphism(
+                task.getGraphVertices(), task.getGraphEdges());
+        case HOMEOMORPHISM:
+            return graphFactory.createRandomGraphWith2ConnectedComponentsHomeomorphism(
+                task.getGraphVertices(), task.getGraphEdges());
+        default:
+            throw new UnsupportedTaskSubjectException("");
         }
     }
 
