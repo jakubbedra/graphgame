@@ -115,6 +115,9 @@ public class TaskAnswerService {
 
     public boolean checkVertexColoringTaskAnswer(int[] colors, Task task, Graph graph) {
         switch (task.getSubject()) {
+            case CYCLE_GRAPHS:
+                return GraphAlgorithms.isVertexColoringValid(graph, colors) &&
+                    getNumberOfColorsUsed(colors, graph.getN()) == 2 + (graph.getN()%2);
             case PATH_GRAPHS:
                 return GraphAlgorithms.isVertexColoringValid(graph, colors) &&
                     getNumberOfColorsUsed(colors, graph.getN()) <= 2;
@@ -128,6 +131,9 @@ public class TaskAnswerService {
 
     public boolean checkEdgeColoringTaskAnswer(int[][] colors, Task task, Graph graph) {
         switch (task.getSubject()) {
+            case CYCLE_GRAPHS:
+                return countEdgeColors(colors, graph.getN()) == 2 + (graph.getN()%2) &&
+                    GraphAlgorithms.isEdgeColoringValid(graph, colors);
             case PATH_GRAPHS:
                 return countEdgeColors(colors, graph.getN()) <= 2 &&
                     GraphAlgorithms.isEdgeColoringValid(graph, colors);

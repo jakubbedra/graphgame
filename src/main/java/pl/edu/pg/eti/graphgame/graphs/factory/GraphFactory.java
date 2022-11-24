@@ -432,12 +432,36 @@ public class GraphFactory {
         return ret;
     }
 
+    private int[] shuffleVerticesIds(int n) {
+        List<Integer> list = new ArrayList<>();
+        for(int i=0; i<n; ++i)
+            list.add(i);
+        Collections.shuffle(list);
+        int[] l = new int[n];
+        for(int i=0; i<n; ++i)
+            l[i] = list.get(i);
+        return l;
+    }
+
     public Graph createRandomPathGraph(int n) {
         Graph g = new NeighbourListsGraph(n);
+        int[] v = shuffleVerticesIds(n);
 
         for (int i = 1; i < n; i++) {
-            g.addEdge(i, i-1);
+            g.addEdge(v[i], v[i-1]);
         }
+
+        return g;
+    }
+
+    public Graph createRandomCycleGraph(int n) {
+        Graph g = new NeighbourListsGraph(n);
+        int[] v = shuffleVerticesIds(n);
+
+        for (int i = 1; i < n; i++) {
+            g.addEdge(v[i], v[i-1]);
+        }
+        g.addEdge(v[0], v[n-1]);
 
         return g;
     }

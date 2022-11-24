@@ -152,12 +152,19 @@ public class TaskFactory {
         int graphEdges = RANDOM.nextInt(
                 (graphVertices * graphVertices - graphVertices) / 2 - (graphVertices - 1)
         ) + (graphVertices - 1);
+        GraphTaskType taskType = GraphTaskType.DRAW;
+        int r = RANDOM.nextInt(4);
+        if(r == 1) {
+            taskType = GraphTaskType.EDGE_COLORING;
+        } else if(r == 2) {
+            taskType = GraphTaskType.VERTEX_COLORING;
+        }
         return Task.builder()
                 .uuid(UUID.randomUUID().toString())
                 .user(user)
                 .graphVertices(graphVertices)
                 .subject(GraphTaskSubject.CYCLE_GRAPHS)
-                .type(GraphTaskType.DRAW)
+                .type(taskType)
                 .specialValues("")
                 .build();
     }

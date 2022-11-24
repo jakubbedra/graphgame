@@ -5,6 +5,14 @@ run:
 	cp src/main/resources/application.properties.dev src/main/resources/application.properties
 	mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug"
 
+run_local:
+	cp src/main/resources/application.properties.local.dev src/main/resources/application.properties
+	-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug"
+	cp src/main/resources/application.properties.dev src/main/resources/application.properties
+
+restore_config:
+	cp src/main/resources/application.properties.dev src/main/resources/application.properties
+
 clone_ui:
 	git clone https://github.com/jakubbedra/graphgame-ui.git ../ui
 

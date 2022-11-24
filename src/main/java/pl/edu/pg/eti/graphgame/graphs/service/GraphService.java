@@ -84,6 +84,8 @@ public class GraphService {
         switch (subject) {
             case PATH_GRAPHS:
                 return graphFactory.createRandomPathGraph(task.getGraphVertices());
+            case CYCLE_GRAPHS:
+                return graphFactory.createRandomCycleGraph(task.getGraphVertices());
             case BFS:
             case DFS:
             case MAX_CLIQUE:
