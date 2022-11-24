@@ -122,7 +122,7 @@ public class TaskFactory {
             .graphVertices(graphVertices)
             .subject(GraphTaskSubject.COMPLETE_GRAPHS)
             .type(taskType)
-            .specialValues("")
+            .specialValues(graphVertices+";")
             .build();
     }
 
@@ -170,7 +170,7 @@ public class TaskFactory {
             .graphVertices(graphVertices)
             .subject(GraphTaskSubject.CYCLE_GRAPHS)
             .type(taskType)
-            .specialValues("")
+            .specialValues(graphVertices+";")
             .build();
     }
 
@@ -194,7 +194,7 @@ public class TaskFactory {
             .graphVertices(graphVertices)
             .subject(GraphTaskSubject.STAR_GRAPHS)
             .type(taskType)
-            .specialValues("")
+            .specialValues(graphVertices+";")
             .build();
     }
 

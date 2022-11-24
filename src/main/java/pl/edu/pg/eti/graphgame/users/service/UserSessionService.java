@@ -11,6 +11,8 @@ import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.entity.UserSession;
 import pl.edu.pg.eti.graphgame.users.repository.UserSessionRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,7 +67,8 @@ public class UserSessionService {
 
 	@Transactional
 	public void prolongUserSession(UserSession session) {
-		session.setExpirationDatetime(getCurrentSessionExpirationDatetime());
+		session.setExpirationDatetime(
+			getCurrentSessionExpirationDatetime());
 		userSessionRepository.save(session);
 	}
 	
@@ -77,9 +80,34 @@ public class UserSessionService {
 		return userSessionRepository.findById(token).isPresent();
 	}
 
-	@Transactional
 	public void logoutUserFromSession(UserSession session) {
-		userSessionRepository.delete(session);
+		safelyDeleteSession(session);
+	}
+
+	@Transactional
+	private void safelyDeleteSession(UserSession session) {
+		if(userSessionRepository.findById(session.getToken()).isPresent()) {
+			userSessionRepository.delete(session);
+		}
+	}
+
+	@Transactional
+	private void safelyDeleteSession(String token) {
+		if(userSessionRepository.findById(token).isPresent()) {
+			userSessionRepository.deleteById(token);
+		}
+	}
+
+	public void clearAllInvalidSessions() {
+		List<String> invalidSessionsId = new ArrayList<>();
+		userSessionRepository.findAll().forEach(session -> {
+			if(isDatetimeValid(session.getExpirationDatetime()) == false) {
+				invalidSessionsId.add(session.getToken());
+			}
+		});
+		for(String token : invalidSessionsId) {
+			safelyDeleteSession(token);
+		}
 	}
 
 

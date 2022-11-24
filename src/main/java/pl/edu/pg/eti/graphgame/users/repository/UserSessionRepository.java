@@ -9,6 +9,5 @@ import java.util.*;
 public interface UserSessionRepository extends CrudRepository<UserSession, String> {
 
     List<User> findAllByUser(User user);
-
 }
 
