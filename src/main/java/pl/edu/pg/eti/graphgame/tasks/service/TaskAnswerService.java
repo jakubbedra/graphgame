@@ -158,6 +158,7 @@ public class TaskAnswerService {
 
     public boolean checkEdgeColoringTaskAnswer(int[][] colors, Task task,
         Graph graph) {
+        int delta, colorsCount;
         switch(task.getSubject()) {
         case CYCLE_GRAPHS:
             return countEdgeColors(colors, graph.getN())==2+(graph.getN()%2)&&
@@ -170,10 +171,23 @@ public class TaskAnswerService {
                 GraphAlgorithms.isEdgeColoringValid(graph, colors);
         case BIPARTITE_GRAPHS:
         case TREE_GRAPHS:
+            delta = graph.delta();
+            colorsCount = countEdgeColors(colors, graph.getN());
+            return colorsCount==delta&&
+                GraphAlgorithms.isEdgeColoringValid(graph, colors);
         case COMPLETE_GRAPHS:
+            delta = graph.delta();
+            colorsCount = countEdgeColors(colors, graph.getN());
+            if(graph.getN() % 2 == 0) {
+                return (colorsCount==delta)&&
+                    GraphAlgorithms.isEdgeColoringValid(graph, colors);
+            } else {
+                return (colorsCount==delta+1)&&
+                    GraphAlgorithms.isEdgeColoringValid(graph, colors);
+            }
         case EDGE_COLORING:
-            int delta = graph.delta();
-            int colorsCount = countEdgeColors(colors, graph.getN());
+            delta = graph.delta();
+            colorsCount = countEdgeColors(colors, graph.getN());
             return (colorsCount==delta||colorsCount==delta+1)&&
                 GraphAlgorithms.isEdgeColoringValid(graph, colors);
         default:
