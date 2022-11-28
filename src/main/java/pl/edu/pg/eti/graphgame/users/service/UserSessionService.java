@@ -25,22 +25,20 @@ public class UserSessionService {
 	private final UserSessionRepository userSessionRepository;
 	private final TaskService taskService;
 
-    @Autowired
+	@Autowired
     public UserSessionService(
 			UserSessionRepository userSessionRepository,
-			TaskService taskService
-    ) {
+			TaskService taskService) {
 		this.userSessionRepository = userSessionRepository;
 		this.taskService = taskService;
-    }
+	}
 
 	public String getCurrentSessionExpirationDatetime() {
-		return (LocalDateTime.now().plusHours(1)).toString();
+		return (LocalDateTime.now().plusSeconds(DEFAULT_SESSION_TOKEN_EXPIRATION_TIME_SECONDS)).toString();
 	}
 	
 	public boolean isDatetimeValid(String expirationDatetime) {
-		return LocalDateTime.parse(expirationDatetime)
-			.isBefore(LocalDateTime.now());
+		return LocalDateTime.now().toString().compareTo(expirationDatetime) < 0;
 	}
 	
 	@Transactional
@@ -98,16 +96,9 @@ public class UserSessionService {
 		}
 	}
 
-	public void clearAllInvalidSessions() {
-		List<String> invalidSessionsId = new ArrayList<>();
-		userSessionRepository.findAll().forEach(session -> {
-			if(isDatetimeValid(session.getExpirationDatetime()) == false) {
-				invalidSessionsId.add(session.getToken());
-			}
-		});
-		for(String token : invalidSessionsId) {
-			safelyDeleteSession(token);
-		}
+	@Transactional
+	public void clearAllExpiredSessions() {
+		userSessionRepository.deleteAllExpiredBefore(LocalDateTime.now().toString());
 	}
 
 
