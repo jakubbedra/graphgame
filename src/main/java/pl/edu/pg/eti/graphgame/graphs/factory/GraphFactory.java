@@ -453,50 +453,20 @@ public class GraphFactory {
         return ret;
     }
 
-    private int[] shuffleVerticesIds(int n) {
-        List<Integer> list = new ArrayList<>();
-        for(int i = 0; i<n; ++i)
-            list.add(i);
-        Collections.shuffle(list);
-        int[] l = new int[n];
-        for(int i = 0; i<n; ++i)
-            l[i] = list.get(i);
-        return l;
-    }
-
     public Graph createRandomPathGraph(int n) {
-        Graph g = new NeighbourListsGraph(n);
-        int[] v = shuffleVerticesIds(n);
-
-        for(int i = 1; i<n; i++) {
-            g.addEdge(v[i], v[i-1]);
-        }
-
-        return g;
+        List<List<Integer>> path = createPath(n);
+        path = randomizeVertices(path, n);
+        return new NeighbourListsGraph(path, n, n-1);
     }
 
     public Graph createRandomCycleGraph(int n) {
-        Graph g = new NeighbourListsGraph(n);
-        int[] v = shuffleVerticesIds(n);
-
-        for(int i = 1; i<n; i++) {
-            g.addEdge(v[i], v[i-1]);
-        }
-        g.addEdge(v[0], v[n-1]);
-
-        return g;
+        List<List<Integer>> path = createCycle(n);
+        path = randomizeVertices(path, n);
+        return new NeighbourListsGraph(path, n, n);
     }
 
     public Graph createCompleteGraph(int n) {
-        Graph g = new NeighbourListsGraph(n);
-
-        for(int i = 0; i<n; i++) {
-            for(int j = i+1; j<n; ++j) {
-                g.addEdge(i, j);
-            }
-        }
-
-        return g;
+        return createRandomCompleteGraph(n, false);
     }
 
     public Graph createRandomTreeGraph(int n) {
