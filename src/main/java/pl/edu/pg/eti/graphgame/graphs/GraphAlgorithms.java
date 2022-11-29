@@ -37,7 +37,7 @@ public class GraphAlgorithms {
 			}
 		}
 		
-        return true;
+        return current == graph.getN() && added == graph.getN();
     }
 	
     public static boolean depthFirstSearch(Graph graph, List<Integer> answer) {
