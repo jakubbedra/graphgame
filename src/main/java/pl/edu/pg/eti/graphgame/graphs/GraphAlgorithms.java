@@ -9,6 +9,10 @@ public class GraphAlgorithms {
 	
     public static boolean breadthFirstSearch(Graph graph, List<Integer> answer) {
 		if(answer.size() == graph.getN()) {
+            if(answer.stream().allMatch(n -> n >= 0 && n < graph.getN()) == false) {
+                return false;
+            }
+
 			if(answer.stream().distinct().count() != answer.size()) {
 				return false;
 			}
