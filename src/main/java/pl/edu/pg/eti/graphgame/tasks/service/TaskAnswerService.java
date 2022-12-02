@@ -5,6 +5,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import pl.edu.pg.eti.graphgame.config.Constants;
 import pl.edu.pg.eti.graphgame.exceptions.IncompleteTaskEntityException;
+import pl.edu.pg.eti.graphgame.exceptions.InvalidGraphSizeInColoringAnswerException;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.GraphAlgorithms;
 import pl.edu.pg.eti.graphgame.graphs.GraphClassChecker;
@@ -132,6 +133,9 @@ public class TaskAnswerService {
 
     public boolean checkVertexColoringTaskAnswer(int[] colors, Task task,
         Graph graph) {
+        if(colors.length != graph.getN()) {
+            throw new InvalidGraphSizeInColoringAnswerException("Vertex coloring invalid amount of colors in answer.");
+        }
         switch(task.getSubject()) {
         case CYCLE_GRAPHS:
             return GraphAlgorithms.isVertexColoringValid(graph, colors)&&
@@ -158,6 +162,17 @@ public class TaskAnswerService {
 
     public boolean checkEdgeColoringTaskAnswer(int[][] colors, Task task,
         Graph graph) {
+        if(colors.length != graph.getN()) {
+            throw new InvalidGraphSizeInColoringAnswerException(
+                "Edge coloring invalid amount of colors in answer.");
+        } else {
+            for(int i=0; i<colors.length; ++i) {
+                if(colors[i].length != graph.getN()) {
+                    throw new InvalidGraphSizeInColoringAnswerException(
+                        "Edge coloring invalid amount of colors in answer.");
+                }
+            }
+        }
         int delta, colorsCount;
         switch(task.getSubject()) {
         case CYCLE_GRAPHS:
