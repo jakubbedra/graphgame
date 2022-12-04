@@ -1,7 +1,6 @@
 package pl.edu.pg.eti.graphgame.graphs;
 
 import pl.edu.pg.eti.graphgame.graphs.model.Graph;
-import pl.edu.pg.eti.graphgame.graphs.model.NeighbourListsGraph;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -136,8 +135,22 @@ public class GraphClassChecker {
         if (!isConnected(graph) || !(graph.getN() > 0 && isKRegular(graph, graph.degree(0)))) {
             return false;
         }
+
+        if (graph.getN() == 1 || graph.getN() == 2 && graph.getM() == 1 || isCycle(graph) && graph.getN() == 4) {
+            return true;
+        }
+
         int n = (int) Math.ceil(log2(graph.getN()));
-        return graph.getM() == ((int) Math.pow(2, n - 1) * n);
+        if (graph.getM() != ((int) Math.pow(2, n - 1) * n)) {
+            return false;
+        }
+        // todo
+        // 1. generate n-sized gray codes
+        // 2. assign gray code numbers to vertices
+        // if it cannot be done, return false
+        HyperCubeTester tester = new HyperCubeTester(graph, n);
+
+        return tester.isHyperCubeLargerThan2Dimensions();
     }
 
     private static int log2(int n) {
