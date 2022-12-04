@@ -126,9 +126,8 @@ public class HyperCubeTester {
     }
 
     // used to traverse the cube to assign codes to all vertices (if some vertex will not have a code -> the graph is not a hypercube)
-    private List<Integer> breadthFirstSearch(int v0) {
+    private void breadthFirstSearch(int v0) {
         Queue<Integer> queue = new LinkedList<>();
-        List<Integer> visitedVertices = new LinkedList<>();
         boolean[] visited = new boolean[g.getN()];
         for (int i = 0; i < g.getN(); i++) {
             visited[i] = false;
@@ -140,7 +139,6 @@ public class HyperCubeTester {
 
         while (!queue.isEmpty()) {
             v = queue.poll();
-            visitedVertices.add(v);
 
             List<Integer> neighbours = g.neighbours(v).stream().sorted().collect(Collectors.toList());
             for (int neighbour : neighbours) {
@@ -154,8 +152,6 @@ public class HyperCubeTester {
                 }
             }
         }
-
-        return visitedVertices;
     }
 
     public boolean isHyperCubeLargerThan2Dimensions() {
