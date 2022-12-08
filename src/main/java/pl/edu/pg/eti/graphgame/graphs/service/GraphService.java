@@ -15,6 +15,7 @@ import pl.edu.pg.eti.graphgame.graphs.repository.GraphRepository;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskSubject;
 import pl.edu.pg.eti.graphgame.tasks.GraphTaskType;
 import pl.edu.pg.eti.graphgame.tasks.entity.Task;
+import pl.edu.pg.eti.graphgame.users.entity.User;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +36,14 @@ public class GraphService {
         this.graphFactory = graphFactory;
         this.graphRepository = graphRepository;
         this.objectMapper = new ObjectMapper();
+    }
+
+    public void deleteGraphsOfTask(Task task) {
+        graphRepository.deleteAllByTaskId(task.getUuid());
+    }
+
+    public void deleteGraphsOfUser(User user) {
+        graphRepository.deleteAllByUserId(user.getId());
     }
 
     public void createAndSaveGraphForTask(Task task) {
