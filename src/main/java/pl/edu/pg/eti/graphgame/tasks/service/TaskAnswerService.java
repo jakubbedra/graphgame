@@ -149,8 +149,7 @@ public class TaskAnswerService {
             return GraphAlgorithms.isVertexColoringValid(graph, colors)&&
                 getNumberOfColorsUsed(colors, graph.getN())==2;
         case COMPLETE_GRAPHS:
-            return GraphAlgorithms.isVertexColoringValid(graph, colors)&&
-                getNumberOfColorsUsed(colors, graph.getN())==graph.getN();
+            return getNumberOfColorsUsed(colors, graph.getN())==graph.getN();
         case VERTEX_COLORING:
             return GraphAlgorithms.isVertexColoringValid(graph, colors)&&
                 getNumberOfColorsUsed(colors, graph.getN())
