@@ -17,7 +17,6 @@ import pl.edu.pg.eti.graphgame.users.entity.User;
 import pl.edu.pg.eti.graphgame.users.service.UserService;
 import pl.edu.pg.eti.graphgame.users.service.UserSessionService;
 
-import javax.websocket.server.PathParam;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;

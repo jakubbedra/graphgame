@@ -200,11 +200,8 @@ public class TaskFactory {
 
     private Task createWheelGraphTask(User user) {
         int graphVertices = RANDOM.nextInt(
-            Constants.MAX_GRAPH_VERTICES-Constants.MIN_GRAPH_VERTICES
-        )+Constants.MIN_GRAPH_VERTICES;
-        int graphEdges = RANDOM.nextInt(
-            (graphVertices*graphVertices-graphVertices)/2-(graphVertices-1)
-        )+(graphVertices-1);
+            Constants.MAX_GRAPH_VERTICES-Constants.MIN_WHEEL_VERTICES
+        )+Constants.MIN_WHEEL_VERTICES;
         return Task.builder()
             .uuid(UUID.randomUUID().toString())
             .user(user)

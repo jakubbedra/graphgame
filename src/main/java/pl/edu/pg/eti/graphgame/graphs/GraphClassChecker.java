@@ -115,17 +115,23 @@ public class GraphClassChecker {
         }
         int degNMinus1V = 0;
         int deg3V = 0;
+        int degNMinus1VInd = 0;
         for (int i = 0; i < graph.getN(); i++) {
             int deg = graph.degree(i);
             if (deg == graph.getN() - 1) {
                 degNMinus1V++;
+                degNMinus1VInd = i;
             } else if (deg == 3) {
                 deg3V++;
             } else {
                 return false;
             }
         }
-        return degNMinus1V == 1 && deg3V == graph.getN() - 1;
+        if(!(degNMinus1V == 1 && deg3V == graph.getN() - 1)) {
+            return false;
+        }
+        graph.removeVertex(degNMinus1VInd);
+        return isCycle(graph);
     }
 
     /**

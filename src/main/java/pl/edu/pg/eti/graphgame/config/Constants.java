@@ -5,6 +5,8 @@ public class Constants {
     public static final int MIN_GRAPH_VERTICES = 3;
     public static final int MAX_GRAPH_VERTICES = 14;
 
+    public static final int MIN_WHEEL_VERTICES = 4;
+
     public static final int MIN_COMPLETE_GRAPH_VERTICES = 2;
     public static final int MAX_COMPLETE_GRAPH_VERTICES = 7;
 
