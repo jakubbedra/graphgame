@@ -136,24 +136,50 @@ public class TaskAnswerService {
         if (colors.length != graph.getN()) {
             throw new InvalidGraphSizeInColoringAnswerException("Vertex coloring invalid amount of colors in answer.");
         }
+<<<<<<< HEAD
+		switch(task.getSubject()) {
+			case CYCLE_GRAPHS:
+				return GraphAlgorithms.isVertexColoringValid(graph, colors)&&
+					getNumberOfColorsUsed(colors, graph.getN())==2+(graph.getN()%2);
+			case PATH_GRAPHS:
+				return GraphAlgorithms.isVertexColoringValid(graph, colors)&&
+					getNumberOfColorsUsed(colors, graph.getN())<=2;
+			case STAR_GRAPHS:
+			case BIPARTITE_GRAPHS:
+			case TREE_GRAPHS:
+				return GraphAlgorithms.isVertexColoringValid(graph, colors)&&
+					getNumberOfColorsUsed(colors, graph.getN())==2;
+			case COMPLETE_GRAPHS:
+				return getNumberOfColorsUsed(colors, graph.getN())==graph.getN();
+			case VERTEX_COLORING:
+				return GraphAlgorithms.isVertexColoringValid(graph, colors)&&
+					getNumberOfColorsUsed(colors, graph.getN())
+					==GraphAlgorithms.calculateChromaticNumber(graph);
+			default:
+				throw new UnsupportedTaskSubjectException("");
+=======
 		switch (task.getSubject()) {
 			case CYCLE_GRAPHS:
 				return GraphAlgorithms.isVertexColoringValid(graph, colors) &&
 					getNumberOfColorsUsed(colors, graph.getN()) == 2 + (graph.getN() % 2);
 			case PATH_GRAPHS:
+				return GraphAlgorithms.isVertexColoringValid(graph, colors) &&
+					getNumberOfColorsUsed(colors, graph.getN()) <= 2;
 			case STAR_GRAPHS:
 			case BIPARTITE_GRAPHS:
 			case TREE_GRAPHS:
 				return GraphAlgorithms.isVertexColoringValid(graph, colors) &&
-					getNumberOfColorsUsed(colors, graph.getN()) <= 2;
+					getNumberOfColorsUsed(colors, graph.getN()) == 2;
 			case COMPLETE_GRAPHS:
-				return getNumberOfColorsUsed(colors, graph.getN())==graph.getN();
+				return GraphAlgorithms.isVertexColoringValid(graph, colors) &&
+					getNumberOfColorsUsed(colors, graph.getN()) == graph.getN();
 			case VERTEX_COLORING:
 				return GraphAlgorithms.isVertexColoringValid(graph, colors) &&
 					getNumberOfColorsUsed(colors, graph.getN())
-						== GraphAlgorithms.calculateChromaticNumber(graph);
+					== GraphAlgorithms.calculateChromaticNumber(graph);
 			default:
 				throw new UnsupportedTaskSubjectException("");
+>>>>>>> origin/master
         }
     }
 
