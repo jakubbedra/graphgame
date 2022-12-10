@@ -243,7 +243,7 @@ public class TaskAnswerService {
 
     private boolean allEdgesIncluded(Graph graph, List<Integer> vertices) {
         Graph copy = new AdjacencyMatrixGraph(graph);
-        for (int i = 0; i < graph.getN() - 1; i++) {
+        for (int i = 0; i < vertices.size() - 1; i++) {
             if (copy.edgeExists(vertices.get(i), vertices.get(i + 1))) {
                 copy.removeEdge(vertices.get(i), vertices.get(i + 1));
             }
