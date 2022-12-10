@@ -150,7 +150,6 @@ public class GraphClassChecker {
         if (graph.getM() != ((int) Math.pow(2, n - 1) * n)) {
             return false;
         }
-        // todo
         // 1. generate n-sized gray codes
         // 2. assign gray code numbers to vertices
         // if it cannot be done, return false

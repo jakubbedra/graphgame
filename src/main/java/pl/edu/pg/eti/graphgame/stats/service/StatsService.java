@@ -46,10 +46,8 @@ public class StatsService {
         ).collect(Collectors.toList());
     }
 
-    //todo
     public List<Stats> findAllStatsByUserAndTask(User user, GraphTaskSubject taskSubject) {
         return statsRepository.findAllByUserAndGraphTaskSubject(user, taskSubject);
-        //return statsRepository.findAllByUserAndTaskSubject(user, taskSubject);
     }
 
     public List<Stats> findAllStatsByUserAndTaskInTimePeriod(User user, GraphTaskSubject taskSubject, Date startDate, Date endDate) {

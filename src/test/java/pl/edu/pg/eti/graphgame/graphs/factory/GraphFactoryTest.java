@@ -137,7 +137,6 @@ public class GraphFactoryTest {
         Assertions.assertTrue(isConnected(graph));
     }
 
-    //todo: maybe move it to a static class or sth like that dunno
     private boolean isConnected(Graph g) {
         List<Integer> visited = new LinkedList<>();
         List<Integer> expected = new ArrayList<>(g.getN());
