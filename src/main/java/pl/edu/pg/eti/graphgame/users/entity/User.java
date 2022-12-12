@@ -21,9 +21,8 @@ public class User {
     private Long id;
     private String username;
     private String passwordEncoded;
-    private String roles;
 
-    @OneToMany
+    @OneToMany(mappedBy="user")
     private List<Task> tasks;
 
 }

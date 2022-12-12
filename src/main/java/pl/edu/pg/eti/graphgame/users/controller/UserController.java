@@ -85,7 +85,6 @@ public class UserController {
     public ResponseEntity<Void> registerUser(@RequestBody CreateUserRequest request) {
         User user = User.builder()
                 .username(request.getUsername())
-                .roles(DEFAULT_USER_ROLE)
                 .build();
         try {
             userService.registerNewUserAccountWithPassword(user, request.getPassword());
