@@ -173,7 +173,7 @@ public class GraphClassChecker {
      * Checks if graph is k-regular
      */
     public static boolean isKRegular(Graph graph, int k) {
-        return 2 * graph.getM() == graph.getN() * k;
+        return 2 * graph.getM() == graph.getN() * k && isConnected(graph);
     }
 
     public static boolean isTree(Graph graph) {
