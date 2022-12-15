@@ -158,7 +158,7 @@ public class GraphFactory {
             path = randomizeVertices(path, n);
         }
 
-        Graph graph = new NeighbourListsGraph(path, n, n-1);
+        NeighbourListsGraph graph = new NeighbourListsGraph(path, n, n-1);
         Edge[] possibleEdges;
 
         if(mightNotBeBipartite) {
@@ -171,6 +171,10 @@ public class GraphFactory {
         for(int i = 0; i<m-graph.getM(); i++) {
             graph.addEdge(possibleEdges[i].getV1(), possibleEdges[i].getV2());
         }
+
+        List<List<Integer>> l = graph.getNeighbourLists();
+        l = randomizeVertices(l, graph.getN());
+        graph.setNeighbourLists(l);
 
         return graph;
     }
