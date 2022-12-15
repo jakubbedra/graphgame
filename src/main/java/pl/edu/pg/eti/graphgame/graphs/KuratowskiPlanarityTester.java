@@ -63,13 +63,15 @@ public class KuratowskiPlanarityTester {
                 return true;
             }
         }
-        for (int i = 0; i < g.getN(); i++) {
-            int v2 = i == g.getN() - 1 ? 0 : i + 1;
-            if(g.edgeExists(i, v2)){
-                RetractableAdjacencyMatrix g2 = new RetractableAdjacencyMatrix(g);
-                g2.mergeVertices(i, v2);
-                if (hasK5OrK3_3(g2)) {
-                    return true;
+        for (int i = 0; i < g.getN()-1; i++) {
+            for (int j=i+1; j<g.getN(); j++){
+                int v2 = j;
+                if(g.edgeExists(i, v2)){
+                    RetractableAdjacencyMatrix g2 = new RetractableAdjacencyMatrix(g);
+                    g2.mergeVertices(i, v2);
+                    if (hasK5OrK3_3(g2)) {
+                        return true;
+                    }
                 }
             }
         }

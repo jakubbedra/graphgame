@@ -69,4 +69,24 @@ public class GraphPlanarityCheckerTest {
         Assertions.assertThat(planarityChecker.isPlanar(testGraph)).isFalse();
     }
 
+    @Test
+    public void testKuratowskiPlanarityTesterAnotherK3_3Minor(){
+        final int[][] TEST_MATRIX = {
+                {0, 0, 1, 0, 0, 1, 1},
+                {0, 0, 0, 0, 1, 1, 1},
+                {1, 0, 0, 1, 1, 0, 0},
+                {0, 0, 1, 0, 1, 1, 1},
+                {0, 1, 1, 1, 0, 0, 0},
+                {1, 1, 0, 1, 0, 0, 1},
+                {1, 1, 0, 1, 0, 1, 0},
+        };
+        final int TEST_N = 7;
+        final int TEST_M =12 ;
+        Graph testGraph = new AdjacencyMatrixGraph(
+                TEST_MATRIX, TEST_N, TEST_M
+        );
+        KuratowskiPlanarityTester planarityChecker = new KuratowskiPlanarityTester();
+        Assertions.assertThat(planarityChecker.isPlanar(testGraph)).isFalse();
+    }
+
 }
