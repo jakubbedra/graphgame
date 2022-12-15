@@ -59,20 +59,18 @@ public class KuratowskiPlanarityTester {
                 return true;
             }
         } else if (g.getN() == 6) {
-            //if (isSubgraphK3_3(g, List.of(0, 1, 2, 3, 4, 5))) {
             if (containsK3_3(g, new LinkedList<>())) {
                 return true;
             }
         }
         for (int i = 0; i < g.getN(); i++) {
-            RetractableAdjacencyMatrix g2 = new RetractableAdjacencyMatrix(g);
-            // merge vertices
-            if (i != g.getN() - 1)
-                g2.mergeVertices(i, i + 1);
-            else
-                g2.mergeVertices(i, 0);
-            if (hasK5OrK3_3(g2)) {
-                return true;
+            int v2 = i == g.getN() - 1 ? 0 : i + 1;
+            if(g.edgeExists(i, v2)){
+                RetractableAdjacencyMatrix g2 = new RetractableAdjacencyMatrix(g);
+                g2.mergeVertices(i, v2);
+                if (hasK5OrK3_3(g2)) {
+                    return true;
+                }
             }
         }
         return false;

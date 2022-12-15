@@ -15,10 +15,10 @@ public class GraphPlanarityCheckerTest {
         final int[][] TEST_MATRIX = {
                 {0, 1, 1, 1, 1, 0},
                 {1, 0, 1, 1, 1, 0},
-                {1, 1, 0, 1, 1, 1},
+                {1, 1, 0, 1, 1, 0},
                 {1, 1, 1, 0, 1, 1},
-                {1, 1, 1, 1, 0, 0},
-                {0, 0, 1, 1, 0, 0}
+                {1, 1, 1, 1, 0, 1},
+                {0, 0, 0, 1, 1, 0}
         };
         final int TEST_N = 6;
         final int TEST_M = 12;
