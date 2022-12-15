@@ -35,29 +35,33 @@ Next you need to create new database namespace:
 
 After that the database is set.
 
-## Development server
+## Alternative to running database
 
-To run a local development server type following commands:
+If you want to test application localy, without worrying about setting up database, you may connect to our database hosted on graphgame.work.gd:3306 (which should be up and running until 2023.02). To achievie this, you need to copy file `src/main/resources/application.properties.dev` to `src/main/resources/application.properties`.
 
+## Running development server
 
-for linux users without gnu-make:
+To run a local development server you need to configure server application to use local database by copying file `src/main/resources/application.properties.local.dev` to `src/main/resources/application.properties`.
+
+To run server type a command:
+
 
 ```bash
-cp src/main/resources/application.properties.local.dev src/main/resources/application.properties
 mvn spring-boot:run
 ```
 
-for linux users with gnu-make installed:
+for linux users with GNU Make installed (clean run with server configured to connect to local database localhost:3306):
 
 ```bash
 make run_local
 ```
 
-for windows users:
+If you are linux user and don't want to run local database and use our resources (database located at graphgame.work.gd:3306), you can run following command:
 
 ```bash
-copy src\main\resources\application.properties.local.dev src\main\resources\application.properties
-mvn spring-boot:run
+make run
 ```
+
+
 
 
