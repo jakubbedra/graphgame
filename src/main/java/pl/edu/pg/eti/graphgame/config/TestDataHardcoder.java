@@ -1,6 +1,7 @@
 package pl.edu.pg.eti.graphgame.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.edu.pg.eti.graphgame.exceptions.UserAlreadyExistsException;
 import pl.edu.pg.eti.graphgame.stats.enitity.Stats;
@@ -17,6 +18,12 @@ import java.util.UUID;
 
 @Component
 public class TestDataHardcoder {
+
+    private static boolean enabled = false;
+
+    public static void enable() {
+        enabled = true;
+    }
 
     private final StatsService statsService;
     private final TaskService taskService;
@@ -44,29 +51,34 @@ public class TestDataHardcoder {
         this.statsService = statsService;
         this.userService = userService;
         this.taskService = taskService;
-        initUsersAndTasks();
+        if (enabled) {
+            initUsersAndTasks();
+        }
     }
 
     @PostConstruct
     public void hardcodeData() throws UserAlreadyExistsException {
-		var user = userService.findUserByUsername("user1");
-		if(user.isEmpty()) {
-			hardcodeUsers();
-			hardcodeStats();
-		}
+        if (!enabled) {
+            return;
+        }
+        var user = userService.findUserByUsername("user1");
+        if (user.isEmpty()) {
+            hardcodeUsers();
+            hardcodeStats();
+        }
     }
 
     private void hardcodeUsers() throws UserAlreadyExistsException {
-        userService.registerNewUserAccountWithPassword(user1, "xD");
-        userService.registerNewUserAccountWithPassword(user2, "xD");
-        userService.registerNewUserAccountWithPassword(user3, "xD");
-        userService.registerNewUserAccountWithPassword(user4, "xD");
-        userService.registerNewUserAccountWithPassword(user5, "xD");
-        userService.registerNewUserAccountWithPassword(user6, "xD");
-        userService.registerNewUserAccountWithPassword(user7, "xD");
-        userService.registerNewUserAccountWithPassword(user8, "xD");
-        userService.registerNewUserAccountWithPassword(user9, "xD");
-        userService.registerNewUserAccountWithPassword(user10, "xD");
+        userService.registerNewUserAccountWithPassword(user1, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user2, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user3, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user4, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user5, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user6, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user7, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user8, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user9, "qwerty1234");
+        userService.registerNewUserAccountWithPassword(user10, "qwerty1234");
     }
 
     private final static Random RANDOM = new Random();
@@ -79,8 +91,8 @@ public class TestDataHardcoder {
                             .uuid(UUID.randomUUID().toString())
                             .user(userService.findUserByUsername(username).get())
                             .graphTaskSubject(subject)
-                            .correct(Math.abs((int)RANDOM.nextGaussian() * RANDOM.nextInt(20)))
-                            .wrong(Math.abs((int)RANDOM.nextGaussian() * RANDOM.nextInt(20)))
+                            .correct(Math.abs((int) RANDOM.nextGaussian() * RANDOM.nextInt(20)))
+                            .wrong(Math.abs((int) RANDOM.nextGaussian() * RANDOM.nextInt(20)))
                             .date(date)
                             .build()
             );
@@ -88,7 +100,7 @@ public class TestDataHardcoder {
     }
 
     private void hardcodeStats() {
-		int limit = 5;
+        int limit = 5;
         for (int i = 0; i < limit; i++) {
             randomStatsForUser(user1.getUsername(), new Date(System.currentTimeMillis() - (long) i * DAY_MILLIS));
         }
@@ -118,43 +130,43 @@ public class TestDataHardcoder {
     private void initUsersAndTasks() {
         user1 = User.builder()
                 .id(21L)
-                .username("user1")
+                .username("sample_user1")
                 .build();
         user2 = User.builder()
                 .id(37L)
-                .username("user2")
+                .username("sample_user2")
                 .build();
         user3 = User.builder()
                 .id(21L)
-                .username("user3")
+                .username("sample_user3")
                 .build();
         user4 = User.builder()
                 .id(37L)
-                .username("user4")
+                .username("sample_user4")
                 .build();
         user5 = User.builder()
                 .id(21L)
-                .username("user5")
+                .username("sample_user5")
                 .build();
         user6 = User.builder()
                 .id(37L)
-                .username("user6")
+                .username("sample_user6")
                 .build();
         user7 = User.builder()
                 .id(21L)
-                .username("user7")
+                .username("sample_user7")
                 .build();
         user8 = User.builder()
                 .id(37L)
-                .username("user8")
+                .username("sample_user8")
                 .build();
         user9 = User.builder()
                 .id(21L)
-                .username("user9")
+                .username("sample_user9")
                 .build();
         user10 = User.builder()
                 .id(37L)
-                .username("user10")
+                .username("sample_user10")
                 .build();
     }
 

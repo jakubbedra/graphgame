@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.edu.pg.eti.graphgame.config.Constants;
 import pl.edu.pg.eti.graphgame.exceptions.UnsupportedTaskSubjectException;
 import pl.edu.pg.eti.graphgame.graphs.entity.GraphEntity;
 import pl.edu.pg.eti.graphgame.graphs.factory.GraphFactory;
